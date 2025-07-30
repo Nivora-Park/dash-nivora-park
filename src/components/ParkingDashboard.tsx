@@ -4,6 +4,9 @@ import { useState } from 'react';
 import { TransactionMonitoring } from './TransactionMonitoring';
 import { TerminalConfig } from './TerminalConfig';
 import { PaymentConfig } from './PaymentConfig';
+import { VehicleManagement } from './VehicleManagement';
+import { Reports } from './Reports';
+import { UserManagement } from './UserManagement';
 import { Sidebar } from './Sidebar';
 import { Header } from './Header';
 
@@ -18,6 +21,12 @@ export function ParkingDashboard() {
         return <TerminalConfig />;
       case 'payment':
         return <PaymentConfig />;
+      case 'vehicles':
+        return <VehicleManagement />;
+      case 'reports':
+        return <Reports />;
+      case 'users':
+        return <UserManagement />;
       default:
         return <TransactionMonitoring />;
     }
