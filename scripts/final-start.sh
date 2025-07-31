@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Cleanup and Restart Script for Nivora Park Services
-# This script cleans up problematic containers and restarts services
+# Final Startup Script for Nivora Park Services
+# This script starts all services in the correct order
 
 set -e
 
@@ -29,6 +29,26 @@ print_error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }
 
+# Function to check if Docker is running
+check_docker() {
+    if ! docker info > /dev/null 2>&1; then
+        print_error "Docker is not running. Please start Docker and try again."
+        exit 1
+    fi
+    print_success "Docker is running"
+}
+
+# Function to create external network
+create_network() {
+    if ! docker network ls | grep -q "shared-network"; then
+        print_status "Creating shared-network..."
+        docker network create shared-network
+        print_success "Network shared-network created"
+    else
+        print_success "Network shared-network already exists"
+    fi
+}
+
 # Function to stop all services
 stop_all_services() {
     print_status "Stopping all services..."
@@ -42,52 +62,15 @@ stop_all_services() {
     print_success "All services stopped"
 }
 
-# Function to clean up problematic containers
+# Function to clean up containers
 cleanup_containers() {
-    print_status "Cleaning up problematic containers..."
+    print_status "Cleaning up containers..."
     
     # Stop and remove all nivora containers
     docker ps -q --filter "name=nivora" | xargs -r docker stop 2>/dev/null || true
     docker ps -aq --filter "name=nivora" | xargs -r docker rm 2>/dev/null || true
     
-    # Remove any containers with grafana in the name
-    docker ps -q --filter "name=grafana" | xargs -r docker stop 2>/dev/null || true
-    docker ps -aq --filter "name=grafana" | xargs -r docker rm 2>/dev/null || true
-    
-    # Remove any containers with monitoring in the name
-    docker ps -q --filter "name=monitoring" | xargs -r docker stop 2>/dev/null || true
-    docker ps -aq --filter "name=monitoring" | xargs -r docker rm 2>/dev/null || true
-    
-    # Remove any containers with redis in the name
-    docker ps -q --filter "name=redis" | xargs -r docker stop 2>/dev/null || true
-    docker ps -aq --filter "name=redis" | xargs -r docker rm 2>/dev/null || true
-    
-    # Remove any containers with elasticsearch in the name
-    docker ps -q --filter "name=elasticsearch" | xargs -r docker stop 2>/dev/null || true
-    docker ps -aq --filter "name=elasticsearch" | xargs -r docker rm 2>/dev/null || true
-    
-    # Remove any containers with kibana in the name
-    docker ps -q --filter "name=kibana" | xargs -r docker stop 2>/dev/null || true
-    docker ps -aq --filter "name=kibana" | xargs -r docker rm 2>/dev/null || true
-    
-    # Remove any containers with logstash in the name
-    docker ps -q --filter "name=logstash" | xargs -r docker stop 2>/dev/null || true
-    docker ps -aq --filter "name=logstash" | xargs -r docker rm 2>/dev/null || true
-    
-    print_success "Problematic containers cleaned up"
-}
-
-# Function to clean up volumes
-cleanup_volumes() {
-    print_status "Cleaning up volumes..."
-    
-    # Remove volumes that might be causing issues
-    docker volume rm nivora_grafana_data 2>/dev/null || true
-    docker volume rm nivora_prometheus_data 2>/dev/null || true
-    docker volume rm nivora_redis_data 2>/dev/null || true
-    docker volume rm nivora_elasticsearch_data 2>/dev/null || true
-    
-    print_success "Volumes cleaned up"
+    print_success "Containers cleaned up"
 }
 
 # Function to start services in correct order
@@ -98,6 +81,19 @@ start_services() {
     print_status "Starting Redis..."
     docker-compose -f docker-compose.redis.yml up -d
     sleep 5
+    
+    # Wait for Redis to be ready
+    print_status "Waiting for Redis to be ready..."
+    timeout=30
+    while ! docker exec nivora-redis redis-cli -a nivora_redis_password ping > /dev/null 2>&1; do
+        if [ $timeout -le 0 ]; then
+            print_error "Redis failed to start within 30 seconds"
+            exit 1
+        fi
+        sleep 1
+        timeout=$((timeout - 1))
+    done
+    print_success "Redis is ready"
     
     # Start Elasticsearch
     print_status "Starting Elasticsearch..."
@@ -151,7 +147,7 @@ show_urls() {
     echo "  Grafana:       http://localhost:3002 (admin/nivora_grafana_password)"
     echo "  Elasticsearch: http://localhost:9200"
     echo "  Kibana:        http://localhost:5601"
-    echo "  Logstash:      localhost:5044"
+    echo "  Logstash:      localhost:5044, localhost:5001"
     echo
     print_status "Credentials:"
     echo "  Grafana:       admin/nivora_grafana_password"
@@ -160,18 +156,19 @@ show_urls() {
 
 # Main function
 main() {
-    echo "🧹 Nivora Park Cleanup and Restart"
-    echo "==================================="
+    echo "🚀 Nivora Park Final Startup"
+    echo "============================"
     echo
+    
+    # Check prerequisites
+    check_docker
+    create_network
     
     # Stop all services
     stop_all_services
     
     # Clean up containers
     cleanup_containers
-    
-    # Clean up volumes
-    cleanup_volumes
     
     # Start services
     start_services
@@ -183,12 +180,12 @@ main() {
     show_urls
     
     echo
-    print_success "Cleanup and restart completed!"
+    print_success "All services started successfully!"
     echo
-    print_status "If you still have issues, try:"
-    echo "  docker system prune -f"
-    echo "  docker volume prune -f"
-    echo "  ./scripts/manage-services.sh restart all"
+    print_status "You can now access:"
+    echo "  Dashboard: http://localhost:3001"
+    echo "  Grafana:   http://localhost:3002"
+    echo "  Prometheus: http://localhost:9090"
 }
 
 # Run main function

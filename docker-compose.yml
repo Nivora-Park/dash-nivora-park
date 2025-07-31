@@ -31,15 +31,13 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
-    depends_on:
-      - nivora-redis
+    # Note: Redis dependency is managed externally via docker-compose.redis.yml
     labels:
       - "com.nivora.service=dashboard"
       - "com.nivora.type=application"
 
   # Redis for caching and sessions (referenced from external compose)
-  nivora-redis:
-    external: true
+  # Note: Redis is managed by docker-compose.redis.yml
 
 volumes:
   nivora_dashboard_data:
