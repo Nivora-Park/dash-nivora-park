@@ -1,2 +1,4 @@
 http.host: "0.0.0.0"
-xpack.monitoring.elasticsearch.hosts: [ "http://nivora-elasticsearch:9200" ] 
+xpack.monitoring.elasticsearch.hosts: [ "http://nivora-elasticsearch:9200" ]
+xpack.monitoring.elasticsearch.username: "shananfamily"
+xpack.monitoring.elasticsearch.password: "ShaninHanan23" 
