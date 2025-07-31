@@ -35,7 +35,7 @@ services:
     image: grafana/grafana:latest
     container_name: nivora-grafana
     ports:
-      - "3002:3002"
+      - "3002:3000"
     volumes:
       - nivora_grafana_data:/var/lib/grafana
       - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
