@@ -73,7 +73,7 @@ docker-compose -f docker-compose.yml up -d
 | Grafana | http://localhost:3002 | Visualization (admin/nivora_grafana_password) |
 | Elasticsearch | http://localhost:9200 | Search engine |
 | Kibana | http://localhost:5601 | Log visualization |
-| Logstash | localhost:5044 | Log processing |
+| Logstash | localhost:5044, localhost:5001 | Log processing |
 
 ## 🛠️ Service Management
 
