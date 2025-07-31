@@ -70,7 +70,7 @@ docker-compose -f docker-compose.yml up -d
 | Dashboard | http://localhost:3001 | Main application |
 | Redis | localhost:6379 | Cache service |
 | Prometheus | http://localhost:9090 | Metrics monitoring |
-| Grafana | http://localhost:3000 | Visualization (admin/nivora_grafana_password) |
+| Grafana | http://localhost:3002 | Visualization (admin/nivora_grafana_password) |
 | Elasticsearch | http://localhost:9200 | Search engine |
 | Kibana | http://localhost:5601 | Log visualization |
 | Logstash | localhost:5044 | Log processing |
@@ -152,7 +152,7 @@ docker-compose -f docker-compose.yml down
 
 ### 3. Prometheus Service (`docker-compose.prometheus.yml`)
 - **Prometheus Port:** 9090
-- **Grafana Port:** 3000
+- **Grafana Port:** 3002
 - **Features:** Metrics collection, monitoring dashboard
 - **Credentials:** admin/nivora_grafana_password
 - **Persistence:** Volumes `nivora_prometheus_data`, `nivora_grafana_data`
@@ -172,7 +172,7 @@ docker-compose -f docker-compose.yml down
 - **Alerts:** Configurable alerting rules
 
 ### Grafana Visualization
-- **Dashboard:** http://localhost:3000
+- **Dashboard:** http://localhost:3002
 - **Username:** admin
 - **Password:** nivora_grafana_password
 - **Pre-configured:** Prometheus datasource dan Nivora dashboard

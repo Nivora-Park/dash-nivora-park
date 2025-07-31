@@ -149,7 +149,7 @@ show_status() {
     echo "  Dashboard:     http://localhost:3001"
     echo "  Redis:         localhost:6379"
     echo "  Prometheus:    http://localhost:9090"
-    echo "  Grafana:       http://localhost:3000 (admin/nivora_grafana_password)"
+    echo "  Grafana:       http://localhost:3002 (admin/nivora_grafana_password)"
     echo "  Elasticsearch: http://localhost:9200"
     echo "  Kibana:        http://localhost:5601"
     echo "  Logstash:      localhost:5044"
