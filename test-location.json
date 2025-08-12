@@ -1,0 +1,11 @@
+{
+    "code": "LOC-001",
+    "name": "Lokasi Test",
+    "description": "Lokasi untuk testing",
+    "address": "Jl. Test No. 1",
+    "email": "test@example.com",
+    "phone": "08123456789",
+    "contract_start": "2024-01-01T00:00:00Z",
+    "contract_end": "2024-12-31T23:59:59Z",
+    "logo_url": "https://example.com/logo.png"
+}

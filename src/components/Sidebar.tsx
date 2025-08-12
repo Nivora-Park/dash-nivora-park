@@ -7,7 +7,8 @@ import {
   Car, 
   Activity,
   Users,
-  FileText
+  FileText,
+  TestTube
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -52,6 +53,12 @@ export function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
       label: 'Pengguna',
       icon: Users,
       description: 'Kelola pengguna sistem'
+    },
+    {
+      id: 'api-test',
+      label: 'Test API',
+      icon: TestTube,
+      description: 'Test koneksi API'
     }
   ];
 
@@ -93,7 +100,7 @@ export function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
         </div>
       </nav>
       
-      <div className="absolute bottom-6 left-6 right-6">
+      <div className="absolute bottom-6 left-6 w-55">
         <div className="bg-gray-50 rounded-lg p-4">
           <div className="flex items-center space-x-2">
             <Activity className="w-4 h-4 text-green-500" />

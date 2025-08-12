@@ -1,0 +1,10 @@
+{
+    "location_id": "9815fa00-a34c-4b99-a4bb-02d464460030",
+    "code": "TERM-001",
+    "name": "Terminal Test",
+    "description": "Terminal untuk testing",
+    "ip_address": "192.168.1.100",
+    "port": 8080,
+    "status": "active",
+    "logo_url": "https://example.com/terminal-logo.png"
+}

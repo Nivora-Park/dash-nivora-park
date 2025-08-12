@@ -9,6 +9,8 @@ import { Reports } from './Reports';
 import { UserManagement } from './UserManagement';
 import { Sidebar } from './Sidebar';
 import { Header } from './Header';
+import { ApiStatus } from './ApiStatus';
+import { ApiTest } from './ApiTest';
 
 export function ParkingDashboard() {
   const [activeTab, setActiveTab] = useState('monitoring');
@@ -27,6 +29,8 @@ export function ParkingDashboard() {
         return <Reports />;
       case 'users':
         return <UserManagement />;
+      case 'api-test':
+        return <ApiTest />;
       default:
         return <TransactionMonitoring />;
     }
@@ -38,6 +42,11 @@ export function ParkingDashboard() {
       <div className="flex-1 flex flex-col overflow-hidden">
         <Header />
         <main className="flex-1 overflow-y-auto p-6">
+          {/* API Status Indicator */}
+          <div className="mb-4">
+            <ApiStatus />
+          </div>
+          
           {renderContent()}
         </main>
       </div>

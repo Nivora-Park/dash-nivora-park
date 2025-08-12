@@ -1,6 +1,7 @@
 'use client';
 
 import { Bell, Search, User, Settings } from 'lucide-react';
+import { ApiStatus } from './ApiStatus';
 
 export function Header() {
   return (
@@ -18,11 +19,8 @@ export function Header() {
         </div>
         
         <div className="flex items-center space-x-4">
-          {/* System Status */}
-          <div className="flex items-center space-x-2 bg-green-50 px-3 py-1 rounded-full">
-            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-            <span className="text-sm font-medium text-green-700">Online</span>
-          </div>
+          {/* API Status */}
+          <ApiStatus />
           
           {/* Notifications */}
           <button className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors">
