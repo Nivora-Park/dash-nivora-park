@@ -80,6 +80,18 @@ export interface ParkingVehicleType extends BaseModel {
     logo_url: string;
 }
 
+// Parking Rate model
+export interface ParkingRate extends BaseModel {
+    vehicle_type_id: string;
+    description: string;
+    first_hour_cost: number;
+    subsequent_hour_cost: number;
+    daily_max_cost: number;
+    lost_ticket_cost: number;
+    tax_cost: number;
+    service_cost: number;
+}
+
 // Parking Payment Type model
 export interface ParkingPaymentType extends BaseModel {
     location_id: string;

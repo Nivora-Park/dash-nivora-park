@@ -8,7 +8,8 @@ import {
     ParkingVehicleType,
     ParkingPaymentType,
     ParkingTransactionPayment,
-    ParkingTransactionTerminal
+    ParkingTransactionTerminal,
+    ParkingRate
 } from '@/types/api';
 
 class ApiService {
@@ -249,6 +250,28 @@ class ApiService {
 
     async deleteParkingTransactionTerminal(id: string): Promise<ApiResponse> {
         return this.request(`${API_CONFIG.ENDPOINTS.PARKING_TRANSACTION_TERMINALS}/${id}`, API_METHODS.DELETE);
+    }
+
+    // Parking Rate endpoints
+    async getParkingRates(params?: QueryParams): Promise<ApiResponse<ParkingRate[]>> {
+        const queryString = this.buildQueryString(params);
+        return this.request(`${API_CONFIG.ENDPOINTS.PARKING_RATES}${queryString}`);
+    }
+
+    async createParkingRate(data: Omit<ParkingRate, 'id' | 'created_at' | 'updated_at' | 'created_by' | 'updated_by' | 'created_remark' | 'updated_remark'>): Promise<ApiResponse<ParkingRate>> {
+        return this.request(API_CONFIG.ENDPOINTS.PARKING_RATES, API_METHODS.POST, data);
+    }
+
+    async getParkingRateById(id: string): Promise<ApiResponse<ParkingRate>> {
+        return this.request(`${API_CONFIG.ENDPOINTS.PARKING_RATES}/${id}`);
+    }
+
+    async updateParkingRate(id: string, data: Partial<ParkingRate>): Promise<ApiResponse<ParkingRate>> {
+        return this.request(`${API_CONFIG.ENDPOINTS.PARKING_RATES}/${id}`, API_METHODS.PUT, data);
+    }
+
+    async deleteParkingRate(id: string): Promise<ApiResponse> {
+        return this.request(`${API_CONFIG.ENDPOINTS.PARKING_RATES}/${id}`, API_METHODS.DELETE);
     }
 }
 

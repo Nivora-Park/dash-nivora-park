@@ -14,6 +14,7 @@ export const API_CONFIG = {
         PARKING_TERMINALS: '/api/v1/cms/parking-terminal',
         PARKING_VEHICLE_TYPES: '/api/v1/cms/parking-vehicle-type',
         PARKING_PAYMENT_TYPES: '/api/v1/cms/parking-payment-type',
+        PARKING_RATES: '/api/v1/cms/parking-rate',
         PARKING_TRANSACTION_PAYMENTS: '/api/v1/cms/parking-transaction-payment',
         PARKING_TRANSACTION_TERMINALS: '/api/v1/cms/parking-transaction-terminal',
     },

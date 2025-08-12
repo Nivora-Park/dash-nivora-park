@@ -202,6 +202,37 @@ export function useParkingPaymentTypes() {
     };
 }
 
+// Parking Rate hooks
+export function useParkingRates() {
+    const { data, loading, error, execute } = useApi();
+
+    const getRates = useCallback((params?: QueryParams) => {
+        return execute(() => apiService.getParkingRates(params));
+    }, [execute]);
+
+    const createRate = useCallback((data: any) => {
+        return execute(() => apiService.createParkingRate(data));
+    }, [execute]);
+
+    const updateRate = useCallback((id: string, data: any) => {
+        return execute(() => apiService.updateParkingRate(id, data));
+    }, [execute]);
+
+    const deleteRate = useCallback((id: string) => {
+        return execute(() => apiService.deleteParkingRate(id));
+    }, [execute]);
+
+    return {
+        data,
+        loading,
+        error,
+        getRates,
+        createRate,
+        updateRate,
+        deleteRate,
+    };
+}
+
 // Location hooks
 export function useLocations() {
     const { data, loading, error, execute } = useApi();
