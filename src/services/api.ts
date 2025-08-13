@@ -254,8 +254,11 @@ class ApiService {
 
     // Parking Rate endpoints
     async getParkingRates(params?: QueryParams): Promise<ApiResponse<ParkingRate[]>> {
+        console.log('Mengirim permintaan ke endpoint ParkingRates dengan params:', params);
         const queryString = this.buildQueryString(params);
-        return this.request(`${API_CONFIG.ENDPOINTS.PARKING_RATES}${queryString}`);
+        const response = await this.request(`${API_CONFIG.ENDPOINTS.PARKING_RATES}${queryString}`);
+        console.log('Respons dari endpoint ParkingRates:', response);
+        return response;
     }
 
     async createParkingRate(data: Omit<ParkingRate, 'id' | 'created_at' | 'updated_at' | 'created_by' | 'updated_by' | 'created_remark' | 'updated_remark'>): Promise<ApiResponse<ParkingRate>> {
@@ -275,4 +278,4 @@ class ApiService {
     }
 }
 
-export const apiService = new ApiService(); 
+export const apiService = new ApiService();
