@@ -1,0 +1,75 @@
+import React from "react";
+import { TrendingUp, DollarSign, Car, Clock } from "lucide-react";
+
+interface TransactionStatsProps {
+  totalTransactions: number;
+  totalRevenue: number;
+  activeVehicles: number;
+  avgDurationMinutes: number;
+}
+
+export function TransactionStats({
+  totalTransactions,
+  totalRevenue,
+  activeVehicles,
+  avgDurationMinutes,
+}: TransactionStatsProps) {
+  const stats = [
+    {
+      title: "Total Transaksi",
+      value: totalTransactions.toLocaleString("id-ID"),
+      icon: TrendingUp,
+      color: "bg-green-500",
+    },
+    {
+      title: "Pendapatan",
+      value: `Rp ${totalRevenue.toLocaleString("id-ID")}`,
+      icon: DollarSign,
+      color: "bg-blue-500",
+    },
+    {
+      title: "Kendaraan Aktif",
+      value: activeVehicles.toLocaleString("id-ID"),
+      icon: Car,
+      color: "bg-purple-500",
+    },
+    {
+      title: "Rata-rata Durasi",
+      value: `${Math.floor(avgDurationMinutes / 60)}h ${
+        avgDurationMinutes % 60
+      }m`,
+      icon: Clock,
+      color: "bg-orange-500",
+    },
+  ];
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {stats.map((stat, index) => {
+        const Icon = stat.icon;
+        return (
+          <div
+            key={index}
+            className="bg-white rounded-lg shadow-sm border border-gray-200 p-6"
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">
+                  {stat.title}
+                </p>
+                <p className="text-2xl font-bold text-gray-900 mt-1">
+                  {stat.value}
+                </p>
+              </div>
+              <div
+                className={`w-12 h-12 ${stat.color} rounded-lg flex items-center justify-center`}
+              >
+                <Icon className="w-6 h-6 text-white" />
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
