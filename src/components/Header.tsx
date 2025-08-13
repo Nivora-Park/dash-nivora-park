@@ -7,14 +7,19 @@ import {
   Settings,
   MapPin,
   ChevronDown,
+  LogOut,
 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { ApiStatus } from "./ApiStatus";
 import { useLocationSwitcher } from "@/hooks/useLocationSwitcher";
+import { useAuth } from "@/contexts/AuthContext";
 
 export function Header() {
   const [showLocationDropdown, setShowLocationDropdown] = useState(false);
+  const [showUserDropdown, setShowUserDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const userDropdownRef = useRef<HTMLDivElement>(null);
+  const { user, logout } = useAuth();
   const {
     currentLocation,
     currentMerchant,
@@ -31,6 +36,12 @@ export function Header() {
         !dropdownRef.current.contains(event.target as Node)
       ) {
         setShowLocationDropdown(false);
+      }
+      if (
+        userDropdownRef.current &&
+        !userDropdownRef.current.contains(event.target as Node)
+      ) {
+        setShowUserDropdown(false);
       }
     }
 
@@ -132,16 +143,40 @@ export function Header() {
           </button>
 
           {/* User Profile */}
-          <div className="flex items-center space-x-3">
-            <div className="text-right">
-              <div className="text-sm font-medium text-gray-900">
-                Admin Nivora
+          <div className="relative" ref={userDropdownRef}>
+            <button
+              onClick={() => setShowUserDropdown(!showUserDropdown)}
+              className="flex items-center space-x-3 hover:bg-gray-100 rounded-lg p-2 transition-colors"
+            >
+              <div className="text-right">
+                <div className="text-sm font-medium text-gray-900">
+                  {user?.username || "Admin Nivora"}
+                </div>
+                <div className="text-xs text-gray-500 capitalize">
+                  {user?.role || "Super Admin"}
+                </div>
               </div>
-              <div className="text-xs text-gray-500">Super Admin</div>
-            </div>
-            <button className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white hover:bg-blue-700 transition-colors">
-              <User className="w-4 h-4" />
+              <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white">
+                <User className="w-4 h-4" />
+              </div>
+              <ChevronDown className="w-4 h-4 text-gray-400" />
             </button>
+
+            {/* User Dropdown */}
+            {showUserDropdown && (
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
+                <button
+                  onClick={() => {
+                    setShowUserDropdown(false);
+                    logout();
+                  }}
+                  className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2"
+                >
+                  <LogOut className="w-4 h-4" />
+                  <span>Logout</span>
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Settings */}

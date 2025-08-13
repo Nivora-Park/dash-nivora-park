@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { AuthProvider } from "@/contexts/AuthContext";
+import { AuthWrapper } from "@/components/AuthWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,7 +16,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Nivora Park - Dashboard Monitoring Transaksi",
-  description: "Dashboard monitoring transaksi parkir dengan konfigurasi terminal dan payment",
+  description:
+    "Dashboard monitoring transaksi parkir dengan konfigurasi terminal dan payment",
 };
 
 export default function RootLayout({
@@ -28,7 +31,9 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning={true}
       >
-        {children}
+        <AuthProvider>
+          <AuthWrapper>{children}</AuthWrapper>
+        </AuthProvider>
       </body>
     </html>
   );
