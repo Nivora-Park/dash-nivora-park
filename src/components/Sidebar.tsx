@@ -100,7 +100,7 @@ export function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
         </div>
       </nav>
       
-      <div className="absolute bottom-6 left-6 w-55">
+      {/* <div className="absolute bottom-6 left-6 w-55">
         <div className="bg-gray-50 rounded-lg p-4">
           <div className="flex items-center space-x-2">
             <Activity className="w-4 h-4 text-green-500" />
@@ -108,7 +108,7 @@ export function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
           </div>
           <div className="text-xs text-gray-500 mt-1">Semua terminal online</div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 } 
