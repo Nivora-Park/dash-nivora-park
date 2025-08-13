@@ -52,7 +52,7 @@ export interface ParkingTransaction extends BaseModel {
 export interface ParkingTerminal extends BaseModel {
     // Catatan: backend tidak mengembalikan location_id untuk terminal
     location_id?: string;
-    vehicle_type_id: string;
+    rate_id?: string; // Tambahkan rate_id untuk relasi dengan parking rate
     code: string;
     name: string;
     description: string;
@@ -82,7 +82,9 @@ export interface ParkingVehicleType extends BaseModel {
 
 // Parking Rate model
 export interface ParkingRate extends BaseModel {
-    vehicle_type_id: string;
+    location_id?: string; // Tambahkan relasi ke lokasi
+    name?: string; // Tambahkan field name untuk display di dropdown
+    code?: string; // Tambahkan field code
     description: string;
     first_hour_cost: number;
     subsequent_hour_cost: number;
@@ -105,7 +107,6 @@ export interface ParkingPaymentType extends BaseModel {
 export interface ParkingTransactionPayment extends BaseModel {
     transaction_id: string;
     terminal_id: string;
-    vehicle_type_id: string;
     payment_type_id: string;
     identifier: string;
     reference: string;
@@ -125,7 +126,6 @@ export interface ParkingTransactionPayment extends BaseModel {
 export interface ParkingTransactionTerminal extends BaseModel {
     transaction_id: string;
     terminal_id: string;
-    vehicle_type_id: string;
     plate_number: string;
     image_url: string;
 }
@@ -176,7 +176,6 @@ export interface QueryParams {
     // Parking Transaction Payment specific
     transaction_id?: string;
     terminal_id?: string;
-    vehicle_type_id?: string;
     payment_type_id?: string;
     identifier?: string;
     reference?: string;
@@ -187,4 +186,4 @@ export interface QueryParams {
 
     // Parking Transaction Terminal specific
     plate_number?: string;
-} 
+}

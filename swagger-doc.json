@@ -215,7 +215,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -234,7 +234,7 @@
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -269,7 +269,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -285,13 +285,13 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -323,7 +323,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -339,19 +339,19 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -393,7 +393,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -409,13 +409,13 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -443,19 +443,19 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -660,7 +660,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -679,7 +679,7 @@
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -714,7 +714,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -730,13 +730,13 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -768,7 +768,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -784,19 +784,19 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -838,7 +838,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -854,13 +854,13 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -888,19 +888,19 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -1105,7 +1105,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -1124,7 +1124,7 @@
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -1159,7 +1159,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -1175,13 +1175,13 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -1374,7 +1374,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -1393,7 +1393,7 @@
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -1428,7 +1428,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -1444,13 +1444,13 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -1482,7 +1482,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -1498,19 +1498,19 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -1552,7 +1552,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -1568,13 +1568,13 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -1602,19 +1602,19 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -1831,7 +1831,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -1850,7 +1850,7 @@
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -1885,7 +1885,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -1901,13 +1901,13 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -1939,7 +1939,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -1955,19 +1955,19 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -2009,7 +2009,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -2025,13 +2025,13 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -2059,19 +2059,19 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -2264,7 +2264,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -2283,7 +2283,7 @@
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -2318,7 +2318,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -2334,13 +2334,13 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -2372,7 +2372,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -2388,19 +2388,19 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -2442,7 +2442,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -2458,13 +2458,13 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -2492,19 +2492,19 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -2536,7 +2536,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -2552,19 +2552,19 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -2606,7 +2606,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -2622,13 +2622,13 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -2656,19 +2656,19 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -2837,7 +2837,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -2856,7 +2856,7 @@
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -2891,7 +2891,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -2907,13 +2907,13 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -2945,7 +2945,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -2961,19 +2961,19 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -3015,7 +3015,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -3031,13 +3031,13 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -3065,19 +3065,19 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -3103,12 +3103,6 @@
                     },
                     {
                         "type": "string",
-                        "description": "Vehicle Type ID (UUID)",
-                        "name": "vehicle_type_id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
                         "description": "Description",
                         "name": "description",
                         "in": "query"
@@ -3129,6 +3123,12 @@
                         "type": "integer",
                         "description": "Daily max cost",
                         "name": "daily_max_cost",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Discount cost",
+                        "name": "discount_cost",
                         "in": "query"
                     },
                     {
@@ -3264,7 +3264,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -3283,7 +3283,7 @@
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -3318,7 +3318,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -3334,13 +3334,13 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -3372,7 +3372,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -3388,19 +3388,19 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -3442,7 +3442,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -3458,13 +3458,13 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -3492,19 +3492,19 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -3691,7 +3691,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -3710,7 +3710,7 @@
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -3745,7 +3745,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -3761,13 +3761,13 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -3799,7 +3799,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -3815,19 +3815,19 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -3869,7 +3869,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -3885,13 +3885,13 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -3919,19 +3919,19 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -4112,7 +4112,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -4131,7 +4131,7 @@
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -4166,7 +4166,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -4182,13 +4182,13 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -4417,7 +4417,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -4436,7 +4436,7 @@
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -4471,7 +4471,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -4487,13 +4487,13 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -4525,7 +4525,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -4541,19 +4541,19 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -4595,7 +4595,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -4611,13 +4611,13 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -4645,19 +4645,19 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -4826,7 +4826,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -4845,7 +4845,7 @@
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -4880,7 +4880,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -4896,13 +4896,13 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -4934,7 +4934,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -4950,19 +4950,19 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -5004,7 +5004,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -5020,13 +5020,13 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -5054,19 +5054,19 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -5098,7 +5098,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -5114,19 +5114,19 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -5168,7 +5168,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -5184,13 +5184,13 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -5218,19 +5218,19 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -5258,6 +5258,12 @@
                         "type": "string",
                         "description": "Location ID (UUID)",
                         "name": "location_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Rate ID (UUID)",
+                        "name": "rate_id",
                         "in": "query"
                     },
                     {
@@ -5417,7 +5423,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -5436,7 +5442,7 @@
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -5471,7 +5477,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -5487,13 +5493,13 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -5650,7 +5656,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -5669,7 +5675,7 @@
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -5704,7 +5710,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -5720,13 +5726,13 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -5758,7 +5764,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -5774,19 +5780,19 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -5828,7 +5834,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -5844,13 +5850,13 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -5878,19 +5884,19 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -5922,7 +5928,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -5938,19 +5944,19 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -5992,7 +5998,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.Response"
+                                    "$ref": "#/definitions/types.Response"
                                 },
                                 {
                                     "type": "object",
@@ -6008,13 +6014,13 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -6042,19 +6048,19 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/helpers.Response"
+                            "$ref": "#/definitions/types.Response"
                         }
                     }
                 }
@@ -6062,24 +6068,6 @@
         }
     },
     "definitions": {
-        "helpers.Response": {
-            "type": "object",
-            "properties": {
-                "code": {
-                    "type": "integer"
-                },
-                "data": {},
-                "host": {
-                    "type": "string"
-                },
-                "latency": {
-                    "type": "number"
-                },
-                "message": {
-                    "type": "string"
-                }
-            }
-        },
         "models.Location": {
             "type": "object",
             "properties": {
@@ -6676,6 +6664,9 @@
                 "description": {
                     "type": "string"
                 },
+                "discount_cost": {
+                    "type": "integer"
+                },
                 "first_hour_cost": {
                     "type": "integer"
                 },
@@ -6685,8 +6676,11 @@
                 "lost_ticket_cost": {
                     "type": "integer"
                 },
-                "parking_vehicle_type": {
-                    "$ref": "#/definitions/models.ParkingVehicleType"
+                "parking_vehicle_types": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.ParkingVehicleType"
+                    }
                 },
                 "service_cost": {
                     "type": "integer"
@@ -6713,9 +6707,6 @@
                     "type": "string"
                 },
                 "updated_remark": {
-                    "type": "string"
-                },
-                "vehicle_type_id": {
                     "type": "string"
                 }
             }
@@ -7097,11 +7088,8 @@
                         "$ref": "#/definitions/models.ParkingMembershipVehicle"
                     }
                 },
-                "parking_rates": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.ParkingRate"
-                    }
+                "parking_rate": {
+                    "$ref": "#/definitions/models.ParkingRate"
                 },
                 "parking_transaction_terminals": {
                     "type": "array",
@@ -7114,6 +7102,9 @@
                     "items": {
                         "$ref": "#/definitions/models.ParkingVehicleTypeTerminal"
                     }
+                },
+                "rate_id": {
+                    "type": "string"
                 },
                 "synced_at": {
                     "type": "string"
@@ -7196,6 +7187,24 @@
                     "type": "string"
                 },
                 "vehicle_type_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.Response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {},
+                "host": {
+                    "type": "string"
+                },
+                "latency": {
+                    "type": "number"
+                },
+                "message": {
                     "type": "string"
                 }
             }
