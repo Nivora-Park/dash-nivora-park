@@ -1,81 +1,33 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Search, Filter, MoreVertical, Car, Bike } from 'lucide-react';
 
-const transactions = [
-  {
-    id: 'TRX-001',
-    plateNumber: 'B 1234 ABC',
-    vehicleType: 'car',
-    entryTime: '08:30',
-    exitTime: '12:45',
-    duration: '4h 15m',
-    amount: 25000,
-    paymentMethod: 'QRIS',
-    status: 'completed',
-    terminal: 'A1'
-  },
-  {
-    id: 'TRX-002',
-    plateNumber: 'B 5678 DEF',
-    vehicleType: 'motorcycle',
-    entryTime: '09:15',
-    exitTime: '11:30',
-    duration: '2h 15m',
-    amount: 15000,
-    paymentMethod: 'Cash',
-    status: 'completed',
-    terminal: 'A2'
-  },
-  {
-    id: 'TRX-003',
-    plateNumber: 'B 9012 GHI',
-    vehicleType: 'car',
-    entryTime: '10:00',
-    exitTime: null,
-    duration: '-',
-    amount: 0,
-    paymentMethod: '-',
-    status: 'active',
-    terminal: 'B1'
-  },
-  {
-    id: 'TRX-004',
-    plateNumber: 'B 3456 JKL',
-    vehicleType: 'motorcycle',
-    entryTime: '07:45',
-    exitTime: '14:20',
-    duration: '6h 35m',
-    amount: 35000,
-    paymentMethod: 'E-Wallet',
-    status: 'completed',
-    terminal: 'B2'
-  },
-  {
-    id: 'TRX-005',
-    plateNumber: 'B 7890 MNO',
-    vehicleType: 'car',
-    entryTime: '11:30',
-    exitTime: '16:45',
-    duration: '5h 15m',
-    amount: 30000,
-    paymentMethod: 'QRIS',
-    status: 'completed',
-    terminal: 'A1'
-  }
-];
+export interface MonitoringTableRow {
+  id: string;
+  plateNumber: string;
+  vehicleType: 'car' | 'motorcycle' | string;
+  entryTime?: string | null;
+  exitTime?: string | null;
+  duration?: string | null;
+  amount: number;
+  paymentMethod: string;
+  status: 'completed' | 'active' | string;
+  terminal: string;
+}
 
-export function TransactionTable() {
+export function TransactionTable({ rows }: { rows: MonitoringTableRow[] }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
 
-  const filteredTransactions = transactions.filter(transaction => {
-    const matchesSearch = transaction.plateNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         transaction.id.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || transaction.status === statusFilter;
-    return matchesSearch && matchesStatus;
-  });
+  const filteredTransactions = useMemo(() => {
+    return rows.filter(transaction => {
+      const matchesSearch = transaction.plateNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           transaction.id.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesStatus = statusFilter === 'all' || transaction.status === statusFilter;
+      return matchesSearch && matchesStatus;
+    });
+  }, [rows, searchTerm, statusFilter]);
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -152,9 +104,9 @@ export function TransactionTable() {
                     <span className="font-medium text-gray-900">{transaction.plateNumber}</span>
                   </div>
                 </td>
-                <td className="py-3 px-4 text-gray-600">{transaction.entryTime}</td>
+                <td className="py-3 px-4 text-gray-600">{transaction.entryTime || '-'}</td>
                 <td className="py-3 px-4 text-gray-600">{transaction.exitTime || '-'}</td>
-                <td className="py-3 px-4 text-gray-600">{transaction.duration}</td>
+                <td className="py-3 px-4 text-gray-600">{transaction.duration || '-'}</td>
                 <td className="py-3 px-4">
                   {transaction.amount > 0 ? (
                     <span className="font-medium text-gray-900">Rp {transaction.amount.toLocaleString()}</span>
@@ -163,9 +115,7 @@ export function TransactionTable() {
                   )}
                 </td>
                 <td className="py-3 px-4 text-gray-600">{transaction.paymentMethod}</td>
-                <td className="py-3 px-4">
-                  {getStatusBadge(transaction.status)}
-                </td>
+                <td className="py-3 px-4">{getStatusBadge(transaction.status)}</td>
                 <td className="py-3 px-4 text-gray-600">{transaction.terminal}</td>
                 <td className="py-3 px-4">
                   <button className="p-1 text-gray-400 hover:text-gray-600 rounded">
@@ -181,7 +131,7 @@ export function TransactionTable() {
       {/* Pagination */}
       <div className="flex items-center justify-between mt-6">
         <div className="text-sm text-gray-600">
-          Menampilkan {filteredTransactions.length} dari {transactions.length} transaksi
+          Menampilkan {filteredTransactions.length} dari {rows.length} transaksi
         </div>
         <div className="flex items-center space-x-2">
           <button className="px-3 py-1 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded">
