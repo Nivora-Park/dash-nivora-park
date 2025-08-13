@@ -1,36 +1,54 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { TransactionMonitoring } from './TransactionMonitoring';
-import { TerminalConfig } from './TerminalConfig';
-import { PaymentConfig } from './PaymentConfig';
-import { VehicleManagement } from './VehicleManagement';
-import { Reports } from './Reports';
-import { UserManagement } from './UserManagement';
-import { Sidebar } from './Sidebar';
-import { Header } from './Header';
-import { ApiStatus } from './ApiStatus';
-import { ApiTest } from './ApiTest';
-import { ApiWarmup } from './ApiWarmup';
+import { useState } from "react";
+import { TransactionMonitoring } from "./TransactionMonitoring";
+import { TerminalConfig } from "./TerminalConfig";
+import { PaymentConfig } from "./PaymentConfig";
+import { VehicleManagement } from "./VehicleManagement";
+import { Reports } from "./Reports";
+import { UserManagement } from "./UserManagement";
+import { MerchantManagement } from "./MerchantManagement";
+import { LocationManagement } from "./LocationManagement";
+import MembershipProductManagement from "./MembershipProductManagement";
+import MembershipManagement from "./MembershipManagement";
+import MembershipVehicleManagement from "./MembershipVehicleManagement";
+import MembershipTransactionManagement from "./MembershipTransactionManagement";
+import { Sidebar } from "./Sidebar";
+import { Header } from "./Header";
+import { ApiStatus } from "./ApiStatus";
+import { ApiTest } from "./ApiTest";
+import { ApiWarmup } from "./ApiWarmup";
 
 export function ParkingDashboard() {
-  const [activeTab, setActiveTab] = useState('monitoring');
+  const [activeTab, setActiveTab] = useState("monitoring");
 
   const renderContent = () => {
     switch (activeTab) {
-      case 'monitoring':
+      case "monitoring":
         return <TransactionMonitoring />;
-      case 'terminal':
+      case "merchants":
+        return <MerchantManagement />;
+      case "locations":
+        return <LocationManagement />;
+      case "membership-products":
+        return <MembershipProductManagement />;
+      case "memberships":
+        return <MembershipManagement />;
+      case "membership-vehicles":
+        return <MembershipVehicleManagement />;
+      case "membership-transactions":
+        return <MembershipTransactionManagement />;
+      case "terminal":
         return <TerminalConfig />;
-      case 'payment':
+      case "payment":
         return <PaymentConfig />;
-      case 'vehicles':
+      case "vehicles":
         return <VehicleManagement />;
-      case 'reports':
+      case "reports":
         return <Reports />;
-      case 'users':
+      case "users":
         return <UserManagement />;
-      case 'api-test':
+      case "api-test":
         return <ApiTest />;
       default:
         return <TransactionMonitoring />;
@@ -53,4 +71,4 @@ export function ParkingDashboard() {
       </div>
     </div>
   );
-} 
+}

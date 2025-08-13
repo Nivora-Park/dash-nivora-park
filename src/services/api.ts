@@ -2,6 +2,7 @@ import { API_CONFIG, API_METHODS, QUERY_PARAMS } from '@/config/api';
 import {
     ApiResponse,
     QueryParams,
+    Merchant,
     Location,
     ParkingTransaction,
     ParkingTerminal,
@@ -9,7 +10,11 @@ import {
     ParkingPaymentType,
     ParkingTransactionPayment,
     ParkingTransactionTerminal,
-    ParkingRate
+    ParkingRate,
+    ParkingMembershipProduct,
+    ParkingMembership,
+    ParkingMembershipVehicle,
+    ParkingMembershipTransaction
 } from '@/types/api';
 
 class ApiService {
@@ -96,6 +101,28 @@ class ApiService {
     // Health check
     async healthCheck(): Promise<ApiResponse> {
         return this.request(API_CONFIG.ENDPOINTS.HEALTH);
+    }
+
+    // Merchant endpoints
+    async getMerchants(params?: QueryParams): Promise<ApiResponse<Merchant[]>> {
+        const queryString = this.buildQueryString(params);
+        return this.request(`${API_CONFIG.ENDPOINTS.MERCHANTS}${queryString}`);
+    }
+
+    async createMerchant(data: Omit<Merchant, 'id' | 'created_at' | 'updated_at' | 'created_by' | 'updated_by' | 'created_remark' | 'updated_remark'>): Promise<ApiResponse<Merchant>> {
+        return this.request(API_CONFIG.ENDPOINTS.MERCHANTS, API_METHODS.POST, data);
+    }
+
+    async getMerchantById(id: string): Promise<ApiResponse<Merchant>> {
+        return this.request(`${API_CONFIG.ENDPOINTS.MERCHANTS}/${id}`);
+    }
+
+    async updateMerchant(id: string, data: Partial<Merchant>): Promise<ApiResponse<Merchant>> {
+        return this.request(`${API_CONFIG.ENDPOINTS.MERCHANTS}/${id}`, API_METHODS.PUT, data);
+    }
+
+    async deleteMerchant(id: string): Promise<ApiResponse> {
+        return this.request(`${API_CONFIG.ENDPOINTS.MERCHANTS}/${id}`, API_METHODS.DELETE);
     }
 
     // Location endpoints
@@ -258,7 +285,7 @@ class ApiService {
         const queryString = this.buildQueryString(params);
         const response = await this.request(`${API_CONFIG.ENDPOINTS.PARKING_RATES}${queryString}`);
         console.log('Respons dari endpoint ParkingRates:', response);
-        return response;
+        return response as ApiResponse<ParkingRate[]>;
     }
 
     async createParkingRate(data: Omit<ParkingRate, 'id' | 'created_at' | 'updated_at' | 'created_by' | 'updated_by' | 'created_remark' | 'updated_remark'>): Promise<ApiResponse<ParkingRate>> {
@@ -275,6 +302,78 @@ class ApiService {
 
     async deleteParkingRate(id: string): Promise<ApiResponse> {
         return this.request(`${API_CONFIG.ENDPOINTS.PARKING_RATES}/${id}`, API_METHODS.DELETE);
+    }
+
+    // Membership Product endpoints
+    async getMembershipProducts(params?: QueryParams): Promise<ApiResponse<ParkingMembershipProduct[]>> {
+        const queryString = this.buildQueryString(params);
+        return this.request(`${API_CONFIG.ENDPOINTS.PARKING_MEMBERSHIP_PRODUCTS}${queryString}`);
+    }
+
+    async createMembershipProduct(data: Omit<ParkingMembershipProduct, 'id' | 'created_at' | 'updated_at' | 'created_by' | 'updated_by' | 'created_remark' | 'updated_remark'>): Promise<ApiResponse<ParkingMembershipProduct>> {
+        return this.request(API_CONFIG.ENDPOINTS.PARKING_MEMBERSHIP_PRODUCTS, API_METHODS.POST, data);
+    }
+
+    async updateMembershipProduct(id: string, data: Partial<ParkingMembershipProduct>): Promise<ApiResponse<ParkingMembershipProduct>> {
+        return this.request(`${API_CONFIG.ENDPOINTS.PARKING_MEMBERSHIP_PRODUCTS}/${id}`, API_METHODS.PUT, data);
+    }
+
+    async deleteMembershipProduct(id: string): Promise<ApiResponse> {
+        return this.request(`${API_CONFIG.ENDPOINTS.PARKING_MEMBERSHIP_PRODUCTS}/${id}`, API_METHODS.DELETE);
+    }
+
+    // Membership endpoints
+    async getMemberships(params?: QueryParams): Promise<ApiResponse<ParkingMembership[]>> {
+        const queryString = this.buildQueryString(params);
+        return this.request(`${API_CONFIG.ENDPOINTS.PARKING_MEMBERSHIPS}${queryString}`);
+    }
+
+    async createMembership(data: Omit<ParkingMembership, 'id' | 'created_at' | 'updated_at' | 'created_by' | 'updated_by' | 'created_remark' | 'updated_remark'>): Promise<ApiResponse<ParkingMembership>> {
+        return this.request(API_CONFIG.ENDPOINTS.PARKING_MEMBERSHIPS, API_METHODS.POST, data);
+    }
+
+    async updateMembership(id: string, data: Partial<ParkingMembership>): Promise<ApiResponse<ParkingMembership>> {
+        return this.request(`${API_CONFIG.ENDPOINTS.PARKING_MEMBERSHIPS}/${id}`, API_METHODS.PUT, data);
+    }
+
+    async deleteMembership(id: string): Promise<ApiResponse> {
+        return this.request(`${API_CONFIG.ENDPOINTS.PARKING_MEMBERSHIPS}/${id}`, API_METHODS.DELETE);
+    }
+
+    // Membership Vehicle endpoints
+    async getMembershipVehicles(params?: QueryParams): Promise<ApiResponse<ParkingMembershipVehicle[]>> {
+        const queryString = this.buildQueryString(params);
+        return this.request(`${API_CONFIG.ENDPOINTS.PARKING_MEMBERSHIP_VEHICLES}${queryString}`);
+    }
+
+    async createMembershipVehicle(data: Omit<ParkingMembershipVehicle, 'id' | 'created_at' | 'updated_at' | 'created_by' | 'updated_by' | 'created_remark' | 'updated_remark'>): Promise<ApiResponse<ParkingMembershipVehicle>> {
+        return this.request(API_CONFIG.ENDPOINTS.PARKING_MEMBERSHIP_VEHICLES, API_METHODS.POST, data);
+    }
+
+    async updateMembershipVehicle(id: string, data: Partial<ParkingMembershipVehicle>): Promise<ApiResponse<ParkingMembershipVehicle>> {
+        return this.request(`${API_CONFIG.ENDPOINTS.PARKING_MEMBERSHIP_VEHICLES}/${id}`, API_METHODS.PUT, data);
+    }
+
+    async deleteMembershipVehicle(id: string): Promise<ApiResponse> {
+        return this.request(`${API_CONFIG.ENDPOINTS.PARKING_MEMBERSHIP_VEHICLES}/${id}`, API_METHODS.DELETE);
+    }
+
+    // Membership Transaction endpoints
+    async getMembershipTransactions(params?: QueryParams): Promise<ApiResponse<ParkingMembershipTransaction[]>> {
+        const queryString = this.buildQueryString(params);
+        return this.request(`${API_CONFIG.ENDPOINTS.PARKING_MEMBERSHIP_TRANSACTIONS}${queryString}`);
+    }
+
+    async createMembershipTransaction(data: Omit<ParkingMembershipTransaction, 'id' | 'created_at' | 'updated_at' | 'created_by' | 'updated_by' | 'created_remark' | 'updated_remark'>): Promise<ApiResponse<ParkingMembershipTransaction>> {
+        return this.request(API_CONFIG.ENDPOINTS.PARKING_MEMBERSHIP_TRANSACTIONS, API_METHODS.POST, data);
+    }
+
+    async updateMembershipTransaction(id: string, data: Partial<ParkingMembershipTransaction>): Promise<ApiResponse<ParkingMembershipTransaction>> {
+        return this.request(`${API_CONFIG.ENDPOINTS.PARKING_MEMBERSHIP_TRANSACTIONS}/${id}`, API_METHODS.PUT, data);
+    }
+
+    async deleteMembershipTransaction(id: string): Promise<ApiResponse> {
+        return this.request(`${API_CONFIG.ENDPOINTS.PARKING_MEMBERSHIP_TRANSACTIONS}/${id}`, API_METHODS.DELETE);
     }
 }
 

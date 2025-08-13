@@ -6,6 +6,9 @@ export const API_CONFIG = {
         // Health check
         HEALTH: '/health',
 
+        // Merchant management (CMS)
+        MERCHANTS: '/api/v1/cms/merchant',
+
         // Location management (CMS)
         LOCATIONS: '/api/v1/cms/location',
 
@@ -17,6 +20,12 @@ export const API_CONFIG = {
         PARKING_RATES: '/api/v1/cms/parking-rate',
         PARKING_TRANSACTION_PAYMENTS: '/api/v1/cms/parking-transaction-payment',
         PARKING_TRANSACTION_TERMINALS: '/api/v1/cms/parking-transaction-terminal',
+
+        // Membership management (CMS)
+        PARKING_MEMBERSHIP_PRODUCTS: '/api/v1/cms/parking-membership-product',
+        PARKING_MEMBERSHIPS: '/api/v1/cms/parking-membership',
+        PARKING_MEMBERSHIP_VEHICLES: '/api/v1/cms/parking-membership-vehicle',
+        PARKING_MEMBERSHIP_TRANSACTIONS: '/api/v1/cms/parking-membership-transaction',
     },
     HEADERS: {
         'Content-Type': 'application/json',

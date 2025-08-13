@@ -101,14 +101,14 @@ export function useVehicleManagement() {
     return map;
   }, [payments]);
 
-  const vehicleTypeIdToLocationName = useMemo(() => {
+  const terminalIdToLocationName = useMemo(() => {
     const locMap = new Map<string, string>();
-    for (const v of vehicleTypes) {
-      const loc = locations.find((l) => l.id === v.location_id);
-      if (v.id) locMap.set(v.id, loc?.name || "");
+    for (const terminal of terminalsMaster) {
+      const location = locations.find((l) => l.id === terminal.location_id);
+      if (terminal.id) locMap.set(terminal.id, location?.name || "Unknown");
     }
     return locMap;
-  }, [vehicleTypes, locations]);
+  }, [terminalsMaster, locations]);
 
   const terminalIdToCode = useMemo(() => {
     const map = new Map<string, string>();
@@ -134,7 +134,7 @@ export function useVehicleManagement() {
           ? payment.total_amount
           : 0;
       const locationName =
-        vehicleTypeIdToLocationName.get(t.vehicle_type_id) || "-";
+        terminalIdToLocationName.get(t.terminal_id) || "-";
       const terminalLabel =
         terminalIdToCode.get(t.terminal_id) || t.terminal_id;
       return {
@@ -149,7 +149,7 @@ export function useVehicleManagement() {
         terminal: terminalLabel,
       };
     });
-  }, [terminals, paymentByTransaction, vehicleTypeIdToLocationName, terminalIdToCode]);
+  }, [terminals, paymentByTransaction, terminalIdToLocationName, terminalIdToCode]);
 
   // Filtered data
   const filteredVehicles = useMemo(() => {

@@ -1,8 +1,10 @@
 "use client";
 
 import React from "react";
-import { Filter, Download, Eye } from "lucide-react";
+import { Filter, Eye } from "lucide-react";
 import { useTransactionMonitoring } from "@/hooks/useTransactionMonitoring";
+import { TransactionMonitoringHeader } from "@/components/transaction/TransactionMonitoringHeader";
+import { TransactionMonitoringFilters } from "@/components/transaction/TransactionMonitoringFilters";
 import { TransactionStats } from "@/components/transaction/TransactionStats";
 import { TransactionChart } from "./TransactionChart";
 import { TransactionTable } from "./TransactionTable";
@@ -22,35 +24,15 @@ export function TransactionMonitoring() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">
-            Monitoring Transaksi
-          </h1>
-          <p className="text-gray-600">Pantau transaksi parkir real-time</p>
-        </div>
-        <div className="flex items-center space-x-3">
-          <select
-            value={timeFilter}
-            onChange={(e) =>
-              updateTimeFilter(e.target.value as "today" | "week" | "month")
-            }
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="today">Hari Ini</option>
-            <option value="week">7 Hari</option>
-            <option value="month">Bulan Ini</option>
-          </select>
-          <button
-            onClick={exportData}
-            className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            <Download className="w-4 h-4" />
-            <span>Export</span>
-          </button>
-        </div>
-      </div>
+      <TransactionMonitoringHeader
+        onRefresh={refreshData}
+        onExport={exportData}
+      />
+
+      <TransactionMonitoringFilters
+        timeFilter={timeFilter}
+        onTimeFilterChange={updateTimeFilter}
+      />
 
       {/* Stats Cards */}
       <TransactionStats

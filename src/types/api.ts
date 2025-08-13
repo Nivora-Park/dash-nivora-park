@@ -24,6 +24,19 @@ export interface BaseModel {
     synced_remark?: string;
 }
 
+// Merchant model
+export interface Merchant extends BaseModel {
+    code: string;
+    name: string;
+    description: string;
+    address: string;
+    email: string;
+    phone: string;
+    contract_start: string;
+    contract_end: string;
+    logo_url: string;
+}
+
 // Location model
 export interface Location extends BaseModel {
     merchant_id: string;
@@ -108,6 +121,7 @@ export interface ParkingTransactionPayment extends BaseModel {
     transaction_id: string;
     terminal_id: string;
     payment_type_id: string;
+    vehicle_type_id?: string; // Add missing vehicle_type_id field
     identifier: string;
     reference: string;
     provider: string;
@@ -117,6 +131,59 @@ export interface ParkingTransactionPayment extends BaseModel {
     tax_amount: number;
     service_amount: number;
     penalty_amount: number;
+    total_amount: number;
+    paid_amount: number;
+    change_amount: number;
+}
+
+// Membership models
+export interface ParkingMembershipProduct extends BaseModel {
+    location_id: string;
+    code: string;
+    name: string;
+    description: string;
+    base_price: number;
+    card_price: number;
+    sticker_price: number;
+    tax_price: number;
+    duration_days: number;
+}
+
+export interface ParkingMembership extends BaseModel {
+    membership_product_id: string;
+    code: string;
+    name: string;
+    description: string;
+    address: string;
+    email: string;
+    phone: string;
+    start_time: string;
+    end_time: string;
+}
+
+export interface ParkingMembershipVehicle extends BaseModel {
+    membership_id: string;
+    vehicle_type_id: string;
+    description: string;
+    plate_number: string;
+    card_number: string;
+    sticker_number: string;
+    brand: string;
+    model: string;
+    color: string;
+}
+
+export interface ParkingMembershipTransaction extends BaseModel {
+    membership_id: string;
+    code: string;
+    name: string;
+    description: string;
+    base_amount: number;
+    card_amount: number;
+    sticker_amount: number;
+    discount_amount: number;
+    service_amount: number;
+    tax_amount: number;
     total_amount: number;
     paid_amount: number;
     change_amount: number;

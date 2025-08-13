@@ -74,8 +74,9 @@ export function useReports() {
     // Distribusi jenis kendaraan
     const vehicleCounts = new Map<string, number>();
     for (const p of payments) {
-      const key = p.vehicle_type_id;
-      vehicleCounts.set(key, (vehicleCounts.get(key) || 0) + 1);
+      // Use 'vehicle_type_id' from ParkingTransactionPayment
+            const key = (p as any).vehicle_type ?? 'unknown';
+            vehicleCounts.set(key, (vehicleCounts.get(key) || 0) + 1);
     }
 
     const vehicleTypeData = Array.from(vehicleCounts.entries()).map(([vehicleTypeId, value]) => {

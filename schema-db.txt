@@ -1,0 +1,359 @@
+Table merchant {
+  id uuid [pk]
+  code varchar
+  name varchar
+  description varchar
+  address varchar
+  email varchar
+  phone varchar
+  contract_start timestamp
+  contract_end timestamp
+  logo_url varchar
+  created_at timestamp
+  created_by varchar
+  created_remark varchar
+  updated_at timestamp
+  updated_by varchar
+  updated_remark varchar
+  deleted_at timestamp
+  deleted_by varchar
+  deleted_remark varchar
+  synced_at timestamp
+  synced_by varchar
+  synced_remark varchar
+}
+
+Table location {
+  id uuid [pk]
+  merchant_id uuid
+  code varchar
+  name varchar
+  description varchar
+  address varchar
+  email varchar
+  phone varchar
+  contract_start timestamp
+  contract_end timestamp
+  logo_url varchar
+  created_at timestamp
+  created_by varchar
+  created_remark varchar
+  updated_at timestamp
+  updated_by varchar
+  updated_remark varchar
+  deleted_at timestamp
+  deleted_by varchar
+  deleted_remark varchar
+  synced_at timestamp
+  synced_by varchar
+  synced_remark varchar
+}
+
+Table parking_rate {
+  id uuid [pk]
+  description varchar
+  first_hour_cost int
+  subsequent_hour_cost int
+  daily_max_cost int
+  discount_cost int
+  lost_ticket_cost int
+  tax_cost int
+  service_cost int
+  created_at timestamp
+  created_by varchar
+  created_remark varchar
+  updated_at timestamp
+  updated_by varchar
+  updated_remark varchar
+  deleted_at timestamp
+  deleted_by varchar
+  deleted_remark varchar
+  synced_at timestamp
+  synced_by varchar
+  synced_remark varchar
+}
+
+Table parking_vehicle_type {
+  id uuid [pk]
+  location_id uuid
+  rate_id uuid
+  code varchar
+  name varchar
+  description varchar
+  wheel_count int
+  height int
+  weight int
+  logo_url varchar
+  created_at timestamp
+  created_by varchar
+  created_remark varchar
+  updated_at timestamp
+  updated_by varchar
+  updated_remark varchar
+  deleted_at timestamp
+  deleted_by varchar
+  deleted_remark varchar
+  synced_at timestamp
+  synced_by varchar
+  synced_remark varchar
+}
+
+Table parking_terminal {
+  id uuid [pk]
+  code varchar
+  name varchar
+  description varchar
+  logo_url varchar
+  ip_terminal varchar
+  ip_printer varchar
+  printer_type varchar
+  ip_camera varchar
+  created_at timestamp
+  created_by varchar
+  created_remark varchar
+  updated_at timestamp
+  updated_by varchar
+  updated_remark varchar
+  deleted_at timestamp
+  deleted_by varchar
+  deleted_remark varchar
+  synced_at timestamp
+  synced_by varchar
+  synced_remark varchar
+}
+
+Table parking_vehicle_type_terminal {
+  id uuid [pk]
+  vehicle_type_id uuid
+  terminal_id uuid
+  description varchar
+  created_at timestamp
+  created_by varchar
+  created_remark varchar
+  updated_at timestamp
+  updated_by varchar
+  updated_remark varchar
+  deleted_at timestamp
+  deleted_by varchar
+  deleted_remark varchar
+  synced_at timestamp
+  synced_by varchar
+  synced_remark varchar
+}
+
+Table parking_transaction {
+  id uuid [pk]
+  code varchar
+  description varchar
+  duration_minutes int
+  canceled_at timestamp
+  canceled_by varchar
+  canceled_remark varchar
+  created_at timestamp
+  created_by varchar
+  created_remark varchar
+  updated_at timestamp
+  updated_by varchar
+  updated_remark varchar
+  deleted_at timestamp
+  deleted_by varchar
+  deleted_remark varchar
+  synced_at timestamp
+  synced_by varchar
+  synced_remark varchar
+}
+
+Table parking_transaction_terminal {
+  id uuid [pk]
+  transaction_id uuid
+  terminal_id uuid
+  vehicle_type_id uuid
+  plate_number varchar
+  image_url varchar
+  created_at timestamp
+  created_by varchar
+  created_remark varchar
+  updated_at timestamp
+  updated_by varchar
+  updated_remark varchar
+  deleted_at timestamp
+  deleted_by varchar
+  deleted_remark varchar
+  synced_at timestamp
+  synced_by varchar
+  synced_remark varchar
+}
+
+Table parking_payment_type {
+  id uuid [pk]
+  location_id uuid
+  code varchar
+  name varchar
+  description varchar
+  logo_url varchar
+  created_at timestamp
+  created_by varchar
+  created_remark varchar
+  updated_at timestamp
+  updated_by varchar
+  updated_remark varchar
+  deleted_at timestamp
+  deleted_by varchar
+  deleted_remark varchar
+  synced_at timestamp
+  synced_by varchar
+  synced_remark varchar
+}
+
+Table parking_transaction_payment {
+  id uuid [pk]
+  transaction_id uuid
+  terminal_id uuid
+  payment_type_id uuid
+  description varchar
+  base_amount int
+  discount_amount int
+  penalty_amount int
+  service_amount int
+  tax_amount int
+  total_amount int
+  paid_amount int
+  change_amount int
+  provider varchar
+  identifier varchar
+  reference varchar
+  created_at timestamp
+  created_by varchar
+  created_remark varchar
+  updated_at timestamp
+  updated_by varchar
+  updated_remark varchar
+  deleted_at timestamp
+  deleted_by varchar
+  deleted_remark varchar
+  synced_at timestamp
+  synced_by varchar
+  synced_remark varchar
+}
+
+Table parking_membership_product {
+  id uuid [pk]
+  location_id uuid
+  code varchar
+  name varchar
+  description varchar
+  base_price int
+  card_price int
+  sticker_price int
+  tax_price int
+  duration_days int
+  created_at timestamp
+  created_by varchar
+  created_remark varchar
+  updated_at timestamp
+  updated_by varchar
+  updated_remark varchar
+  deleted_at timestamp
+  deleted_by varchar
+  deleted_remark varchar
+  synced_at timestamp
+  synced_by varchar
+  synced_remark varchar
+}
+
+Table parking_membership {
+  id uuid [pk]
+  membership_product_id uuid
+  code varchar
+  name varchar
+  description varchar
+  address varchar
+  email varchar
+  phone varchar
+  start_time timestamp
+  end_time timestamp
+  created_at timestamp
+  created_by varchar
+  created_remark varchar
+  updated_at timestamp
+  updated_by varchar
+  updated_remark varchar
+  deleted_at timestamp
+  deleted_by varchar
+  deleted_remark varchar
+  synced_at timestamp
+  synced_by varchar
+  synced_remark varchar
+}
+
+Table parking_membership_vehicle {
+  id uuid [pk]
+  membership_id uuid
+  vehicle_type_id uuid
+  description varchar
+  plate_number varchar
+  card_number varchar
+  sticker_number varchar
+  brand varchar
+  model varchar
+  color varchar
+  created_at timestamp
+  created_by varchar
+  created_remark varchar
+  updated_at timestamp
+  updated_by varchar
+  updated_remark varchar
+  deleted_at timestamp
+  deleted_by varchar
+  deleted_remark varchar
+  synced_at timestamp
+  synced_by varchar
+  synced_remark varchar
+}
+
+Table parking_membership_transaction {
+  id uuid [pk]
+  membership_id uuid
+  code varchar
+  name varchar
+  description varchar
+  base_amount int
+  card_amount int
+  sticker_amount int
+  discount_amount int
+  service_amount int
+  tax_amount int
+  total_amount int
+  paid_amount int
+  change_amount int
+  created_at timestamp
+  created_by varchar
+  created_remark varchar
+  updated_at timestamp
+  updated_by varchar
+  updated_remark varchar
+  deleted_at timestamp
+  deleted_by varchar
+  deleted_remark varchar
+  synced_at timestamp
+  synced_by varchar
+  synced_remark varchar
+}
+
+Ref: merchant.id < location.merchant_id
+Ref: location.id < parking_vehicle_type.location_id
+Ref: location.id < parking_payment_type.location_id
+Ref: location.id < parking_membership_product.location_id
+Ref: parking_rate.id < parking_vehicle_type.rate_id
+Ref: parking_vehicle_type.id < parking_vehicle_type_terminal.vehicle_type_id
+Ref: parking_terminal.id < parking_vehicle_type_terminal.terminal_id
+Ref: parking_terminal.id < parking_transaction_terminal.terminal_id
+Ref: parking_vehicle_type.id < parking_transaction_terminal.vehicle_type_id
+Ref: parking_transaction.id < parking_transaction_terminal.transaction_id
+Ref: parking_terminal.id < parking_transaction_payment.terminal_id
+Ref: parking_transaction.id < parking_transaction_payment.transaction_id
+Ref: parking_payment_type.id < parking_transaction_payment.payment_type_id
+Ref: parking_membership_product.id < parking_membership.membership_product_id
+Ref: parking_membership.id < parking_membership_vehicle.membership_id
+Ref: parking_vehicle_type.id < parking_membership_vehicle.vehicle_type_id
+Ref: parking_membership.id < parking_membership_transaction.membership_id

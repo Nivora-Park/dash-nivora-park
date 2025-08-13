@@ -16,7 +16,6 @@ interface PaymentFormData {
 }
 
 interface RateFormData {
-  vehicle_type_id: string;
   description: string;
   first_hour_cost: number;
   subsequent_hour_cost: number;
@@ -44,7 +43,6 @@ export function usePaymentConfig() {
   });
 
   const [rateFormData, setRateFormData] = useState<RateFormData>({
-    vehicle_type_id: '',
     description: '',
     first_hour_cost: 0,
     subsequent_hour_cost: 0,
@@ -197,7 +195,6 @@ export function usePaymentConfig() {
   const openCreateRateModal = () => {
     setSelectedRate(null);
     setRateFormData({
-      vehicle_type_id: rateFormData.vehicle_type_id,
       description: '',
       first_hour_cost: 0,
       subsequent_hour_cost: 0,
@@ -212,7 +209,6 @@ export function usePaymentConfig() {
   const openEditRateModal = (rate: ParkingRate) => {
     setSelectedRate(rate);
     setRateFormData({
-      vehicle_type_id: rate.vehicle_type_id,
       description: rate.description,
       first_hour_cost: rate.first_hour_cost,
       subsequent_hour_cost: rate.subsequent_hour_cost,
@@ -288,15 +284,6 @@ export function usePaymentConfig() {
       }
     }
   }, [paymentTypes, paymentFormData.location_id]);
-
-  useEffect(() => {
-    if (vehicleTypes.length > 0 && !rateFormData.vehicle_type_id) {
-      const firstVehicle = vehicleTypes[0];
-      if (firstVehicle.id) {
-        setRateFormData(prev => ({ ...prev, vehicle_type_id: firstVehicle.id }));
-      }
-    }
-  }, [vehicleTypes, rateFormData.vehicle_type_id]);
 
   return {
     // State
