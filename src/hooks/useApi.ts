@@ -293,4 +293,35 @@ export function useParkingTransactionPayments() {
         updateTransactionPayment,
         deleteTransactionPayment,
     };
+}
+
+// Parking Transaction Terminal hooks
+export function useParkingTransactionTerminals() {
+    const { data, loading, error, execute } = useApi();
+
+    const getTransactionTerminals = useCallback((params?: QueryParams) => {
+        return execute(() => apiService.getParkingTransactionTerminals(params));
+    }, [execute]);
+
+    const createTransactionTerminal = useCallback((data: any) => {
+        return execute(() => apiService.createParkingTransactionTerminal(data));
+    }, [execute]);
+
+    const updateTransactionTerminal = useCallback((id: string, data: any) => {
+        return execute(() => apiService.updateParkingTransactionTerminal(id, data));
+    }, [execute]);
+
+    const deleteTransactionTerminal = useCallback((id: string) => {
+        return execute(() => apiService.deleteParkingTransactionTerminal(id));
+    }, [execute]);
+
+    return {
+        data,
+        loading,
+        error,
+        getTransactionTerminals,
+        createTransactionTerminal,
+        updateTransactionTerminal,
+        deleteTransactionTerminal,
+    };
 } 
