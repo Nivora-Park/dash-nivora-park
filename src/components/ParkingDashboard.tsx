@@ -11,6 +11,7 @@ import { Sidebar } from './Sidebar';
 import { Header } from './Header';
 import { ApiStatus } from './ApiStatus';
 import { ApiTest } from './ApiTest';
+import { ApiWarmup } from './ApiWarmup';
 
 export function ParkingDashboard() {
   const [activeTab, setActiveTab] = useState('monitoring');
@@ -46,7 +47,7 @@ export function ParkingDashboard() {
           <div className="mb-4">
             <ApiStatus />
           </div>
-          
+          <ApiWarmup />
           {renderContent()}
         </main>
       </div>
