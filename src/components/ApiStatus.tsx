@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { Wifi, WifiOff, AlertCircle } from 'lucide-react';
-import { useHealthCheck } from '@/hooks/useApi';
+import { useState, useEffect } from "react";
+import { Wifi, WifiOff, AlertCircle } from "lucide-react";
+import { useHealthCheck } from "@/hooks/useApi";
 
 export function ApiStatus() {
   const { data, loading, error, checkHealth } = useHealthCheck();
@@ -29,8 +29,8 @@ export function ApiStatus() {
 
   if (loading) {
     return (
-      <div className="flex items-center space-x-2 text-gray-500">
-        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-500"></div>
+      <div className="flex items-center space-x-2 text-gray-500 ">
+        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-500 "></div>
         <span className="text-sm">Memeriksa koneksi...</span>
       </div>
     );
@@ -41,9 +41,13 @@ export function ApiStatus() {
   }
 
   return (
-    <div className={`flex items-center space-x-2 text-sm ${
-      isOnline ? 'text-green-600' : 'text-red-600'
-    }`}>
+    <div
+      className={`flex items-center space-x-2 text-sm ${
+        isOnline
+          ? "text-green-600 "
+          : "text-red-600 "
+      }`}
+    >
       {isOnline ? (
         <>
           <Wifi className="w-4 h-4" />
@@ -57,4 +61,4 @@ export function ApiStatus() {
       )}
     </div>
   );
-} 
+}

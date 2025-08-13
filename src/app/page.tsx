@@ -1,4 +1,4 @@
-import { ParkingDashboard } from '@/components/ParkingDashboard';
+import { ParkingDashboard } from "@/components/ParkingDashboard";
 
 export default function Home() {
   return (

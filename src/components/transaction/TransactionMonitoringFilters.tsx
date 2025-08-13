@@ -13,15 +13,17 @@ export function TransactionMonitoringFilters({
   return (
     <div className="flex items-center space-x-4">
       <div className="flex items-center space-x-2">
-        <Filter className="h-4 w-4 text-gray-500" />
-        <span className="text-sm font-medium text-gray-700">Time Period:</span>
+        <Filter className="h-4 w-4 text-gray-500 " />
+        <span className="text-sm font-medium text-gray-700 ">
+          Time Period:
+        </span>
       </div>
       <select
         value={timeFilter}
         onChange={(e) =>
           onTimeFilterChange(e.target.value as "today" | "week" | "month")
         }
-        className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-900 transition-colors duration-300"
       >
         <option value="today">Today</option>
         <option value="week">7 Days</option>

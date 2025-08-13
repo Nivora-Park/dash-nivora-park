@@ -42,7 +42,7 @@ export function Header() {
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => setShowLocationDropdown(!showLocationDropdown)}
-              className="flex items-center space-x-3 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="flex items-center space-x-3 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
               disabled={loading}
             >
               <div className="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
@@ -74,7 +74,7 @@ export function Header() {
                         setCurrentLocation(location);
                         setShowLocationDropdown(false);
                       }}
-                      className={`w-full flex items-center space-x-3 px-4 py-3 text-left hover:bg-gray-50 ${
+                      className={`w-full flex items-center space-x-3 px-4 py-3 text-left hover:bg-gray-50 transition-colors ${
                         currentLocation?.id === location.id
                           ? "bg-emerald-50 border-r-2 border-emerald-500"
                           : ""

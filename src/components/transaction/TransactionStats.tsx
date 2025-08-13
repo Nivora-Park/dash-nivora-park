@@ -50,11 +50,11 @@ export function TransactionStats({
         return (
           <div
             key={index}
-            className="bg-white rounded-lg shadow-sm border border-gray-200 p-6"
+            className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 transition-colors duration-300"
           >
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">
+                <p className="text-sm font-medium text-gray-600 ">
                   {stat.title}
                 </p>
                 <p className="text-2xl font-bold text-gray-900 mt-1">

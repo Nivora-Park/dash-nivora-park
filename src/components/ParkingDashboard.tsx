@@ -18,9 +18,11 @@ import { Header } from "./Header";
 import { ApiStatus } from "./ApiStatus";
 import { ApiTest } from "./ApiTest";
 import { ApiWarmup } from "./ApiWarmup";
+import { useSidebar } from "@/contexts/SidebarContext";
 
 export function ParkingDashboard() {
   const [activeTab, setActiveTab] = useState("monitoring");
+  const { isCollapsed } = useSidebar();
 
   const renderContent = () => {
     switch (activeTab) {
@@ -58,7 +60,11 @@ export function ParkingDashboard() {
   return (
     <div className="flex h-screen bg-gray-50">
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div
+        className={`flex-1 flex flex-col overflow-hidden transition-all duration-300 ${
+          isCollapsed ? "ml-0" : "ml-0"
+        }`}
+      >
         <Header />
         <main className="flex-1 overflow-y-auto p-6">
           {/* API Status Indicator */}

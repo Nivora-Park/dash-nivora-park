@@ -15,7 +15,10 @@ import {
   CreditCard as MembershipIcon,
   Truck,
   Receipt,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
+import { useSidebar } from "@/contexts/SidebarContext";
 
 interface SidebarProps {
   activeTab: string;
@@ -23,6 +26,8 @@ interface SidebarProps {
 }
 
 export function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
+  const { isCollapsed, toggleSidebar } = useSidebar();
+
   const menuItems = [
     {
       id: "monitoring",
@@ -105,58 +110,119 @@ export function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
   ];
 
   return (
-    <div className="w-64 bg-white shadow-lg border-r border-gray-200">
-      <div className="p-6">
-        <div className="flex items-center space-x-3">
-          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-            <Car className="w-5 h-5 text-white" />
+    <div
+      className={`${
+        isCollapsed ? "w-16" : "w-64"
+      } bg-white shadow-lg border-r border-gray-200 transition-all duration-300 ease-in-out relative`}
+    >
+      {/* Header */}
+      <div
+        className={`${
+          isCollapsed ? "p-3" : "p-6"
+        } border-b border-gray-200 transition-all duration-300`}
+      >
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+              <Car className="w-5 h-5 text-white" />
+            </div>
+            {!isCollapsed && (
+              <h1 className="text-xl font-bold text-gray-900 transition-opacity duration-300">
+                Nivora Park
+              </h1>
+            )}
           </div>
-          <h1 className="text-xl font-bold text-gray-900">Nivora Park</h1>
+
+          {/* Toggle Button */}
+          <button
+            onClick={toggleSidebar}
+            className="p-1 rounded-lg hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-700"
+            title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+          >
+            {isCollapsed ? (
+              <ChevronRight className="w-4 h-4" />
+            ) : (
+              <ChevronLeft className="w-4 h-4" />
+            )}
+          </button>
         </div>
       </div>
 
+      {/* Navigation */}
       <nav className="mt-6">
-        <div className="px-3">
+        <div
+          className={`${
+            isCollapsed ? "px-2" : "px-3"
+          } transition-all duration-300`}
+        >
           {menuItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeTab === item.id;
 
             return (
-              <button
-                key={item.id}
-                onClick={() => setActiveTab(item.id)}
-                className={`w-full flex items-center space-x-3 px-3 py-3 rounded-lg mb-1 transition-colors ${
-                  isActive
-                    ? "bg-blue-50 text-blue-700 border-r-2 border-blue-600"
-                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                }`}
-              >
-                <Icon
-                  className={`w-5 h-5 ${
-                    isActive ? "text-blue-600" : "text-gray-400"
+              <div key={item.id} className="relative group">
+                <button
+                  onClick={() => setActiveTab(item.id)}
+                  className={`w-full flex items-center ${
+                    isCollapsed
+                      ? "justify-center px-2 py-3"
+                      : "space-x-3 px-3 py-3"
+                  } rounded-lg mb-1 transition-all duration-200 ${
+                    isActive
+                      ? "bg-blue-50 text-blue-700 border-r-2 border-blue-600"
+                      : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                   }`}
-                />
-                <div className="flex-1 text-left">
-                  <div className="font-medium">{item.label}</div>
-                  <div className="text-xs text-gray-500">
-                    {item.description}
+                  title={isCollapsed ? item.label : undefined}
+                >
+                  <Icon
+                    className={`w-5 h-5 transition-colors duration-200 ${
+                      isActive ? "text-blue-600" : "text-gray-500"
+                    }`}
+                  />
+                  {!isCollapsed && (
+                    <div className="flex-1 text-left transition-opacity duration-300">
+                      <div className="font-medium">{item.label}</div>
+                      <div className="text-xs text-gray-500">
+                        {item.description}
+                      </div>
+                    </div>
+                  )}
+                </button>
+
+                {/* Tooltip for collapsed state */}
+                {isCollapsed && (
+                  <div className="absolute left-full top-1/2 transform -translate-y-1/2 ml-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 whitespace-nowrap">
+                    <div className="font-medium">{item.label}</div>
+                    <div className="text-xs text-gray-300">
+                      {item.description}
+                    </div>
+                    <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-full">
+                      <div className="w-2 h-2 bg-gray-900 rotate-45"></div>
+                    </div>
                   </div>
-                </div>
-              </button>
+                )}
+              </div>
             );
           })}
         </div>
       </nav>
 
-      {/* <div className="absolute bottom-6 left-6 w-55">
-        <div className="bg-gray-50 rounded-lg p-4">
-          <div className="flex items-center space-x-2">
-            <Activity className="w-4 h-4 text-green-500" />
-            <span className="text-sm font-medium text-gray-700">Sistem Aktif</span>
+      {/* Status indicator - only show when not collapsed */}
+      {!isCollapsed && (
+        <div className="absolute bottom-6 left-6 right-6 transition-opacity duration-300">
+          <div className="bg-gray-50 rounded-lg p-4">
+            <div className="flex items-center space-x-2">
+              <Activity className="w-4 h-4 text-green-500" />
+              <span className="text-sm font-medium text-gray-700">
+                Sistem Aktif
+              </span>
+            </div>
+            <div className="text-xs text-gray-500 mt-1">
+              Semua terminal online
+            </div>
           </div>
-          <div className="text-xs text-gray-500 mt-1">Semua terminal online</div>
         </div>
-      </div> */}
+      )}
     </div>
   );
 }
