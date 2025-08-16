@@ -8,7 +8,8 @@ module.exports = {
         PORT: 3000,
         NODE_ENV: 'production'
       },
-      pre_start: 'npm run build'
+  pre_start: 'npm run build',
+  post_restart: 'npm run build'
     }
   ]
 };
