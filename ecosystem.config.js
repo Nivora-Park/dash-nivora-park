@@ -7,7 +7,8 @@ module.exports = {
       env: {
         PORT: 3000,
         NODE_ENV: 'production'
-      }
+      },
+      pre_start: 'npm run build'
     }
   ]
 };
