@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useApi } from './useApi';
 import { apiService } from '@/services/api';
-import type { ParkingVehicleType, Location } from '@/types/api';
+import type { ParkingVehicleType, Location, ParkingRate } from '@/types/api';
 
 interface VehicleTypeFormData {
   location_id: string;
+  rate_id?: string;
   code: string;
   name: string;
   description: string;
@@ -23,6 +24,7 @@ export function useVehicleTypeManagement() {
   const { execute } = useApi();
   const [vehicleTypes, setVehicleTypes] = useState<ParkingVehicleType[]>([]);
   const [locations, setLocations] = useState<Location[]>([]);
+  const [rates, setRates] = useState<ParkingRate[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
@@ -34,6 +36,7 @@ export function useVehicleTypeManagement() {
   
   const [formData, setFormData] = useState<VehicleTypeFormData>({
     location_id: '',
+  rate_id: '',
     code: '',
     name: '',
     description: '',
@@ -76,12 +79,26 @@ export function useVehicleTypeManagement() {
     }
   };
 
+  // Fetch rates for dropdown
+  const fetchRates = async () => {
+    try {
+      const response = await execute(() => apiService.getParkingRates());
+      if (response && response.code === 200) {
+        const data = Array.isArray(response.data) ? response.data : [];
+        setRates(data as ParkingRate[]);
+      }
+    } catch (err) {
+      console.error('Error fetching rates:', err);
+    }
+  };
+
   // Open modal for creating new vehicle type
   const handleOpenModal = (vehicleType?: ParkingVehicleType) => {
     if (vehicleType) {
       setEditingVehicleType(vehicleType);
       setFormData({
         location_id: vehicleType.location_id || '',
+  rate_id: vehicleType.rate_id || '',
         code: vehicleType.code,
         name: vehicleType.name,
         description: vehicleType.description,
@@ -94,6 +111,7 @@ export function useVehicleTypeManagement() {
       setEditingVehicleType(null);
       setFormData({
         location_id: '',
+  rate_id: '',
         code: '',
         name: '',
         description: '',
@@ -121,6 +139,7 @@ export function useVehicleTypeManagement() {
     try {
       const payload = {
         location_id: formData.location_id,
+  rate_id: formData.rate_id,
         code: formData.code,
         name: formData.name,
         description: formData.description,
@@ -160,6 +179,24 @@ export function useVehicleTypeManagement() {
 
   // Update form field
   const updateFormField = (field: keyof VehicleTypeFormData, value: string | number) => {
+    if (field === 'logo_url' && typeof value === 'string') {
+      try {
+        // If the value looks like a backend URL with query `?allowed_ext=.../filename`, extract the filename
+        const v = value.trim();
+        // Try to extract the last path segment as filename
+        const urlObj = new URL(v, typeof window !== 'undefined' ? window.location.origin : 'http://localhost');
+        const path = urlObj.pathname;
+        const last = path.split('/').filter(Boolean).pop() || '';
+        const filename = last.includes('.') ? last : (urlObj.search ? urlObj.search.replace(/^\?/, '').split('/').pop() || '' : '');
+        if (filename) {
+          const localUrl = apiService.getFileUrl(filename);
+          setFormData(prev => ({ ...prev, [field]: localUrl }));
+          return;
+        }
+      } catch {
+        // ignore parse errors; fall through
+      }
+    }
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
@@ -199,7 +236,10 @@ export function useVehicleTypeManagement() {
 
   // Get rate description - removed since rate_id doesn't exist
   const getRateDescription = (rateId: string): string => {
-    return 'N/A';
+    const r = rates.find(rt => rt.id === rateId);
+    if (!r) return 'N/A';
+    const name = r.name || r.description;
+    return name || 'N/A';
   };
 
   // Filter vehicle types
@@ -233,11 +273,13 @@ export function useVehicleTypeManagement() {
   useEffect(() => {
     fetchVehicleTypes();
     fetchLocations();
+  fetchRates();
   }, []);
 
   return {
     vehicleTypes: filteredVehicleTypes,
     locations,
+  rates,
     loading,
     error,
     stats,

@@ -98,9 +98,17 @@ export function VehicleTypeTable({
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="flex items-center">
                   <div className="flex-shrink-0 h-10 w-10">
-                    <div className="h-10 w-10 rounded-lg bg-blue-100 flex items-center justify-center">
-                      <Car className="h-5 w-5 text-blue-600" />
-                    </div>
+                    {vehicleType.logo_url ? (
+                      <img
+                        src={vehicleType.logo_url}
+                        alt={`${vehicleType.name} logo`}
+                        className="h-10 w-10 rounded-lg object-contain border"
+                      />
+                    ) : (
+                      <div className="h-10 w-10 rounded-lg bg-blue-100 flex items-center justify-center">
+                        <Car className="h-5 w-5 text-blue-600" />
+                      </div>
+                    )}
                   </div>
                   <div className="ml-4">
                     <div className="text-sm font-medium text-gray-900">
@@ -127,6 +135,11 @@ export function VehicleTypeTable({
                       <Settings className="h-4 w-4 text-gray-400 mr-1" />
                       {vehicleType.wheel_count} roda
                     </span>
+                    {vehicleType.rate_id && (
+                      <span className="flex items-center text-gray-600">
+                        Tarif: {getRateDescription(vehicleType.rate_id)}
+                      </span>
+                    )}
                     {vehicleType.height > 0 && (
                       <span className="text-gray-500">
                         {vehicleType.height}cm

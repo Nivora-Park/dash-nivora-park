@@ -4,22 +4,17 @@ import { Search, Filter } from "lucide-react";
 interface TerminalFiltersProps {
   searchTerm: string;
   locationFilter: string;
-  rateFilter: string;
   locationOptions: Array<{ id: string; name: string }>;
-  rateOptions: Array<{ id: string; name: string }>;
   onUpdateFilters: (filters: {
     searchTerm?: string;
     locationFilter?: string;
-    rateFilter?: string;
   }) => void;
 }
 
 export function TerminalFilters({
   searchTerm,
   locationFilter,
-  rateFilter,
   locationOptions,
-  rateOptions,
   onUpdateFilters,
 }: TerminalFiltersProps) {
   return (
@@ -53,20 +48,7 @@ export function TerminalFilters({
           </select>
         </div>
 
-        <div>
-          <select
-            value={rateFilter}
-            onChange={(e) => onUpdateFilters({ rateFilter: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-900 transition-colors duration-300"
-          >
-            <option value="all">Semua Tarif</option>
-            {rateOptions.map((option) => (
-              <option key={option.id} value={option.id}>
-                {option.name}
-              </option>
-            ))}
-          </select>
-        </div>
+        {/* Rate filter removed; tariff is now tied to vehicle type, not terminal */}
 
         <div className="flex items-center space-x-2">
           <Filter className="w-4 h-4 text-gray-400 " />

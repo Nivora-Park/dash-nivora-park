@@ -3542,6 +3542,12 @@
                     },
                     {
                         "type": "string",
+                        "description": "Type",
+                        "name": "type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "Description",
                         "name": "description",
                         "in": "query"
@@ -6065,9 +6071,761 @@
                     }
                 }
             }
+        },
+        "/api/v1/desktop/parking-transaction": {
+            "get": {
+                "description": "Retrieve a parking transaction desktop record",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "parkingtransactiondesktops"
+                ],
+                "summary": "Get a parking transaction desktop",
+                "operationId": "get-parking-transaction-desktop",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID (UUID)",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Terminal ID",
+                        "name": "terminal_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Code",
+                        "name": "code",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Identifier",
+                        "name": "identifier",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Vehicle Type ID",
+                        "name": "vehicle_type_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/types.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.GetParkingTransactionDesktopResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update an existing parking transaction desktop record",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "parkingtransactiondesktops"
+                ],
+                "summary": "Update a parking transaction desktop",
+                "operationId": "update-parking-transaction-desktop",
+                "parameters": [
+                    {
+                        "description": "Updated parking transaction desktop data",
+                        "name": "parkingtransactiondesktop",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UpdateParkingTransactionDesktopRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/types.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.UpdateParkingTransactionDesktopResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a new parking transaction desktop record",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "parkingtransactiondesktops"
+                ],
+                "summary": "Create a new parking transaction desktop",
+                "operationId": "create-parking-transaction-desktop",
+                "parameters": [
+                    {
+                        "description": "CreateParkingTransactionDesktopRequest data",
+                        "name": "parkingtransactiondesktop",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.CreateParkingTransactionDesktopRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/types.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.CreateParkingTransactionDesktopResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/file": {
+            "get": {
+                "description": "Show list of files from local storage",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "upload"
+                ],
+                "summary": "List files",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a file and save to local storage. Allowed extensions can be set via query param \"allowed_ext\", e.g. \"jpg,png,pdf\"",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "upload"
+                ],
+                "summary": "Create file",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "File to create",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Comma separated allowed extensions (e.g. jpg,png,pdf)",
+                        "name": "allowed_ext",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/file/{filename}": {
+            "get": {
+                "description": "Show content of uploaded file from local storage",
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "upload"
+                ],
+                "summary": "Get file by filename",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "File name",
+                        "name": "filename",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "File content",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete uploaded file from local storage",
+                "tags": [
+                    "upload"
+                ],
+                "summary": "Delete file by filename",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "File name",
+                        "name": "filename",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "dto.CreateParkingTransactionDesktopRequest": {
+            "type": "object",
+            "required": [
+                "terminal_id"
+            ],
+            "properties": {
+                "identifier": {
+                    "type": "string"
+                },
+                "image_url": {
+                    "description": "PaymentTypeID  string `json:\"payment_type_id\"`",
+                    "type": "string"
+                },
+                "plate_number": {
+                    "type": "string"
+                },
+                "provider": {
+                    "description": "BaseAmount     int    `json:\"base_amount\"`\nDiscountAmount int    `json:\"discount_amount\"`\nPenaltyAmount  int    `json:\"penalty_amount\"`\nServiceAmount  int    `json:\"service_amount\"`\nTaxAmount      int    `json:\"tax_amount\"`\nTotalAmount    int    `json:\"total_amount\"`\nPaidAmount     int    `json:\"paid_amount\"`\nChangeAmount   int    `json:\"change_amount\"`",
+                    "type": "string"
+                },
+                "reference": {
+                    "type": "string"
+                },
+                "terminal_id": {
+                    "type": "string"
+                },
+                "vehicle_type_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.CreateParkingTransactionDesktopResponse": {
+            "type": "object",
+            "properties": {
+                "base_amount": {
+                    "type": "integer"
+                },
+                "canceled_at": {
+                    "type": "string"
+                },
+                "canceled_by": {
+                    "type": "string"
+                },
+                "canceled_remark": {
+                    "type": "string"
+                },
+                "change_amount": {
+                    "type": "integer"
+                },
+                "code": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "created_remark": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "discount_amount": {
+                    "type": "integer"
+                },
+                "duration_minutes": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "identifier": {
+                    "type": "string"
+                },
+                "image_url": {
+                    "type": "string"
+                },
+                "paid_amount": {
+                    "type": "integer"
+                },
+                "payment_type_id": {
+                    "type": "string"
+                },
+                "penalty_amount": {
+                    "type": "integer"
+                },
+                "plate_number": {
+                    "type": "string"
+                },
+                "provider": {
+                    "type": "string"
+                },
+                "reference": {
+                    "type": "string"
+                },
+                "service_amount": {
+                    "type": "integer"
+                },
+                "synced_at": {
+                    "type": "string"
+                },
+                "synced_by": {
+                    "type": "string"
+                },
+                "synced_remark": {
+                    "type": "string"
+                },
+                "tax_amount": {
+                    "type": "integer"
+                },
+                "terminal_id": {
+                    "type": "string"
+                },
+                "total_amount": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                },
+                "updated_remark": {
+                    "type": "string"
+                },
+                "vehicle_type_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.GetParkingTransactionDesktopResponse": {
+            "type": "object",
+            "properties": {
+                "base_amount": {
+                    "type": "integer"
+                },
+                "canceled_at": {
+                    "type": "string"
+                },
+                "canceled_by": {
+                    "type": "string"
+                },
+                "canceled_remark": {
+                    "type": "string"
+                },
+                "change_amount": {
+                    "type": "integer"
+                },
+                "code": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "created_remark": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "discount_amount": {
+                    "type": "integer"
+                },
+                "duration_minutes": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "identifier": {
+                    "type": "string"
+                },
+                "image_url": {
+                    "type": "string"
+                },
+                "paid_amount": {
+                    "type": "integer"
+                },
+                "payment_type_id": {
+                    "type": "string"
+                },
+                "penalty_amount": {
+                    "type": "integer"
+                },
+                "plate_number": {
+                    "type": "string"
+                },
+                "provider": {
+                    "type": "string"
+                },
+                "reference": {
+                    "type": "string"
+                },
+                "service_amount": {
+                    "type": "integer"
+                },
+                "synced_at": {
+                    "type": "string"
+                },
+                "synced_by": {
+                    "type": "string"
+                },
+                "synced_remark": {
+                    "type": "string"
+                },
+                "tax_amount": {
+                    "type": "integer"
+                },
+                "terminal_id": {
+                    "type": "string"
+                },
+                "total_amount": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                },
+                "updated_remark": {
+                    "type": "string"
+                },
+                "vehicle_type_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.UpdateParkingTransactionDesktopRequest": {
+            "type": "object",
+            "required": [
+                "id",
+                "terminal_id"
+            ],
+            "properties": {
+                "base_amount": {
+                    "type": "integer"
+                },
+                "change_amount": {
+                    "type": "integer"
+                },
+                "discount_amount": {
+                    "type": "integer"
+                },
+                "duration_minutes": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "identifier": {
+                    "type": "string"
+                },
+                "image_url": {
+                    "type": "string"
+                },
+                "paid_amount": {
+                    "type": "integer"
+                },
+                "payment_type_id": {
+                    "type": "string"
+                },
+                "penalty_amount": {
+                    "type": "integer"
+                },
+                "plate_number": {
+                    "type": "string"
+                },
+                "provider": {
+                    "type": "string"
+                },
+                "reference": {
+                    "type": "string"
+                },
+                "service_amount": {
+                    "type": "integer"
+                },
+                "tax_amount": {
+                    "type": "integer"
+                },
+                "terminal_id": {
+                    "type": "string"
+                },
+                "total_amount": {
+                    "type": "integer"
+                },
+                "updated_by": {
+                    "type": "string"
+                },
+                "updated_remark": {
+                    "type": "string"
+                },
+                "vehicle_type_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.UpdateParkingTransactionDesktopResponse": {
+            "type": "object",
+            "properties": {
+                "base_amount": {
+                    "type": "integer"
+                },
+                "canceled_at": {
+                    "type": "string"
+                },
+                "canceled_by": {
+                    "type": "string"
+                },
+                "canceled_remark": {
+                    "type": "string"
+                },
+                "change_amount": {
+                    "type": "integer"
+                },
+                "code": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "created_remark": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "discount_amount": {
+                    "type": "integer"
+                },
+                "duration_minutes": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "identifier": {
+                    "type": "string"
+                },
+                "image_url": {
+                    "type": "string"
+                },
+                "paid_amount": {
+                    "type": "integer"
+                },
+                "payment_type_id": {
+                    "type": "string"
+                },
+                "penalty_amount": {
+                    "type": "integer"
+                },
+                "plate_number": {
+                    "type": "string"
+                },
+                "provider": {
+                    "type": "string"
+                },
+                "reference": {
+                    "type": "string"
+                },
+                "service_amount": {
+                    "type": "integer"
+                },
+                "synced_at": {
+                    "type": "string"
+                },
+                "synced_by": {
+                    "type": "string"
+                },
+                "synced_remark": {
+                    "type": "string"
+                },
+                "tax_amount": {
+                    "type": "integer"
+                },
+                "terminal_id": {
+                    "type": "string"
+                },
+                "total_amount": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                },
+                "updated_remark": {
+                    "type": "string"
+                },
+                "vehicle_type_id": {
+                    "type": "string"
+                }
+            }
+        },
         "models.Location": {
             "type": "object",
             "properties": {
@@ -6784,6 +7542,9 @@
                     "type": "string"
                 },
                 "synced_remark": {
+                    "type": "string"
+                },
+                "type": {
                     "type": "string"
                 },
                 "updated_at": {

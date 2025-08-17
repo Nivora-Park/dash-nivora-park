@@ -7,6 +7,7 @@ import { PaymentConfigTabs } from "@/components/payment/PaymentConfigTabs";
 import { PaymentStats } from "@/components/payment/PaymentStats";
 import { PaymentMethodTable } from "@/components/payment/PaymentMethodTable";
 import { ParkingRateTable } from "@/components/payment/ParkingRateTable";
+import { UploadButton } from "@/components/common/UploadButton";
 
 export function PaymentConfig() {
   const {
@@ -181,6 +182,22 @@ export function PaymentConfig() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="https://example.com/logo.png"
                 />
+                <div className="mt-2 flex items-center gap-3">
+                  <UploadButton
+                    label="Upload Logo"
+                    allowedExt="jpg,jpeg,png,svg"
+                    onUploaded={({ url }) =>
+                      updatePaymentFormField("logo_url", url)
+                    }
+                  />
+                  {paymentFormData.logo_url && (
+                    <img
+                      src={paymentFormData.logo_url}
+                      alt="Logo preview"
+                      className="h-10 w-10 object-contain border rounded"
+                    />
+                  )}
+                </div>
               </div>
             </div>
 

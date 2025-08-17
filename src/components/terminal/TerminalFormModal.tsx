@@ -1,9 +1,9 @@
 import React from "react";
 import { XCircle } from "lucide-react";
+import { UploadButton } from "@/components/common/UploadButton";
 
 interface TerminalFormData {
   location_id: string;
-  rate_id: string;
   code: string;
   name: string;
   description: string;
@@ -16,7 +16,6 @@ interface TerminalFormData {
 
 interface FormErrors {
   location_id?: string;
-  rate_id?: string;
   code?: string;
   name?: string;
   ip_terminal?: string;
@@ -30,7 +29,6 @@ interface TerminalFormModalProps {
   isEdit: boolean;
   formData: TerminalFormData;
   formErrors: FormErrors;
-  rateOptions: Array<{ id: string; name: string }>;
   onClose: () => void;
   onSubmit: () => void;
   onUpdateField: (field: keyof TerminalFormData, value: string) => void;
@@ -41,7 +39,6 @@ export function TerminalFormModal({
   isEdit,
   formData,
   formErrors,
-  rateOptions,
   onClose,
   onSubmit,
   onUpdateField,
@@ -65,29 +62,6 @@ export function TerminalFormModal({
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Tarif *
-              </label>
-              <select
-                value={formData.rate_id}
-                onChange={(e) => onUpdateField("rate_id", e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">Pilih Tarif</option>
-                {rateOptions.map((option) => (
-                  <option key={option.id} value={option.id}>
-                    {option.name}
-                  </option>
-                ))}
-              </select>
-              {formErrors.rate_id && (
-                <p className="mt-1 text-sm text-red-600">
-                  {formErrors.rate_id}
-                </p>
-              )}
-            </div>
-
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Kode Terminal *
@@ -206,6 +180,34 @@ export function TerminalFormModal({
                 </p>
               )}
             </div>
+          </div>
+        </div>
+
+        {/* Logo URL + Upload */}
+        <div className="mt-6">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            URL Logo
+          </label>
+          <input
+            type="url"
+            value={formData.logo_url}
+            onChange={(e) => onUpdateField("logo_url", e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="https://example.com/logo.png"
+          />
+          <div className="mt-2 flex items-center gap-3">
+            <UploadButton
+              label="Upload Logo"
+              allowedExt="jpg,jpeg,png,svg"
+              onUploaded={({ url }) => onUpdateField("logo_url", url)}
+            />
+            {formData.logo_url && (
+              <img
+                src={formData.logo_url}
+                alt="Logo preview"
+                className="h-10 w-10 object-contain border rounded"
+              />
+            )}
           </div>
         </div>
 

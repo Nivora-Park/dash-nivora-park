@@ -2,6 +2,7 @@
 
 import React from "react";
 import { X, Building2 } from "lucide-react";
+import { UploadButton } from "@/components/common/UploadButton";
 import type { Merchant } from "@/types/api";
 
 interface MerchantFormModalProps {
@@ -196,6 +197,20 @@ export function MerchantFormModal({
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
               placeholder="https://example.com/logo.png"
             />
+            <div className="mt-2 flex items-center gap-3">
+              <UploadButton
+                label="Upload Logo"
+                allowedExt="jpg,jpeg,png,svg"
+                onUploaded={({ url }) => updateFormField("logo_url", url)}
+              />
+              {formData.logo_url && (
+                <img
+                  src={formData.logo_url}
+                  alt="Logo preview"
+                  className="h-10 w-10 object-contain border rounded"
+                />
+              )}
+            </div>
           </div>
 
           <div className="flex justify-end space-x-3 pt-6 border-t border-gray-200">

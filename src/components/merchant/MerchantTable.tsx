@@ -106,9 +106,17 @@ export function MerchantTable({
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center">
                     <div className="flex-shrink-0 h-10 w-10">
-                      <div className="h-10 w-10 bg-indigo-100 rounded-lg flex items-center justify-center">
-                        <Building2 className="h-5 w-5 text-indigo-600" />
-                      </div>
+                      {merchant.logo_url ? (
+                        <img
+                          src={merchant.logo_url}
+                          alt={`${merchant.name} logo`}
+                          className="h-10 w-10 object-contain border rounded"
+                        />
+                      ) : (
+                        <div className="h-10 w-10 bg-indigo-100 rounded-lg flex items-center justify-center">
+                          <Building2 className="h-5 w-5 text-indigo-600" />
+                        </div>
+                      )}
                     </div>
                     <div className="ml-4">
                       <div className="text-sm font-medium text-gray-900">

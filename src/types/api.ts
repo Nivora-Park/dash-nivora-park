@@ -65,7 +65,6 @@ export interface ParkingTransaction extends BaseModel {
 export interface ParkingTerminal extends BaseModel {
     // Catatan: backend tidak mengembalikan location_id untuk terminal
     location_id?: string;
-    rate_id?: string; // Tambahkan rate_id untuk relasi dengan parking rate
     code: string;
     name: string;
     description: string;
@@ -84,6 +83,7 @@ export interface ParkingTerminal extends BaseModel {
 // Parking Vehicle Type model
 export interface ParkingVehicleType extends BaseModel {
     location_id: string;
+    rate_id?: string; // Relasi ke parking_rate sesuai schema-db
     code: string;
     name: string;
     description: string;

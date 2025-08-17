@@ -23,7 +23,7 @@ class ApiService {
 
     constructor() {
         this.baseURL = API_CONFIG.BASE_URL;
-        this.useProxy = false; // Start with direct API calls
+    this.useProxy = false; // default not used for JSON calls
     }
 
     private async request<T>(
@@ -36,7 +36,8 @@ class ApiService {
             ? `/api/proxy${endpoint}`
             : `${this.baseURL}${endpoint}`;
 
-        const requestHeaders = {
+        // Allow overriding headers; by default JSON headers, but let caller skip for FormData
+        const requestHeaders: Record<string, string> = {
             ...API_CONFIG.HEADERS,
             ...headers,
         };
@@ -60,10 +61,8 @@ class ApiService {
             return data;
         } catch (error) {
             console.error(`API Error (${method} ${endpoint}):`, error);
-
             // If direct API call fails and we haven't tried proxy yet, retry with proxy
-            if (!this.useProxy && error instanceof TypeError && error.message.includes('fetch')) {
-                console.log('Direct API call failed, retrying with proxy...');
+            if (!this.useProxy && error instanceof TypeError && (error as any).message?.includes?.('fetch')) {
                 this.useProxy = true;
                 return this.request(endpoint, method, body, headers);
             }
@@ -80,6 +79,38 @@ class ApiService {
                 throw new Error(`Tidak dapat terhubung ke server API. Pastikan server berjalan di ${this.baseURL}`);
             }
 
+            throw error;
+        }
+    }
+
+    // Raw fetch helper for non-JSON requests (e.g., multipart upload or blob/text)
+    private async fetchRaw(
+        endpoint: string,
+        options: RequestInit,
+        opts?: { forceDirect?: boolean; forceProxy?: boolean; noProxyRetry?: boolean; sameOrigin?: boolean }
+    ): Promise<Response> {
+        const useProxyNow = opts?.forceDirect ? false : (opts?.forceProxy ? true : this.useProxy);
+        const url = opts?.sameOrigin
+            ? endpoint
+            : (useProxyNow ? `/api/proxy${endpoint}` : `${this.baseURL}${endpoint}`);
+        try {
+            const resp = await fetch(url, {
+                ...options,
+                mode: opts?.sameOrigin || useProxyNow ? 'same-origin' : 'cors',
+                credentials: opts?.sameOrigin || useProxyNow ? 'same-origin' : 'omit',
+                cache: 'no-cache',
+            });
+            if (!resp.ok) {
+                const text = await resp.text();
+                throw new Error(`HTTP error! status: ${resp.status}, message: ${text}`);
+            }
+            return resp;
+        } catch (error) {
+            // Retry with proxy on network error
+            if (!opts?.noProxyRetry && !useProxyNow && error instanceof TypeError && (error as any).message?.includes?.('fetch')) {
+                this.useProxy = true;
+                return this.fetchRaw(endpoint, options, opts);
+            }
             throw error;
         }
     }
@@ -374,6 +405,70 @@ class ApiService {
 
     async deleteMembershipTransaction(id: string): Promise<ApiResponse> {
         return this.request(`${API_CONFIG.ENDPOINTS.PARKING_MEMBERSHIP_TRANSACTIONS}/${id}`, API_METHODS.DELETE);
+    }
+
+    // Upload/list/get files
+    async uploadFile(file: File, allowedExt?: string): Promise<ApiResponse<any>> {
+        const form = new FormData();
+        form.append('file', file);
+
+        // Derive file extension and validate against provided list (if any)
+        const rawName = file.name || '';
+        const ext = (rawName.includes('.') ? rawName.split('.').pop() : '')?.toLowerCase() || '';
+        if (!ext) {
+            throw new Error('Nama file tidak memiliki ekstensi');
+        }
+        if (allowedExt) {
+            const allowed = allowedExt.split(',').map((s) => s.trim().toLowerCase());
+            if (!allowed.includes(ext)) {
+                throw new Error(`Ekstensi .${ext} tidak diizinkan. Hanya: ${allowed.join(', ')}`);
+            }
+        }
+
+        // Always pass a single extension to backend to maximize compatibility
+        const qs = `?allowed_ext=${encodeURIComponent(ext)}`;
+        // Try direct to API backend (CORS)
+        try {
+            const resp = await this.fetchRaw(`${API_CONFIG.ENDPOINTS.FILE}${qs}`, {
+                method: API_METHODS.POST,
+                body: form,
+            }, { forceDirect: true, noProxyRetry: true });
+            const data = (await resp.json()) as ApiResponse<any>;
+            return data;
+        } catch (err: any) {
+            // Fallback to same-origin Next.js route to avoid CORS/network issues
+            if (err instanceof TypeError || (typeof err?.message === 'string' && err.message.includes('fetch'))) {
+                const resp2 = await this.fetchRaw(`/api/file${qs}`, {
+                    method: API_METHODS.POST,
+                    body: form,
+                }, { sameOrigin: true, noProxyRetry: true });
+                const data2 = (await resp2.json()) as ApiResponse<any>;
+                return data2;
+            }
+            throw err;
+        }
+    }
+
+    async listFiles(): Promise<ApiResponse<any>> {
+        return this.request(`${API_CONFIG.ENDPOINTS.FILE}`, API_METHODS.GET);
+    }
+
+    async getFile(filename: string): Promise<Blob> {
+        // Use same-origin Next.js route for file content to avoid CORS impact on other endpoints
+        const resp = await this.fetchRaw(`/api/file/${encodeURIComponent(filename)}`, {
+            method: API_METHODS.GET,
+        }, { sameOrigin: true, noProxyRetry: true });
+        return await resp.blob();
+    }
+
+    // Helper: build a URL to access a stored file depending on proxy mode
+    public getFileUrl(filename: string): string {
+        const rel = `/api/file/${encodeURIComponent(filename)}`;
+        // For form inputs with type=url, return absolute URL to satisfy browser validation
+        if (typeof window !== 'undefined' && window.location?.origin) {
+            return `${window.location.origin}${rel}`;
+        }
+        return rel;
     }
 }
 

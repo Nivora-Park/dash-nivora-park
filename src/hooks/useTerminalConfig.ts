@@ -1,14 +1,9 @@
 import { useState, useEffect, useMemo } from "react";
-import {
-  useParkingTerminals,
-  useLocations,
-  useParkingRates,
-} from "@/hooks/useApi";
-import { ParkingTerminal, Location, ParkingRate } from "@/types/api";
+import { useParkingTerminals, useLocations } from "@/hooks/useApi";
+import { ParkingTerminal, Location } from "@/types/api";
 
 interface TerminalFormData {
   location_id: string;
-  rate_id: string;
   code: string;
   name: string;
   description: string;
@@ -21,7 +16,6 @@ interface TerminalFormData {
 
 interface FormErrors {
   location_id?: string;
-  rate_id?: string;
   code?: string;
   name?: string;
   ip_terminal?: string;
@@ -33,7 +27,6 @@ interface FormErrors {
 interface FilterState {
   searchTerm: string;
   locationFilter: string;
-  rateFilter: string;
 }
 
 export function useTerminalConfig() {
@@ -46,13 +39,11 @@ export function useTerminalConfig() {
   const [filters, setFilters] = useState<FilterState>({
     searchTerm: "",
     locationFilter: "all",
-    rateFilter: "all",
   });
 
   // Form state
   const [formData, setFormData] = useState<TerminalFormData>({
     location_id: "",
-    rate_id: "",
     code: "",
     name: "",
     description: "",
@@ -82,11 +73,7 @@ export function useTerminalConfig() {
     getLocations,
   } = useLocations();
 
-  const {
-    data: ratesData,
-    loading: ratesLoading,
-    getRates,
-  } = useParkingRates();
+  // No rates needed at terminal level per schema
 
   // Computed values
   const terminals = useMemo(() => 
@@ -103,24 +90,7 @@ export function useTerminalConfig() {
     [locationsData]
   );
 
-  const rates = useMemo(() => 
-    Array.isArray(ratesData) ? ratesData : [], 
-    [ratesData]
-  );
-
-  const rateOptions = useMemo(() =>
-    rates && rates.length > 0
-      ? rates.map((r: ParkingRate) => ({
-          id: r.id,
-          name:
-            r.name ||
-            r.description ||
-            `Tarif Rp ${r.first_hour_cost?.toLocaleString()}/jam` ||
-            "Tarif Tidak Diketahui",
-        }))
-      : [],
-    [rates]
-  );
+  // rateOptions removed
 
   const locationOptions = useMemo(() =>
     locationsArray && locationsArray.length > 0
@@ -139,35 +109,18 @@ export function useTerminalConfig() {
         terminal.code.toLowerCase().includes(filters.searchTerm.toLowerCase());
       const matchesLocation =
         filters.locationFilter === "all" || terminal.location_id === filters.locationFilter;
-      const matchesRate = 
-        filters.rateFilter === "all" || terminal.rate_id === filters.rateFilter;
 
-      return matchesSearch && matchesLocation && matchesRate;
+      return matchesSearch && matchesLocation;
     }),
     [terminals, filters]
   );
 
   // Helper functions
-  const getRateName = (rateId: string): string => {
-    if (!Array.isArray(rates)) {
-      return "Tarif tidak ditemukan";
-    }
-
-    const rate = rates.find((r: ParkingRate) => r && r.id === rateId);
-    return rate
-      ? rate.name ||
-          rate.description ||
-          `Tarif Rp ${rate.first_hour_cost?.toLocaleString()}/jam`
-      : "Tarif tidak ditemukan";
-  };
+  // getRateName removed
 
   const getTerminalLocationName = (terminal: ParkingTerminal): string => {
-    const rate = Array.isArray(rates)
-      ? (rates as ParkingRate[]).find((r) => r.id === terminal.rate_id)
-      : undefined;
-    if (!rate || !rate.location_id) return "Lokasi tidak ditemukan";
-    
-    const location = locationsArray.find((loc: Location) => loc.id === rate.location_id);
+    // Without rate on terminal, location is expected directly on terminal if provided
+    const location = locationsArray.find((loc: Location) => loc.id === terminal.location_id);
     return location?.name || "Lokasi tidak ditemukan";
   };
 
@@ -178,7 +131,6 @@ export function useTerminalConfig() {
 
   const validateForm = (): boolean => {
     const errors: FormErrors = {};
-    if (!formData.rate_id) errors.rate_id = "Tarif wajib dipilih";
     if (!String(formData.code).trim()) errors.code = "Kode terminal wajib diisi";
     if (!String(formData.name).trim()) errors.name = "Nama terminal wajib diisi";
     if (!String(formData.ip_terminal).trim()) errors.ip_terminal = "IP Terminal wajib diisi";
@@ -193,7 +145,6 @@ export function useTerminalConfig() {
   const resetForm = () => {
     setFormData({
       location_id: "",
-      rate_id: "",
       code: "",
       name: "",
       description: "",
@@ -216,7 +167,6 @@ export function useTerminalConfig() {
     setSelectedTerminal(terminal);
     setFormData({
       location_id: terminal.location_id || "",
-      rate_id: terminal.rate_id || "",
       code: terminal.code || "",
       name: terminal.name || "",
       description: terminal.description || "",
@@ -275,9 +225,8 @@ export function useTerminalConfig() {
     if (typeof window !== "undefined") {
       getTerminals();
       getLocations();
-      getRates();
     }
-  }, [getTerminals, getLocations, getRates]);
+  }, [getTerminals, getLocations]);
 
   // Set default values when data is loaded
   useEffect(() => {
@@ -286,11 +235,7 @@ export function useTerminalConfig() {
     }
   }, [locationsArray.length, formData.location_id]);
 
-  useEffect(() => {
-    if (!formData.rate_id && rates.length > 0) {
-      setFormData(prev => ({ ...prev, rate_id: rates[0].id }));
-    }
-  }, [rates.length, formData.rate_id]);
+  // No default rate selection at terminal level
 
   return {
     // State
@@ -304,14 +249,12 @@ export function useTerminalConfig() {
     terminals,
     filteredTerminals,
     locationOptions,
-    rateOptions,
     
     // Loading states
-    isLoading: terminalsLoading || locationsLoading || ratesLoading,
+  isLoading: terminalsLoading || locationsLoading,
     terminalsError,
     
     // Helper functions
-    getRateName,
     getTerminalLocationName,
     mergeTerminal,
     

@@ -12,6 +12,7 @@ export function VehicleTypeManagement() {
   const {
     vehicleTypes,
     locations,
+    rates,
     loading,
     error,
     stats,
@@ -84,7 +85,7 @@ export function VehicleTypeManagement() {
           loading={loading}
           error={error}
           locations={locations}
-          rates={[]}
+          rates={rates}
         />
       )}
     </div>

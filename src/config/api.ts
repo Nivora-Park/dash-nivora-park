@@ -21,6 +21,9 @@ export const API_CONFIG = {
         PARKING_TRANSACTION_PAYMENTS: '/api/v1/cms/parking-transaction-payment',
         PARKING_TRANSACTION_TERMINALS: '/api/v1/cms/parking-transaction-terminal',
 
+    // File upload
+    FILE: '/api/v1/file',
+
         // Membership management (CMS)
         PARKING_MEMBERSHIP_PRODUCTS: '/api/v1/cms/parking-membership-product',
         PARKING_MEMBERSHIPS: '/api/v1/cms/parking-membership',

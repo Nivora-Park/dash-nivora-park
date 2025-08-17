@@ -1,5 +1,6 @@
 import React from "react";
 import { X, Car } from "lucide-react";
+import { UploadButton } from "@/components/common/UploadButton";
 
 interface VehicleTypeFormModalProps {
   isOpen: boolean;
@@ -131,6 +132,24 @@ export function VehicleTypeFormModal({
                 ))}
               </select>
             </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Tarif Parkir *
+              </label>
+              <select
+                value={formData.rate_id || ""}
+                onChange={(e) => updateFormField("rate_id", e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              >
+                <option value="">Pilih Tarif</option>
+                {rates.map((rate) => (
+                  <option key={rate.id} value={rate.id}>
+                    {rate.name || rate.description}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -198,6 +217,20 @@ export function VehicleTypeFormModal({
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="https://example.com/logo.png"
             />
+            <div className="mt-2 flex items-center gap-3">
+              <UploadButton
+                label="Upload Logo"
+                allowedExt="jpg,jpeg,png,svg"
+                onUploaded={({ url }) => updateFormField("logo_url", url)}
+              />
+              {formData.logo_url && (
+                <img
+                  src={formData.logo_url}
+                  alt="Logo preview"
+                  className="h-10 w-10 object-contain border rounded"
+                />
+              )}
+            </div>
           </div>
 
           <div className="flex justify-end space-x-3 pt-6 border-t border-gray-200">

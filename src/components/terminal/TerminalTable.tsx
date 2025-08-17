@@ -6,7 +6,6 @@ interface TerminalTableProps {
   terminals: ParkingTerminal[];
   isLoading: boolean;
   error: string | null;
-  getRateName: (rateId: string) => string;
   onEdit: (terminal: ParkingTerminal) => void;
   onDelete: (terminalId: string) => void;
 }
@@ -15,7 +14,6 @@ export function TerminalTable({
   terminals,
   isLoading,
   error,
-  getRateName,
   onEdit,
   onDelete,
 }: TerminalTableProps) {
@@ -64,9 +62,6 @@ export function TerminalTable({
                 Terminal
               </th>
               <th className="text-left py-3 px-6 font-medium text-gray-900 ">
-                Tarif
-              </th>
-              <th className="text-left py-3 px-6 font-medium text-gray-900 ">
                 IP Terminal
               </th>
               <th className="text-left py-3 px-6 font-medium text-gray-900 ">
@@ -82,8 +77,18 @@ export function TerminalTable({
               >
                 <td className="py-4 px-6">
                   <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
-                      <Settings className="w-4 h-4 text-white" />
+                    <div className="w-8 h-8 rounded-lg flex items-center justify-center overflow-hidden">
+                      {terminal.logo_url ? (
+                        <img
+                          src={terminal.logo_url}
+                          alt={`${terminal.name} logo`}
+                          className="w-8 h-8 object-contain border rounded"
+                        />
+                      ) : (
+                        <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+                          <Settings className="w-4 h-4 text-white" />
+                        </div>
+                      )}
                     </div>
                     <div>
                       <div className="font-medium text-gray-900 ">
@@ -94,9 +99,6 @@ export function TerminalTable({
                       </div>
                     </div>
                   </div>
-                </td>
-                <td className="py-4 px-6 text-gray-600 ">
-                  {getRateName(terminal.rate_id || "")}
                 </td>
                 <td className="py-4 px-6 text-gray-600 ">
                   {terminal.ip_terminal || "Tidak ada data"}

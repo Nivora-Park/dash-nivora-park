@@ -19,14 +19,12 @@ export function TerminalConfig() {
     // Computed data
     filteredTerminals,
     locationOptions,
-    rateOptions,
 
     // Loading states
     isLoading,
     terminalsError,
 
     // Helper functions
-    getRateName,
 
     // Actions
     openCreateModal,
@@ -58,9 +56,7 @@ export function TerminalConfig() {
       <TerminalFilters
         searchTerm={filters.searchTerm}
         locationFilter={filters.locationFilter}
-        rateFilter={filters.rateFilter}
         locationOptions={locationOptions}
-        rateOptions={rateOptions}
         onUpdateFilters={updateFilters}
       />
 
@@ -68,7 +64,6 @@ export function TerminalConfig() {
         terminals={filteredTerminals}
         isLoading={false} // sudah di-handle di level atas
         error={terminalsError}
-        getRateName={getRateName}
         onEdit={openEditModal}
         onDelete={handleDelete}
       />
@@ -78,7 +73,6 @@ export function TerminalConfig() {
         isEdit={!!selectedTerminal}
         formData={formData}
         formErrors={formErrors}
-        rateOptions={rateOptions}
         onClose={closeModal}
         onSubmit={handleSubmit}
         onUpdateField={updateFormField}
