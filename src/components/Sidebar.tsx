@@ -19,6 +19,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { useSidebar } from "@/contexts/SidebarContext";
+import { Logo } from "@/components/ui/Logo";
 
 interface SidebarProps {
   activeTab: string;
@@ -123,14 +124,12 @@ export function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-              <Car className="w-5 h-5 text-white" />
-            </div>
-            {!isCollapsed && (
-              <h1 className="text-xl font-bold text-gray-900 transition-opacity duration-300">
-                Nivora Park
-              </h1>
-            )}
+            <Logo 
+              size="medium" 
+              showText={!isCollapsed}
+              showTagline={false}
+              className="min-w-0"
+            />
           </div>
 
           {/* Toggle Button */}
@@ -206,23 +205,6 @@ export function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
           })}
         </div>
       </nav>
-
-      {/* Status indicator - only show when not collapsed */}
-      {!isCollapsed && (
-        <div className="absolute bottom-6 left-6 right-6 transition-opacity duration-300">
-          <div className="bg-gray-50 rounded-lg p-4">
-            <div className="flex items-center space-x-2">
-              <Activity className="w-4 h-4 text-green-500" />
-              <span className="text-sm font-medium text-gray-700">
-                Sistem Aktif
-              </span>
-            </div>
-            <div className="text-xs text-gray-500 mt-1">
-              Semua terminal online
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

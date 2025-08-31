@@ -1,12 +1,11 @@
 "use client";
 
 import { useLoginForm } from "@/hooks/useLoginForm";
+import { Logo } from "@/components/ui/Logo";
 import {
   LoginLayout,
-  LoginHeader,
   LoginCard,
   LoginForm,
-  DemoCredentials,
   LoginFooter,
 } from "@/components/auth";
 
@@ -16,10 +15,16 @@ export default function LoginPage() {
 
   return (
     <LoginLayout>
-      <LoginHeader
-        title="Nivora Park"
-        subtitle="Dashboard Monitoring Transaksi"
-      />
+      {/* Logo Section - Centered dan Rapi */}
+      <div className="flex flex-col items-center justify-center mb-12 space-y-6">
+        <Logo 
+          size="large" 
+          showText={true} 
+          showTagline={true} 
+          centered={true}
+          className="max-w-md"
+        />
+      </div>
 
       <LoginCard>
         <LoginForm
@@ -29,8 +34,8 @@ export default function LoginPage() {
           onFieldChange={updateField}
           onSubmit={handleSubmit}
         />
-
       </LoginCard>
+      
       <LoginFooter />
     </LoginLayout>
   );
