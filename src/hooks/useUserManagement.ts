@@ -1,19 +1,23 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useApi } from './useApi';
+import { apiService } from '@/services/api';
+import { validateDuplicates, getValidationRules } from '@/utils/validation';
 
 interface SystemUser {
   id: string;
-  username: string;
-  email: string;
-  name: string;
-  role: 'admin' | 'operator' | 'viewer';
-  status: 'active' | 'inactive' | 'suspended';
-  lastLogin: string | null;
-  permissions: string[];
-  terminal: string;
+  username?: string;
+  full_name?: string; // Changed from 'name' to 'full_name' to match API
+  email?: string;
+  password?: string;
+  role?: 'admin' | 'operator' | 'viewer';
+  status?: 'active' | 'inactive' | 'suspended';
+  lastLogin?: string | null;
+  permissions?: string[];
+  terminal?: string;
   location_id?: string;
-  created_at: string;
-  updated_at: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 interface UserFilters {
@@ -27,6 +31,7 @@ const initialUsers: SystemUser[] = [];
 
 export function useUserManagement() {
   const { isAuthenticated } = useAuth();
+  const { execute } = useApi();
 
   // State
   const [users, setUsers] = useState<SystemUser[]>(initialUsers);
@@ -41,11 +46,14 @@ export function useUserManagement() {
   // Filtered users
   const filteredUsers = useMemo(() => {
     return users.filter(user => {
-      const matchesSearch = user.name.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
-        user.email.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
-        user.username.toLowerCase().includes(filters.searchTerm.toLowerCase());
+      const searchTerm = filters.searchTerm.toLowerCase();
+      const matchesSearch =
+        (user.full_name?.toLowerCase() || '').includes(searchTerm) ||
+        (user.email?.toLowerCase() || '').includes(searchTerm) ||
+        (user.username?.toLowerCase() || '').includes(searchTerm);
       const matchesRole = filters.roleFilter === 'all' || user.role === filters.roleFilter;
       const matchesStatus = filters.statusFilter === 'all' || user.status === filters.statusFilter;
+
       return matchesSearch && matchesRole && matchesStatus;
     });
   }, [users, filters]);
@@ -61,40 +69,18 @@ export function useUserManagement() {
   }, [users]);
 
   // Fetch users from API
-  const fetchUsers = async (retryCount = 0) => {
+  const fetchUsers = async () => {
     try {
       setIsLoading(true);
       setError(null);
 
-      const token = localStorage.getItem('auth-token');
-      console.log('Fetching users with token:', token ? 'Token exists' : 'No token');
+      const response = await execute(() => apiService.getUsers());
 
-      if (!token) {
-        throw new Error('No authentication token');
-      }
-
-      const response = await fetch('/api/users', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-        if (response.status === 401 && retryCount < 3) {
-          // Retry after a short delay if unauthorized
-          console.log(`Retrying fetch users (attempt ${retryCount + 1})`);
-          setTimeout(() => fetchUsers(retryCount + 1), 1000);
-          return;
-        }
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const result = await response.json();
-      if (result.success) {
-        setUsers(result.data);
+      if (response && response.code === 200) {
+        const userData = Array.isArray(response.data) ? response.data : [];
+        setUsers(userData);
       } else {
-        throw new Error(result.error || 'Failed to fetch users');
+        setError('Failed to fetch users');
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch users');
@@ -125,31 +111,30 @@ export function useUserManagement() {
     try {
       setError(null);
 
-      const token = localStorage.getItem('auth-token');
-      if (!token) {
-        throw new Error('No authentication token');
+      // Prepare data for API (only send fields that API expects)
+      const apiData = {
+        username: userData.username,
+        email: userData.email,
+        full_name: userData.full_name,
+        password: userData.password,
+        location_id: userData.location_id
+      };
+
+      // Validate for duplicates before creating
+      const validation = await validateDuplicates(userData, users, getValidationRules('user'));
+      if (!validation.isValid) {
+        setError(`Validation failed: ${validation.errors.join(', ')}`);
+        return false;
       }
 
-      const response = await fetch('/api/users', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),
-      });
+      const response = await execute(() => apiService.createUser(apiData));
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const result = await response.json();
-      if (result.success) {
-        // Refresh users list
+      if (response && (response.code === 201 || response.code === 200)) {
         await fetchUsers();
-        return result.data;
+        return response.data;
       } else {
-        throw new Error(result.error || 'Failed to create user');
+        setError('Failed to create user');
+        return false;
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to create user');
@@ -162,31 +147,21 @@ export function useUserManagement() {
     try {
       setError(null);
 
-      const token = localStorage.getItem('auth-token');
-      if (!token) {
-        throw new Error('No authentication token');
+      // Validate for duplicates before updating (exclude current item)
+      const validation = await validateDuplicates(userData, users, getValidationRules('user'), userId);
+      if (!validation.isValid) {
+        setError(`Validation failed: ${validation.errors.join(', ')}`);
+        return false;
       }
 
-      const response = await fetch(`/api/users/${userId}`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),
-      });
+      const response = await execute(() => apiService.updateUser(userId, userData));
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const result = await response.json();
-      if (result.success) {
-        // Refresh users list
+      if (response && response.code === 200) {
         await fetchUsers();
-        return result.data;
+        return response.data;
       } else {
-        throw new Error(result.error || 'Failed to update user');
+        setError('Failed to update user');
+        return false;
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to update user');
@@ -199,30 +174,14 @@ export function useUserManagement() {
     try {
       setError(null);
 
-      const token = localStorage.getItem('auth-token');
-      if (!token) {
-        throw new Error('No authentication token');
-      }
+      const response = await execute(() => apiService.deleteUser(userId));
 
-      const response = await fetch(`/api/users/${userId}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const result = await response.json();
-      if (result.success) {
-        // Refresh users list
+      if (response && response.code === 200) {
         await fetchUsers();
-        return result.data;
+        return response.data;
       } else {
-        throw new Error(result.error || 'Failed to delete user');
+        setError('Failed to delete user');
+        return false;
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to delete user');
@@ -235,31 +194,14 @@ export function useUserManagement() {
     try {
       setError(null);
 
-      const token = localStorage.getItem('auth-token');
-      if (!token) {
-        throw new Error('No authentication token');
-      }
+      const response = await execute(() => apiService.updateUser(userId, { status: 'suspended' }));
 
-      const response = await fetch(`/api/users/${userId}`, {
-        method: 'PATCH',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ status: 'suspended' }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const result = await response.json();
-      if (result.success) {
-        // Refresh users list
+      if (response && response.code === 200) {
         await fetchUsers();
-        return result.data;
+        return response.data;
       } else {
-        throw new Error(result.error || 'Failed to suspend user');
+        setError('Failed to suspend user');
+        return false;
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to suspend user');
@@ -272,31 +214,14 @@ export function useUserManagement() {
     try {
       setError(null);
 
-      const token = localStorage.getItem('auth-token');
-      if (!token) {
-        throw new Error('No authentication token');
-      }
+      const response = await execute(() => apiService.updateUser(userId, { status: 'active' }));
 
-      const response = await fetch(`/api/users/${userId}`, {
-        method: 'PATCH',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ status: 'active' }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const result = await response.json();
-      if (result.success) {
-        // Refresh users list
+      if (response && response.code === 200) {
         await fetchUsers();
-        return result.data;
+        return response.data;
       } else {
-        throw new Error(result.error || 'Failed to activate user');
+        setError('Failed to activate user');
+        return false;
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to activate user');

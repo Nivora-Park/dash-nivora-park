@@ -15,9 +15,7 @@ import MembershipVehicleManagement from "./MembershipVehicleManagement";
 import MembershipTransactionManagement from "./MembershipTransactionManagement";
 import { Sidebar } from "./Sidebar";
 import { Header } from "./Header";
-import { ApiStatus } from "./ApiStatus";
-import { ApiTest } from "./ApiTest";
-import { ApiWarmup } from "./ApiWarmup";
+
 import { useSidebar } from "@/contexts/SidebarContext";
 
 export function ParkingDashboard() {
@@ -50,8 +48,7 @@ export function ParkingDashboard() {
         return <Reports />;
       case "users":
         return <UserManagement />;
-      case "api-test":
-        return <ApiTest />;
+
       default:
         return <TransactionMonitoring />;
     }

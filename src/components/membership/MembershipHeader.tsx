@@ -1,14 +1,16 @@
 import React from "react";
-import { Plus, Users } from "lucide-react";
+import { Plus, Users, Upload } from "lucide-react";
 
 interface MembershipHeaderProps {
   onRefresh: () => void;
   onAddNew: () => void;
+  onImport: () => void;
 }
 
 export function MembershipHeader({
   onRefresh,
   onAddNew,
+  onImport,
 }: MembershipHeaderProps) {
   return (
     <div className="flex justify-between items-center">
@@ -25,6 +27,13 @@ export function MembershipHeader({
           className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
         >
           Refresh
+        </button>
+        <button
+          onClick={onImport}
+          className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+        >
+          <Upload className="h-4 w-4" />
+          <span>Import CSV</span>
         </button>
         <button
           onClick={onAddNew}

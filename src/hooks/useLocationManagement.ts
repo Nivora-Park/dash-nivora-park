@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useApi } from './useApi';
 import { apiService } from '@/services/api';
 import type { Location, Merchant, ApiResponse } from '@/types/api';
+import { validateDuplicates, getValidationRules, BUSINESS_VALIDATION_RULES } from '@/utils/validation';
 
 interface LocationFormData {
   merchant_id: string;
@@ -35,7 +36,7 @@ export function useLocationManagement() {
     merchantId: '',
     contractStatus: 'all'
   });
-  
+
   const [formData, setFormData] = useState<LocationFormData>({
     merchant_id: '',
     code: '',
@@ -55,7 +56,7 @@ export function useLocationManagement() {
     setError(null);
     try {
       const response = await execute(() => apiService.getLocations());
-      
+
       if (response && response.code === 200) {
         setLocations(Array.isArray(response.data) ? response.data : []);
       } else {
@@ -72,7 +73,7 @@ export function useLocationManagement() {
   const fetchMerchants = async () => {
     try {
       const response = await execute(() => apiService.getMerchants());
-      
+
       if (response && response.code === 200) {
         setMerchants(Array.isArray(response.data) ? response.data : []);
       }
@@ -86,8 +87,19 @@ export function useLocationManagement() {
     setLoading(true);
     setError(null);
     try {
+      // Validate for duplicates before creating
+      const validationRules = formData.merchant_id
+        ? BUSINESS_VALIDATION_RULES.locationByMerchant(formData.merchant_id)
+        : getValidationRules('location');
+
+      const validation = await validateDuplicates(formData, locations, validationRules);
+      if (!validation.isValid) {
+        setError(`Validation failed: ${validation.errors.join(', ')}`);
+        return false;
+      }
+
       const response = await execute(() => apiService.createLocation(formData));
-      
+
       if (response && (response.code === 201 || response.code === 200)) {
         await fetchLocations();
         handleCloseModal();
@@ -109,8 +121,19 @@ export function useLocationManagement() {
     setLoading(true);
     setError(null);
     try {
+      // Validate for duplicates before updating (exclude current item)
+      const validationRules = formData.merchant_id
+        ? BUSINESS_VALIDATION_RULES.locationByMerchant(formData.merchant_id)
+        : getValidationRules('location');
+
+      const validation = await validateDuplicates(formData, locations, validationRules, id);
+      if (!validation.isValid) {
+        setError(`Validation failed: ${validation.errors.join(', ')}`);
+        return false;
+      }
+
       const response = await execute(() => apiService.updateLocation(id, formData));
-      
+
       if (response && response.code === 200) {
         await fetchLocations();
         handleCloseModal();
@@ -133,7 +156,7 @@ export function useLocationManagement() {
     setError(null);
     try {
       const response = await execute(() => apiService.deleteLocation(id));
-      
+
       if (response && (response.code === 200 || response.code === 204)) {
         await fetchLocations();
         return true;
@@ -210,19 +233,19 @@ export function useLocationManagement() {
   // Filtered locations
   const filteredLocations = locations.filter(location => {
     const matchesSearch = location.name.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
-                         location.code.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
-                         location.address.toLowerCase().includes(filters.searchTerm.toLowerCase());
-    
+      location.code.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
+      location.address.toLowerCase().includes(filters.searchTerm.toLowerCase());
+
     if (!matchesSearch) return false;
 
     if (filters.merchantId && location.merchant_id !== filters.merchantId) return false;
 
     if (filters.contractStatus === 'all') return true;
-    
+
     const now = new Date();
     const contractEnd = new Date(location.contract_end);
     const daysUntilExpiry = Math.ceil((contractEnd.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
-    
+
     switch (filters.contractStatus) {
       case 'active':
         return daysUntilExpiry > 30;

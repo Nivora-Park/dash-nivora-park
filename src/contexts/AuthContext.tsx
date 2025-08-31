@@ -109,9 +109,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         localStorage.setItem("user", JSON.stringify(userData));
         localStorage.setItem("auth-token", data.token); // Store token in localStorage
         
-        // Update API service token
-        apiService.setToken(data.token);
-        console.log('🔐 Updated API service token');
+        // Also set cookie for backup
+        document.cookie = `auth-token=${data.token}; path=/; max-age=86400`; // 24 hours
+        
+        console.log('🔐 Stored token in localStorage:', data.token.substring(0, 20) + '...');
+        console.log('🔐 Set token in cookie as backup');
+        console.log('🔍 localStorage after storing:', {
+            'auth-token': localStorage.getItem('auth-token'),
+            'isAuthenticated': localStorage.getItem('isAuthenticated'),
+            'user': localStorage.getItem('user')
+        });
+        console.log('🔍 Cookie after storing:', document.cookie);
         
         console.log('🔐 Setting user state...');
         setUser(userData);

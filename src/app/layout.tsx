@@ -4,6 +4,8 @@ import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { AuthWrapper } from "@/components/AuthWrapper";
 import { SidebarProvider } from "@/contexts/SidebarContext";
+import { TokenDebug } from "@/components/common/TokenDebug";
+import "@/hooks/useTokenTest";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -35,6 +37,7 @@ export default function RootLayout({
         <AuthProvider>
           <SidebarProvider>
             <AuthWrapper>{children}</AuthWrapper>
+            {/* <TokenDebug /> */}
           </SidebarProvider>
         </AuthProvider>
       </body>

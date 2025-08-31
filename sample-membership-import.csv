@@ -1,0 +1,6 @@
+name,email,phone,address,membership_type,vehicle_number,vehicle_type,start_date,end_date
+John Doe,john@example.com,+6281234567890,Jl. Contoh No. 123 Jakarta,Premium,B1234ABC,Car,2024-01-01,2024-12-31
+Jane Smith,jane@example.com,+6281234567891,Jl. Sample No. 456 Bandung,Standard,B5678DEF,Motorcycle,2024-01-15,2024-12-15
+Bob Johnson,bob@example.com,+6281234567892,Jl. Test No. 789 Surabaya,Premium,B9012GHI,Car,2024-02-01,2024-12-31
+Alice Brown,alice@example.com,+6281234567893,Jl. Demo No. 321 Medan,Standard,B3456JKL,Motorcycle,2024-02-15,2024-12-15
+Charlie Wilson,charlie@example.com,+6281234567894,Jl. Sample No. 654 Semarang,Premium,B7890MNO,Car,2024-03-01,2024-12-31

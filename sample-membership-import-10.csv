@@ -1,0 +1,11 @@
+name,email,phone,address,membership_type,vehicle_number,vehicle_type,start_date,end_date
+Ahmad Rahman,ahmad@example.com,+6281234567890,Jl. Sudirman No. 123 Jakarta Pusat,Premium,B1234ABC,Car,2024-01-01,2025-06-30
+Sarah Wijaya,sarah@example.com,+6281234567891,Jl. Thamrin No. 456 Jakarta Selatan,Standard,B5678DEF,Motorcycle,2024-01-15,2025-07-15
+Budi Santoso,budi@example.com,+6281234567892,Jl. Gatot Subroto No. 789 Jakarta Barat,Premium,B9012GHI,Car,2024-02-01,2025-08-31
+Dewi Kusuma,dewi@example.com,+6281234567893,Jl. Hayam Wuruk No. 321 Jakarta Utara,Standard,B3456JKL,Motorcycle,2024-02-15,2025-09-15
+Rudi Hartono,rudi@example.com,+6281234567894,Jl. Asia Afrika No. 654 Bandung,Premium,B7890MNO,Car,2024-03-01,2025-10-31
+Siti Nurhaliza,siti@example.com,+6281234567895,Jl. Pahlawan No. 987 Surabaya,Standard,B2345PQR,Motorcycle,2024-03-15,2025-11-15
+Joko Widodo,joko@example.com,+6281234567896,Jl. Malioboro No. 147 Yogyakarta,Premium,B6789STU,Car,2024-04-01,2025-12-31
+Mega Putri,mega@example.com,+6281234567897,Jl. Ahmad Yani No. 258 Semarang,Standard,B0123VWX,Motorcycle,2024-04-15,2026-01-15
+Agus Setiawan,agus@example.com,+6281234567898,Jl. Diponegoro No. 369 Medan,Premium,B4567YZA,Car,2024-05-01,2026-02-28
+Rina Marlina,rina@example.com,+6281234567899,Jl. Merdeka No. 741 Palembang,Standard,B8901BCD,Motorcycle,2024-05-15,2026-03-15

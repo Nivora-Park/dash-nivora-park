@@ -28,10 +28,7 @@ export function MembershipFormModal({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const success = await onSubmit();
-    if (success) {
-      onClose();
-    }
+    await onSubmit();
   };
 
   return (

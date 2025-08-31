@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useApi } from './useApi';
 import { apiService } from '@/services/api';
 import type { ParkingVehicleType, Location, ParkingRate } from '@/types/api';
+import { validateDuplicates, getValidationRules, BUSINESS_VALIDATION_RULES } from '@/utils/validation';
 
 interface VehicleTypeFormData {
   location_id: string;
@@ -33,10 +34,10 @@ export function useVehicleTypeManagement() {
     searchTerm: '',
     locationId: ''
   });
-  
+
   const [formData, setFormData] = useState<VehicleTypeFormData>({
     location_id: '',
-  rate_id: '',
+    rate_id: '',
     code: '',
     name: '',
     description: '',
@@ -98,7 +99,7 @@ export function useVehicleTypeManagement() {
       setEditingVehicleType(vehicleType);
       setFormData({
         location_id: vehicleType.location_id || '',
-  rate_id: vehicleType.rate_id || '',
+        rate_id: vehicleType.rate_id || '',
         code: vehicleType.code,
         name: vehicleType.name,
         description: vehicleType.description,
@@ -111,7 +112,7 @@ export function useVehicleTypeManagement() {
       setEditingVehicleType(null);
       setFormData({
         location_id: '',
-  rate_id: '',
+        rate_id: '',
         code: '',
         name: '',
         description: '',
@@ -135,11 +136,22 @@ export function useVehicleTypeManagement() {
   const handleSubmit = async (): Promise<boolean> => {
     setLoading(true);
     setError(null);
-    
+
     try {
+      // Validate for duplicates before creating/updating
+      const validationRules = formData.location_id
+        ? BUSINESS_VALIDATION_RULES.vehicleTypeByLocation(formData.location_id)
+        : getValidationRules('vehicleType');
+
+      const validation = await validateDuplicates(formData, vehicleTypes, validationRules, editingVehicleType?.id);
+      if (!validation.isValid) {
+        setError(`Validation failed: ${validation.errors.join(', ')}`);
+        return false;
+      }
+
       const payload = {
         location_id: formData.location_id,
-  rate_id: formData.rate_id,
+        rate_id: formData.rate_id,
         code: formData.code,
         name: formData.name,
         description: formData.description,
@@ -151,11 +163,11 @@ export function useVehicleTypeManagement() {
 
       let response;
       if (editingVehicleType) {
-        response = await execute(() => 
+        response = await execute(() =>
           apiService.updateParkingVehicleType(editingVehicleType.id, payload)
         );
       } else {
-        response = await execute(() => 
+        response = await execute(() =>
           apiService.createParkingVehicleType(payload)
         );
       }
@@ -204,7 +216,7 @@ export function useVehicleTypeManagement() {
   const deleteVehicleType = async (id: string): Promise<boolean> => {
     setLoading(true);
     setError(null);
-    
+
     try {
       const response = await execute(() => apiService.deleteParkingVehicleType(id));
       if (response && response.code === 200) {
@@ -244,14 +256,14 @@ export function useVehicleTypeManagement() {
 
   // Filter vehicle types
   const filteredVehicleTypes = vehicleTypes.filter(vt => {
-    const matchesSearch = 
+    const matchesSearch =
       vt.name.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
       vt.code.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
       vt.description.toLowerCase().includes(filters.searchTerm.toLowerCase());
-    
-    const matchesLocation = 
+
+    const matchesLocation =
       !filters.locationId || vt.location_id === filters.locationId;
-    
+
     return matchesSearch && matchesLocation;
   });
 
@@ -273,13 +285,13 @@ export function useVehicleTypeManagement() {
   useEffect(() => {
     fetchVehicleTypes();
     fetchLocations();
-  fetchRates();
+    fetchRates();
   }, []);
 
   return {
     vehicleTypes: filteredVehicleTypes,
     locations,
-  rates,
+    rates,
     loading,
     error,
     stats,

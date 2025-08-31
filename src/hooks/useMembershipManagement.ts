@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useApi } from './useApi';
 import { apiService } from '@/services/api';
 import type { ParkingMembership, ParkingMembershipProduct, Location } from '@/types/api';
+import { validateDuplicates, getValidationRules } from '@/utils/validation';
 
 interface MembershipFormData {
   membership_product_id: string;
@@ -33,7 +34,7 @@ export function useMembershipManagement() {
     searchTerm: '',
     membershipProductId: ''
   });
-  
+
   const [formData, setFormData] = useState<MembershipFormData>({
     membership_product_id: '',
     code: '',
@@ -51,14 +52,27 @@ export function useMembershipManagement() {
     setLoading(true);
     setError(null);
     try {
-      const response = await execute(() => apiService.getMemberships());
-      
+      console.log('🔄 Fetching memberships...');
+      // Add parameters to get all data without pagination
+      const response = await execute(() => apiService.getMemberships({
+        page: 1,
+        page_size: 1000
+      }));
+
+      console.log('📡 Fetch response:', response);
+
       if (response && response.code === 200) {
-        setMemberships(Array.isArray(response.data) ? response.data : []);
+        const data = Array.isArray(response.data) ? response.data : [];
+        console.log('📊 Fetched memberships count:', data.length);
+        console.log('📋 Memberships:', data.map(m => ({ id: m.id, name: m.name, code: m.code })));
+
+        setMemberships(data);
       } else {
+        console.log('❌ Fetch failed:', response);
         setError('Failed to fetch memberships');
       }
     } catch (err) {
+      console.error('💥 Fetch error:', err);
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);
@@ -69,7 +83,7 @@ export function useMembershipManagement() {
   const fetchMembershipProducts = async () => {
     try {
       const response = await execute(() => apiService.getMembershipProducts());
-      
+
       if (response && response.code === 200) {
         setMembershipProducts(Array.isArray(response.data) ? response.data : []);
       }
@@ -82,7 +96,7 @@ export function useMembershipManagement() {
   const fetchLocations = async () => {
     try {
       const response = await execute(() => apiService.getLocations());
-      
+
       if (response && response.code === 200) {
         setLocations(Array.isArray(response.data) ? response.data : []);
       }
@@ -96,11 +110,17 @@ export function useMembershipManagement() {
     setLoading(true);
     setError(null);
     try {
+      // Validate for duplicates before creating
+      const validation = await validateDuplicates(formData, memberships, getValidationRules('membership'));
+      if (!validation.isValid) {
+        setError(`Validation failed: ${validation.errors.join(', ')}`);
+        return false;
+      }
+
       const response = await execute(() => apiService.createMembership(formData));
-      
+
       if (response && (response.code === 201 || response.code === 200)) {
         await fetchMemberships();
-        handleCloseModal();
         return true;
       } else {
         setError('Failed to create membership');
@@ -119,17 +139,31 @@ export function useMembershipManagement() {
     setLoading(true);
     setError(null);
     try {
+      // Validate for duplicates before updating (exclude current item)
+      const validation = await validateDuplicates(formData, memberships, getValidationRules('membership'), id);
+      if (!validation.isValid) {
+        setError(`Validation failed: ${validation.errors.join(', ')}`);
+        return false;
+      }
+
+      console.log('🔄 Updating membership with ID:', id);
+      console.log('📝 Form data:', formData);
+
       const response = await execute(() => apiService.updateMembership(id, formData));
-      
+
+      console.log('📡 Update response:', response);
+
       if (response && response.code === 200) {
+        console.log('✅ Update successful, refreshing data...');
         await fetchMemberships();
-        handleCloseModal();
         return true;
       } else {
+        console.log('❌ Update failed:', response);
         setError('Failed to update membership');
         return false;
       }
     } catch (err) {
+      console.error('💥 Update error:', err);
       setError(err instanceof Error ? err.message : 'An error occurred');
       return false;
     } finally {
@@ -142,9 +176,13 @@ export function useMembershipManagement() {
     setLoading(true);
     setError(null);
     try {
+      // Use execute from useApi hook to ensure proper token handling
       const response = await execute(() => apiService.deleteMembership(id));
-      
-      if (response && (response.code === 200 || response.code === 204)) {
+
+      console.log('Delete membership response:', response); // Debug log
+
+      // For DELETE requests, if we reach here without exception, consider it successful
+      if (response) {
         await fetchMemberships();
         return true;
       } else {
@@ -152,12 +190,14 @@ export function useMembershipManagement() {
         return false;
       }
     } catch (err) {
+      console.error('Delete membership error:', err); // Debug log
       setError(err instanceof Error ? err.message : 'An error occurred');
       return false;
     } finally {
       setLoading(false);
     }
   };
+
 
   // Modal handlers
   const handleOpenModal = (membership?: ParkingMembership) => {
@@ -192,9 +232,11 @@ export function useMembershipManagement() {
   };
 
   const handleCloseModal = () => {
+    console.log('🔒 Closing modal');
     setShowModal(false);
     setEditingMembership(null);
     setError(null);
+    console.log('🔒 Modal closed, editingMembership reset to null');
   };
 
   // Form handlers
@@ -203,10 +245,30 @@ export function useMembershipManagement() {
   };
 
   const handleSubmit = async () => {
-    if (editingMembership) {
-      return await updateMembership(editingMembership.id);
-    } else {
-      return await createMembership();
+    try {
+      console.log('🚀 HandleSubmit called');
+      if (editingMembership) {
+        console.log('✏️ Updating existing membership:', editingMembership.id);
+        const success = await updateMembership(editingMembership.id);
+        console.log('✅ Update result:', success);
+        if (success) {
+          console.log('🔒 Closing modal after successful update');
+          handleCloseModal();
+        }
+        return success;
+      } else {
+        console.log('➕ Creating new membership');
+        const success = await createMembership();
+        console.log('✅ Create result:', success);
+        if (success) {
+          console.log('🔒 Closing modal after successful create');
+          handleCloseModal();
+        }
+        return success;
+      }
+    } catch (error) {
+      console.error('💥 Submit error:', error);
+      return false;
     }
   };
 
@@ -217,7 +279,7 @@ export function useMembershipManagement() {
 
   // Get filtered products by location
   const getFilteredProducts = (locationId: string) => {
-    return membershipProducts.filter(product => 
+    return membershipProducts.filter(product =>
       !locationId || product.location_id === locationId
     );
   };
@@ -225,16 +287,22 @@ export function useMembershipManagement() {
   // Filtered memberships
   const filteredMemberships = memberships.filter(membership => {
     const matchesSearch = membership.name.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
-                         membership.email?.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
-                         membership.phone?.includes(filters.searchTerm) ||
-                         membership.code.toLowerCase().includes(filters.searchTerm.toLowerCase());
-    
+      membership.email?.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
+      membership.phone?.includes(filters.searchTerm) ||
+      membership.code.toLowerCase().includes(filters.searchTerm.toLowerCase());
+
     if (!matchesSearch) return false;
 
     if (filters.membershipProductId && membership.membership_product_id !== filters.membershipProductId) return false;
 
     return true;
   });
+
+  // Debug filtered memberships (only log if there are issues)
+  if (filteredMemberships.length !== memberships.length) {
+    console.log('🔍 Filtered memberships count:', filteredMemberships.length, 'of', memberships.length);
+    console.log('🔍 Current filters:', filters);
+  }
 
   // Get location name by product ID
   const getLocationName = (productId: string) => {
@@ -261,7 +329,7 @@ export function useMembershipManagement() {
     const now = new Date();
     const startDate = new Date(membership.start_time);
     const endDate = new Date(membership.end_time);
-    
+
     if (now < startDate) return 'pending';
     if (now > endDate) return 'expired';
     return 'active';

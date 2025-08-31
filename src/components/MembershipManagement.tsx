@@ -1,14 +1,18 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useMembershipManagement } from "@/hooks/useMembershipManagement";
+import { useMembershipImport } from "@/hooks/useMembershipImport";
 import { MembershipHeader } from "@/components/membership/MembershipHeader";
 import { MembershipStats } from "@/components/membership/MembershipStats";
 import { MembershipFilters } from "@/components/membership/MembershipFilters";
 import { MembershipTable } from "@/components/membership/MembershipTable";
 import { MembershipFormModal } from "@/components/membership/MembershipFormModal";
+import { MembershipImportModal } from "@/components/membership/MembershipImportModal";
 
 export default function MembershipManagement() {
+  const [showImportModal, setShowImportModal] = useState(false);
+  
   const {
     // Data
     memberships,
@@ -33,16 +37,38 @@ export default function MembershipManagement() {
     updateFormField,
     updateFilters,
     getMembershipProductName,
+    fetchMemberships,
   } = useMembershipManagement();
+
+  const { importMemberships } = useMembershipImport();
+
+  const handleImport = async (data: any[]) => {
+    try {
+      await importMemberships(data);
+      // Refresh data after successful import
+      await fetchMemberships();
+    } catch (error) {
+      console.error('Import failed:', error);
+    }
+  };
 
   return (
     <div className="space-y-6">
-      <MembershipHeader onRefresh={() => {}} onAddNew={handleOpenModal} />
+      <MembershipHeader 
+        onRefresh={fetchMemberships} 
+        onAddNew={handleOpenModal}
+        onImport={() => setShowImportModal(true)}
+      />
 
       <MembershipStats
         totalMemberships={stats.total}
         activeMemberships={stats.active}
-        expiringMemberships={stats.expired}
+        expiringMemberships={memberships.filter(m => {
+          const now = new Date();
+          const endDate = new Date(m.end_time);
+          const daysUntilExpiry = Math.ceil((endDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+          return daysUntilExpiry <= 30 && daysUntilExpiry > 0; // Expiring within 30 days but not expired yet
+        }).length}
         totalRevenue={0}
       />
 
@@ -86,6 +112,14 @@ export default function MembershipManagement() {
           updateFormField={(field, value) =>
             updateFormField(field as any, value)
           }
+        />
+      )}
+
+      {showImportModal && (
+        <MembershipImportModal
+          isOpen={showImportModal}
+          onClose={() => setShowImportModal(false)}
+          onImport={handleImport}
         />
       )}
     </div>

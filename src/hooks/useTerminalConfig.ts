@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { useParkingTerminals, useLocations } from "@/hooks/useApi";
 import { ParkingTerminal, Location } from "@/types/api";
+import { validateDuplicates, getValidationRules, BUSINESS_VALIDATION_RULES } from "@/utils/validation";
 
 interface TerminalFormData {
   location_id: string;
@@ -34,7 +35,7 @@ export function useTerminalConfig() {
   const [selectedTerminal, setSelectedTerminal] = useState<ParkingTerminal | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [terminalOverrides, setTerminalOverrides] = useState<Record<string, Partial<ParkingTerminal>>>({});
-  
+
   // Filter state
   const [filters, setFilters] = useState<FilterState>({
     searchTerm: "",
@@ -76,17 +77,17 @@ export function useTerminalConfig() {
   // No rates needed at terminal level per schema
 
   // Computed values
-  const terminals = useMemo(() => 
-    Array.isArray(terminalsData) ? terminalsData : [], 
+  const terminals = useMemo(() =>
+    Array.isArray(terminalsData) ? terminalsData : [],
     [terminalsData]
   );
 
-  const locationsArray = useMemo(() => 
+  const locationsArray = useMemo(() =>
     Array.isArray(locationsData)
       ? locationsData
       : locationsData && Array.isArray((locationsData as any).items)
-      ? (locationsData as any).items
-      : [], 
+        ? (locationsData as any).items
+        : [],
     [locationsData]
   );
 
@@ -99,7 +100,7 @@ export function useTerminalConfig() {
     [locationsArray]
   );
 
-  const filteredTerminals = useMemo(() => 
+  const filteredTerminals = useMemo(() =>
     terminals.filter((terminal: ParkingTerminal) => {
       if (!terminal || typeof terminal !== "object") return false;
       if (!terminal.name || !terminal.code) return false;
@@ -188,6 +189,18 @@ export function useTerminalConfig() {
     if (!validateForm()) return;
 
     try {
+      // Validate for duplicates before creating/updating
+      const validationRules = formData.location_id
+        ? BUSINESS_VALIDATION_RULES.terminalByLocation(formData.location_id)
+        : getValidationRules('terminal');
+
+      const validation = await validateDuplicates(formData, terminals, validationRules, selectedTerminal?.id);
+      if (!validation.isValid) {
+        console.error("Validation failed:", validation.errors);
+        // You might want to set an error state here to show to the user
+        return;
+      }
+
       if (selectedTerminal) {
         await updateTerminal(selectedTerminal.id, formData);
       } else {
@@ -244,20 +257,20 @@ export function useTerminalConfig() {
     formData,
     formErrors,
     filters,
-    
+
     // Computed data
     terminals,
     filteredTerminals,
     locationOptions,
-    
+
     // Loading states
-  isLoading: terminalsLoading || locationsLoading,
+    isLoading: terminalsLoading || locationsLoading,
     terminalsError,
-    
+
     // Helper functions
     getTerminalLocationName,
     mergeTerminal,
-    
+
     // Actions
     openCreateModal,
     openEditModal,

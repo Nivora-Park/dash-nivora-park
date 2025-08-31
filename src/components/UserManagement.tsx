@@ -105,8 +105,9 @@ export function UserManagement() {
         <UserTable
           users={users}
           totalUsers={stats.totalUsers}
-          onEditUser={(user) => {
-            setEditingUser(user);
+          onEditUser={(userId) => {
+            const user = users.find(u => u.id === userId);
+            setEditingUser(user || null);
             setIsModalOpen(true);
           }}
           onDeleteUser={deleteUser}

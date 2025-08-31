@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useApi } from './useApi';
 import { apiService } from '@/services/api';
 import type { ParkingMembershipProduct, Location } from '@/types/api';
+import { validateDuplicates, getValidationRules } from '@/utils/validation';
 
 interface MembershipProductFormData {
   location_id: string;
@@ -32,7 +33,7 @@ export function useMembershipProductManagement() {
     searchTerm: '',
     locationId: ''
   });
-  
+
   const [formData, setFormData] = useState<MembershipProductFormData>({
     location_id: '',
     code: '',
@@ -51,7 +52,7 @@ export function useMembershipProductManagement() {
     setError(null);
     try {
       const response = await execute(() => apiService.getMembershipProducts());
-      
+
       if (response && response.code === 200) {
         setProducts(Array.isArray(response.data) ? response.data : []);
       } else {
@@ -68,7 +69,7 @@ export function useMembershipProductManagement() {
   const fetchLocations = async () => {
     try {
       const response = await execute(() => apiService.getLocations());
-      
+
       if (response && response.code === 200) {
         setLocations(Array.isArray(response.data) ? response.data : []);
       }
@@ -82,8 +83,15 @@ export function useMembershipProductManagement() {
     setLoading(true);
     setError(null);
     try {
+      // Validate for duplicates before creating
+      const validation = await validateDuplicates(formData, products, getValidationRules('membershipProduct'));
+      if (!validation.isValid) {
+        setError(`Validation failed: ${validation.errors.join(', ')}`);
+        return false;
+      }
+
       const response = await execute(() => apiService.createMembershipProduct(formData));
-      
+
       if (response && (response.code === 201 || response.code === 200)) {
         await fetchProducts();
         handleCloseModal();
@@ -105,8 +113,15 @@ export function useMembershipProductManagement() {
     setLoading(true);
     setError(null);
     try {
+      // Validate for duplicates before updating (exclude current item)
+      const validation = await validateDuplicates(formData, products, getValidationRules('membershipProduct'), id);
+      if (!validation.isValid) {
+        setError(`Validation failed: ${validation.errors.join(', ')}`);
+        return false;
+      }
+
       const response = await execute(() => apiService.updateMembershipProduct(id, formData));
-      
+
       if (response && response.code === 200) {
         await fetchProducts();
         handleCloseModal();
@@ -129,7 +144,7 @@ export function useMembershipProductManagement() {
     setError(null);
     try {
       const response = await execute(() => apiService.deleteMembershipProduct(id));
-      
+
       if (response && (response.code === 200 || response.code === 204)) {
         await fetchProducts();
         return true;
@@ -204,9 +219,9 @@ export function useMembershipProductManagement() {
   // Filtered products
   const filteredProducts = products.filter(product => {
     const matchesSearch = product.name.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
-                         product.code.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
-                         product.description.toLowerCase().includes(filters.searchTerm.toLowerCase());
-    
+      product.code.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
+      product.description.toLowerCase().includes(filters.searchTerm.toLowerCase());
+
     if (!matchesSearch) return false;
 
     if (filters.locationId && product.location_id !== filters.locationId) return false;

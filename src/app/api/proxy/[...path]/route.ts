@@ -16,12 +16,29 @@ export async function GET(
             'Content-Type': 'application/json',
         };
 
-        const authHeader = request.headers.get('authorization');
+        // Check for Authorization header (case insensitive)
+        let authHeader = request.headers.get('authorization') || request.headers.get('Authorization');
+        
+        // If no Authorization header, try to get token from cookie
+        if (!authHeader) {
+            const cookieHeader = request.headers.get('cookie');
+            if (cookieHeader) {
+                const cookies = cookieHeader.split(';');
+                const authCookie = cookies.find(cookie => cookie.trim().startsWith('auth-token='));
+                if (authCookie) {
+                    const token = authCookie.split('=')[1];
+                    authHeader = `Bearer ${token}`;
+                    console.log('🔐 Found token in cookie, created Authorization header:', token.substring(0, 20) + '...');
+                }
+            }
+        }
+        
         if (authHeader) {
             headers['Authorization'] = authHeader;
             console.log('🔐 Forwarding Authorization header:', authHeader.substring(0, 20) + '...');
         } else {
-            console.log('⚠️ No Authorization header found in request');
+            console.log('⚠️ No Authorization header or auth-token cookie found in request');
+            console.log('🔍 All request headers:', Object.fromEntries(request.headers.entries()));
         }
 
         const response = await fetch(url, {
@@ -53,11 +70,37 @@ export async function POST(
 
         console.log('🌐 Proxy POST request to:', url);
 
+        // Forward Authorization header if present
+        const headers: HeadersInit = {
+            'Content-Type': 'application/json',
+        };
+
+        let authHeader = request.headers.get('authorization') || request.headers.get('Authorization');
+        
+        // If no Authorization header, try to get token from cookie
+        if (!authHeader) {
+            const cookieHeader = request.headers.get('cookie');
+            if (cookieHeader) {
+                const cookies = cookieHeader.split(';');
+                const authCookie = cookies.find(cookie => cookie.trim().startsWith('auth-token='));
+                if (authCookie) {
+                    const token = authCookie.split('=')[1];
+                    authHeader = `Bearer ${token}`;
+                    console.log('🔐 Found token in cookie, created Authorization header:', token.substring(0, 20) + '...');
+                }
+            }
+        }
+        
+        if (authHeader) {
+            headers['Authorization'] = authHeader;
+            console.log('🔐 Forwarding Authorization header:', authHeader.substring(0, 20) + '...');
+        } else {
+            console.log('⚠️ No Authorization header or auth-token cookie found in POST request');
+        }
+
         const response = await fetch(url, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers,
             body: JSON.stringify(body),
         });
 
@@ -85,11 +128,37 @@ export async function PUT(
 
         console.log('🌐 Proxy PUT request to:', url);
 
+        // Forward Authorization header if present
+        const headers: HeadersInit = {
+            'Content-Type': 'application/json',
+        };
+
+        let authHeader = request.headers.get('authorization') || request.headers.get('Authorization');
+        
+        // If no Authorization header, try to get token from cookie
+        if (!authHeader) {
+            const cookieHeader = request.headers.get('cookie');
+            if (cookieHeader) {
+                const cookies = cookieHeader.split(';');
+                const authCookie = cookies.find(cookie => cookie.trim().startsWith('auth-token='));
+                if (authCookie) {
+                    const token = authCookie.split('=')[1];
+                    authHeader = `Bearer ${token}`;
+                    console.log('🔐 Found token in cookie, created Authorization header:', token.substring(0, 20) + '...');
+                }
+            }
+        }
+        
+        if (authHeader) {
+            headers['Authorization'] = authHeader;
+            console.log('🔐 Forwarding Authorization header:', authHeader.substring(0, 20) + '...');
+        } else {
+            console.log('⚠️ No Authorization header or auth-token cookie found in PUT request');
+        }
+
         const response = await fetch(url, {
             method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers,
             body: JSON.stringify(body),
         });
 
@@ -116,11 +185,37 @@ export async function DELETE(
 
         console.log('🌐 Proxy DELETE request to:', url);
 
+        // Forward Authorization header if present
+        const headers: HeadersInit = {
+            'Content-Type': 'application/json',
+        };
+
+        let authHeader = request.headers.get('authorization') || request.headers.get('Authorization');
+        
+        // If no Authorization header, try to get token from cookie
+        if (!authHeader) {
+            const cookieHeader = request.headers.get('cookie');
+            if (cookieHeader) {
+                const cookies = cookieHeader.split(';');
+                const authCookie = cookies.find(cookie => cookie.trim().startsWith('auth-token='));
+                if (authCookie) {
+                    const token = authCookie.split('=')[1];
+                    authHeader = `Bearer ${token}`;
+                    console.log('🔐 Found token in cookie, created Authorization header:', token.substring(0, 20) + '...');
+                }
+            }
+        }
+        
+        if (authHeader) {
+            headers['Authorization'] = authHeader;
+            console.log('🔐 Forwarding Authorization header:', authHeader.substring(0, 20) + '...');
+        } else {
+            console.log('⚠️ No Authorization header or auth-token cookie found in DELETE request');
+        }
+
         const response = await fetch(url, {
             method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers,
         });
 
         const data = await response.json();

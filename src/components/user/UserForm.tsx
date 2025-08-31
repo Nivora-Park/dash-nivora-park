@@ -5,12 +5,13 @@ import React, { useState, useEffect } from 'react';
 interface UserFormData {
   username: string;
   email: string;
-  name: string;
+  full_name: string; // Changed from 'name' to 'full_name' to match API
   password: string;
   role: 'admin' | 'operator' | 'viewer';
   location_id?: string;
   terminal: string;
   permissions: string[];
+  status?: 'active' | 'inactive' | 'suspended';
 }
 
 interface UserFormProps {
@@ -42,12 +43,13 @@ export function UserForm({ user, isEditing = false, onSubmit, onCancel, isLoadin
   const [formData, setFormData] = useState<UserFormData>({
     username: '',
     email: '',
-    name: '',
+    full_name: '',
     password: '',
     role: 'operator',
     location_id: '',
     terminal: '',
-    permissions: []
+    permissions: [],
+    status: 'active'
   });
 
   const [errors, setErrors] = useState<Partial<UserFormData>>({});
@@ -75,8 +77,8 @@ export function UserForm({ user, isEditing = false, onSubmit, onCancel, isLoadin
       newErrors.email = 'Email is invalid';
     }
 
-    if (!formData.name.trim()) {
-      newErrors.name = 'Name is required';
+    if (!formData.full_name.trim()) {
+      newErrors.full_name = 'Full Name is required';
     }
 
     if (!isEditing && !formData.password.trim()) {
@@ -146,7 +148,7 @@ export function UserForm({ user, isEditing = false, onSubmit, onCancel, isLoadin
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Username */}
         <div>
-          <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
             Username *
           </label>
           <input
@@ -154,7 +156,7 @@ export function UserForm({ user, isEditing = false, onSubmit, onCancel, isLoadin
             id="username"
             value={formData.username}
             onChange={(e) => setFormData(prev => ({ ...prev, username: e.target.value }))}
-            className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm ${
+            className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
               errors.username ? 'border-red-300' : ''
             }`}
             disabled={isEditing} // Username cannot be changed after creation
@@ -166,7 +168,7 @@ export function UserForm({ user, isEditing = false, onSubmit, onCancel, isLoadin
 
         {/* Email */}
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
             Email *
           </label>
           <input
@@ -174,7 +176,7 @@ export function UserForm({ user, isEditing = false, onSubmit, onCancel, isLoadin
             id="email"
             value={formData.email}
             onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-            className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm ${
+            className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
               errors.email ? 'border-red-300' : ''
             }`}
           />
@@ -183,28 +185,28 @@ export function UserForm({ user, isEditing = false, onSubmit, onCancel, isLoadin
           )}
         </div>
 
-        {/* Name */}
+        {/* Full Name */}
         <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="full_name" className="block text-sm font-medium text-gray-700 mb-1">
             Full Name *
           </label>
           <input
             type="text"
-            id="name"
-            value={formData.name}
-            onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-            className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm ${
-              errors.name ? 'border-red-300' : ''
+            id="full_name"
+            value={formData.full_name}
+            onChange={(e) => setFormData(prev => ({ ...prev, full_name: e.target.value }))}
+            className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+              errors.full_name ? 'border-red-300' : ''
             }`}
           />
-          {errors.name && (
-            <p className="mt-1 text-sm text-red-600">{errors.name}</p>
+          {errors.full_name && (
+            <p className="mt-1 text-sm text-red-600">{errors.full_name}</p>
           )}
         </div>
 
         {/* Password */}
         <div>
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
             Password {!isEditing && '*'}
           </label>
           <input
@@ -212,7 +214,7 @@ export function UserForm({ user, isEditing = false, onSubmit, onCancel, isLoadin
             id="password"
             value={formData.password}
             onChange={(e) => setFormData(prev => ({ ...prev, password: e.target.value }))}
-            className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm ${
+            className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
               errors.password ? 'border-red-300' : ''
             }`}
             placeholder={isEditing ? 'Leave blank to keep current password' : ''}
@@ -224,14 +226,14 @@ export function UserForm({ user, isEditing = false, onSubmit, onCancel, isLoadin
 
         {/* Role */}
         <div>
-          <label htmlFor="role" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-1">
             Role *
           </label>
           <select
             id="role"
             value={formData.role}
             onChange={(e) => handleRoleChange(e.target.value)}
-            className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm ${
+            className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
               errors.role ? 'border-red-300' : ''
             }`}
           >
@@ -248,7 +250,7 @@ export function UserForm({ user, isEditing = false, onSubmit, onCancel, isLoadin
 
         {/* Terminal */}
         <div>
-          <label htmlFor="terminal" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="terminal" className="block text-sm font-medium text-gray-700 mb-1">
             Terminal
           </label>
           <input
@@ -256,7 +258,7 @@ export function UserForm({ user, isEditing = false, onSubmit, onCancel, isLoadin
             id="terminal"
             value={formData.terminal}
             onChange={(e) => setFormData(prev => ({ ...prev, terminal: e.target.value }))}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="e.g., A1, B1, or 'All' for admin"
           />
         </div>
@@ -287,14 +289,14 @@ export function UserForm({ user, isEditing = false, onSubmit, onCancel, isLoadin
         <button
           type="button"
           onClick={onCancel}
-          className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
           disabled={isLoading}
         >
           Cancel
         </button>
         <button
           type="submit"
-          className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+          className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
           disabled={isLoading}
         >
           {isLoading ? 'Saving...' : (isEditing ? 'Update User' : 'Create User')}

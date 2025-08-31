@@ -8,7 +8,6 @@ import {
   Activity,
   Users,
   FileText,
-  TestTube,
   Building2,
   MapPin,
   Package,
@@ -102,12 +101,7 @@ export function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
       icon: Users,
       description: "Kelola pengguna sistem",
     },
-    {
-      id: "api-test",
-      label: "Test API",
-      icon: TestTube,
-      description: "Test koneksi API",
-    },
+
   ];
 
   return (

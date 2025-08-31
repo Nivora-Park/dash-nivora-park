@@ -12,13 +12,17 @@ import {
 
 interface SystemUser {
   id: string;
-  name: string;
-  email: string;
+  username?: string;
+  full_name?: string; // Changed from 'name' to 'full_name' to match API
+  email?: string;
   role: "admin" | "operator" | "viewer";
   status: "active" | "inactive" | "suspended";
-  lastLogin: string;
-  permissions: string[];
-  terminal: string;
+  lastLogin?: string;
+  permissions?: string[];
+  terminal?: string;
+  location_id?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 interface UserTableProps {
@@ -152,9 +156,9 @@ export function UserTable({
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
+            {users.map((user, index) => (
               <tr
-                key={user.id}
+                key={user.id || `user-${index}`}
                 className="border-b border-gray-100 hover:bg-gray-50"
               >
                 <td className="py-4 px-6">
@@ -164,29 +168,29 @@ export function UserTable({
                     </div>
                     <div>
                       <div className="font-medium text-gray-900">
-                        {user.name}
+                        {user.full_name || 'N/A'}
                       </div>
-                      <div className="text-sm text-gray-500">{user.email}</div>
+                      <div className="text-sm text-gray-500">{user.email || 'N/A'}</div>
                     </div>
                   </div>
                 </td>
                 <td className="py-4 px-6">
                   <div className="flex items-center space-x-2">
-                    {getRoleIcon(user.role)}
-                    {getRoleBadge(user.role)}
+                    {getRoleIcon(user.role || 'viewer')}
+                    {getRoleBadge(user.role || 'viewer')}
                   </div>
                 </td>
                 <td className="py-4 px-6">
                   <div className="flex items-center space-x-2">
-                    {getStatusIcon(user.status)}
-                    {getStatusBadge(user.status)}
+                    {getStatusIcon(user.status || 'inactive')}
+                    {getStatusBadge(user.status || 'inactive')}
                   </div>
                 </td>
-                <td className="py-4 px-6 text-gray-600">{user.terminal}</td>
-                <td className="py-4 px-6 text-gray-600">{user.lastLogin}</td>
+                <td className="py-4 px-6 text-gray-600">{user.terminal || '-'}</td>
+                <td className="py-4 px-6 text-gray-600">{user.lastLogin || '-'}</td>
                 <td className="py-4 px-6">
                   <div className="flex flex-wrap gap-1">
-                    {user.permissions.slice(0, 2).map((permission, index) => (
+                    {(user.permissions || []).slice(0, 2).map((permission, index) => (
                       <span
                         key={index}
                         className="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded"
@@ -194,9 +198,9 @@ export function UserTable({
                         {permission}
                       </span>
                     ))}
-                    {user.permissions.length > 2 && (
+                    {(user.permissions || []).length > 2 && (
                       <span className="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded">
-                        +{user.permissions.length - 2}
+                        +{(user.permissions || []).length - 2}
                       </span>
                     )}
                   </div>
@@ -204,14 +208,16 @@ export function UserTable({
                 <td className="py-4 px-6">
                   <div className="flex items-center space-x-2">
                     <button
-                      onClick={() => onEditUser(user.id)}
+                      onClick={() => user.id && onEditUser(user.id)}
                       className="p-1 text-blue-600 hover:text-blue-700 rounded"
+                      disabled={!user.id}
                     >
                       <Edit className="w-4 h-4" />
                     </button>
                     <button
-                      onClick={() => onDeleteUser(user.id)}
+                      onClick={() => user.id && onDeleteUser(user.id)}
                       className="p-1 text-red-600 hover:text-red-700 rounded"
+                      disabled={!user.id}
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>

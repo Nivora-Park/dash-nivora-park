@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useApi } from './useApi';
 import { apiService } from '@/services/api';
 import type { Merchant, ApiResponse } from '@/types/api';
+import { validateDuplicates, getValidationRules } from '@/utils/validation';
 
 interface MerchantFormData {
   code: string;
@@ -31,7 +32,7 @@ export function useMerchantManagement() {
     searchTerm: '',
     contractStatus: 'all'
   });
-  
+
   const [formData, setFormData] = useState<MerchantFormData>({
     code: '',
     name: '',
@@ -50,7 +51,7 @@ export function useMerchantManagement() {
     setError(null);
     try {
       const response = await execute(() => apiService.getMerchants());
-      
+
       if (response && response.code === 200) {
         setMerchants(Array.isArray(response.data) ? response.data : []);
       } else {
@@ -68,8 +69,15 @@ export function useMerchantManagement() {
     setLoading(true);
     setError(null);
     try {
+      // Validate for duplicates before creating
+      const validation = await validateDuplicates(formData, merchants, getValidationRules('merchant'));
+      if (!validation.isValid) {
+        setError(`Validation failed: ${validation.errors.join(', ')}`);
+        return false;
+      }
+
       const response = await execute(() => apiService.createMerchant(formData));
-      
+
       if (response && (response.code === 201 || response.code === 200)) {
         await fetchMerchants();
         handleCloseModal();
@@ -91,8 +99,15 @@ export function useMerchantManagement() {
     setLoading(true);
     setError(null);
     try {
+      // Validate for duplicates before updating (exclude current item)
+      const validation = await validateDuplicates(formData, merchants, getValidationRules('merchant'), id);
+      if (!validation.isValid) {
+        setError(`Validation failed: ${validation.errors.join(', ')}`);
+        return false;
+      }
+
       const response = await execute(() => apiService.updateMerchant(id, formData));
-      
+
       if (response && response.code === 200) {
         await fetchMerchants();
         handleCloseModal();
@@ -115,7 +130,7 @@ export function useMerchantManagement() {
     setError(null);
     try {
       const response = await execute(() => apiService.deleteMerchant(id));
-      
+
       if (response && (response.code === 200 || response.code === 204)) {
         await fetchMerchants();
         return true;
@@ -190,17 +205,17 @@ export function useMerchantManagement() {
   // Filtered merchants
   const filteredMerchants = merchants.filter(merchant => {
     const matchesSearch = merchant.name.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
-                         merchant.code.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
-                         merchant.email.toLowerCase().includes(filters.searchTerm.toLowerCase());
-    
+      merchant.code.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
+      merchant.email.toLowerCase().includes(filters.searchTerm.toLowerCase());
+
     if (!matchesSearch) return false;
 
     if (filters.contractStatus === 'all') return true;
-    
+
     const now = new Date();
     const contractEnd = new Date(merchant.contract_end);
     const daysUntilExpiry = Math.ceil((contractEnd.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
-    
+
     switch (filters.contractStatus) {
       case 'active':
         return daysUntilExpiry > 30;
