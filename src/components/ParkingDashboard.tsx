@@ -67,11 +67,6 @@ export function ParkingDashboard() {
       >
         <Header />
         <main className="flex-1 overflow-y-auto p-6">
-          {/* API Status Indicator */}
-          <div className="mb-4">
-            <ApiStatus />
-          </div>
-          <ApiWarmup />
           {renderContent()}
         </main>
       </div>

@@ -1,14 +1,19 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface SystemUser {
   id: string;
-  name: string;
+  username: string;
   email: string;
+  name: string;
   role: 'admin' | 'operator' | 'viewer';
   status: 'active' | 'inactive' | 'suspended';
-  lastLogin: string;
+  lastLogin: string | null;
   permissions: string[];
   terminal: string;
+  location_id?: string;
+  created_at: string;
+  updated_at: string;
 }
 
 interface UserFilters {
@@ -17,63 +22,16 @@ interface UserFilters {
   statusFilter: string;
 }
 
-// Mock data - in real app this would come from API
-const mockUsers: SystemUser[] = [
-  {
-    id: 'USR-001',
-    name: 'Admin Nivora',
-    email: 'admin@nivora.com',
-    role: 'admin',
-    status: 'active',
-    lastLogin: '2 menit yang lalu',
-    permissions: ['all'],
-    terminal: 'All'
-  },
-  {
-    id: 'USR-002',
-    name: 'Operator A1',
-    email: 'operator.a1@nivora.com',
-    role: 'operator',
-    status: 'active',
-    lastLogin: '15 menit yang lalu',
-    permissions: ['terminal_a1', 'transactions', 'reports'],
-    terminal: 'A1'
-  },
-  {
-    id: 'USR-003',
-    name: 'Operator B1',
-    email: 'operator.b1@nivora.com',
-    role: 'operator',
-    status: 'inactive',
-    lastLogin: '2 jam yang lalu',
-    permissions: ['terminal_b1', 'transactions'],
-    terminal: 'B1'
-  },
-  {
-    id: 'USR-004',
-    name: 'Viewer Reports',
-    email: 'viewer@nivora.com',
-    role: 'viewer',
-    status: 'active',
-    lastLogin: '1 jam yang lalu',
-    permissions: ['reports', 'analytics'],
-    terminal: 'None'
-  },
-  {
-    id: 'USR-005',
-    name: 'Operator A2',
-    email: 'operator.a2@nivora.com',
-    role: 'operator',
-    status: 'suspended',
-    lastLogin: '1 hari yang lalu',
-    permissions: ['terminal_a2', 'transactions'],
-    terminal: 'A2'
-  }
-];
+// Initial empty state - will be populated from API
+const initialUsers: SystemUser[] = [];
 
 export function useUserManagement() {
+  const { isAuthenticated } = useAuth();
+
   // State
-  const [users] = useState<SystemUser[]>(mockUsers);
+  const [users, setUsers] = useState<SystemUser[]>(initialUsers);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [filters, setFilters] = useState<UserFilters>({
     searchTerm: '',
     roleFilter: 'all',
@@ -84,7 +42,8 @@ export function useUserManagement() {
   const filteredUsers = useMemo(() => {
     return users.filter(user => {
       const matchesSearch = user.name.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
-                           user.email.toLowerCase().includes(filters.searchTerm.toLowerCase());
+        user.email.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
+        user.username.toLowerCase().includes(filters.searchTerm.toLowerCase());
       const matchesRole = filters.roleFilter === 'all' || user.role === filters.roleFilter;
       const matchesStatus = filters.statusFilter === 'all' || user.status === filters.statusFilter;
       return matchesSearch && matchesRole && matchesStatus;
@@ -101,34 +60,249 @@ export function useUserManagement() {
     };
   }, [users]);
 
+  // Fetch users from API
+  const fetchUsers = async (retryCount = 0) => {
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      const token = localStorage.getItem('auth-token');
+      console.log('Fetching users with token:', token ? 'Token exists' : 'No token');
+
+      if (!token) {
+        throw new Error('No authentication token');
+      }
+
+      const response = await fetch('/api/users', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        if (response.status === 401 && retryCount < 3) {
+          // Retry after a short delay if unauthorized
+          console.log(`Retrying fetch users (attempt ${retryCount + 1})`);
+          setTimeout(() => fetchUsers(retryCount + 1), 1000);
+          return;
+        }
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      if (result.success) {
+        setUsers(result.data);
+      } else {
+        throw new Error(result.error || 'Failed to fetch users');
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to fetch users');
+      console.error('Fetch users error:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Load users when authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      // Add small delay to ensure token is properly stored after login
+      const timer = setTimeout(() => {
+        fetchUsers();
+      }, 500); // Increased delay to ensure token is properly stored
+
+      return () => clearTimeout(timer);
+    }
+  }, [isAuthenticated]);
+
   // Actions
   const updateFilters = (newFilters: Partial<UserFilters>) => {
     setFilters(prev => ({ ...prev, ...newFilters }));
   };
 
-  const createUser = () => {
-    // TODO: Implement user creation
-    console.log('Create user');
+  const createUser = async (userData: Omit<SystemUser, 'id' | 'created_at' | 'updated_at'>) => {
+    try {
+      setError(null);
+
+      const token = localStorage.getItem('auth-token');
+      if (!token) {
+        throw new Error('No authentication token');
+      }
+
+      const response = await fetch('/api/users', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      if (result.success) {
+        // Refresh users list
+        await fetchUsers();
+        return result.data;
+      } else {
+        throw new Error(result.error || 'Failed to create user');
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to create user');
+      console.error('Create user error:', err);
+      throw err;
+    }
   };
 
-  const editUser = (userId: string) => {
-    // TODO: Implement user editing
-    console.log('Edit user:', userId);
+  const editUser = async (userId: string, userData: Partial<SystemUser>) => {
+    try {
+      setError(null);
+
+      const token = localStorage.getItem('auth-token');
+      if (!token) {
+        throw new Error('No authentication token');
+      }
+
+      const response = await fetch(`/api/users/${userId}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      if (result.success) {
+        // Refresh users list
+        await fetchUsers();
+        return result.data;
+      } else {
+        throw new Error(result.error || 'Failed to update user');
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to update user');
+      console.error('Edit user error:', err);
+      throw err;
+    }
   };
 
-  const deleteUser = (userId: string) => {
-    // TODO: Implement user deletion
-    console.log('Delete user:', userId);
+  const deleteUser = async (userId: string) => {
+    try {
+      setError(null);
+
+      const token = localStorage.getItem('auth-token');
+      if (!token) {
+        throw new Error('No authentication token');
+      }
+
+      const response = await fetch(`/api/users/${userId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      if (result.success) {
+        // Refresh users list
+        await fetchUsers();
+        return result.data;
+      } else {
+        throw new Error(result.error || 'Failed to delete user');
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete user');
+      console.error('Delete user error:', err);
+      throw err;
+    }
   };
 
-  const suspendUser = (userId: string) => {
-    // TODO: Implement user suspension
-    console.log('Suspend user:', userId);
+  const suspendUser = async (userId: string) => {
+    try {
+      setError(null);
+
+      const token = localStorage.getItem('auth-token');
+      if (!token) {
+        throw new Error('No authentication token');
+      }
+
+      const response = await fetch(`/api/users/${userId}`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: 'suspended' }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      if (result.success) {
+        // Refresh users list
+        await fetchUsers();
+        return result.data;
+      } else {
+        throw new Error(result.error || 'Failed to suspend user');
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to suspend user');
+      console.error('Suspend user error:', err);
+      throw err;
+    }
   };
 
-  const activateUser = (userId: string) => {
-    // TODO: Implement user activation
-    console.log('Activate user:', userId);
+  const activateUser = async (userId: string) => {
+    try {
+      setError(null);
+
+      const token = localStorage.getItem('auth-token');
+      if (!token) {
+        throw new Error('No authentication token');
+      }
+
+      const response = await fetch(`/api/users/${userId}`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: 'active' }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      if (result.success) {
+        // Refresh users list
+        await fetchUsers();
+        return result.data;
+      } else {
+        throw new Error(result.error || 'Failed to activate user');
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to activate user');
+      console.error('Activate user error:', err);
+      throw err;
+    }
   };
 
   return {
@@ -137,7 +311,9 @@ export function useUserManagement() {
     allUsers: users,
     stats,
     filters,
-    
+    isLoading,
+    error,
+
     // Actions
     updateFilters,
     createUser,
@@ -145,5 +321,6 @@ export function useUserManagement() {
     deleteUser,
     suspendUser,
     activateUser,
+    fetchUsers,
   };
 }

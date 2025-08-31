@@ -2,7 +2,6 @@
 
 import { Bell, Search, Settings, MapPin, ChevronDown } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
-import { ApiStatus } from "./ApiStatus";
 import { useLocationSwitcher } from "@/hooks/useLocationSwitcher";
 import { UserDropdown } from "./auth";
 
@@ -115,8 +114,6 @@ export function Header() {
 
         <div className="flex items-center space-x-4">
           {/* API Status */}
-          <ApiStatus />
-
           {/* Notifications */}
           <button className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors">
             <Bell className="w-5 h-5" />

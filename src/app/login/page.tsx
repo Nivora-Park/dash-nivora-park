@@ -30,9 +30,7 @@ export default function LoginPage() {
           onSubmit={handleSubmit}
         />
 
-        <DemoCredentials />
       </LoginCard>
-
       <LoginFooter />
     </LoginLayout>
   );

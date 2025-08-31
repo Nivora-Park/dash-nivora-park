@@ -67,17 +67,6 @@ export function useApi<T = any>() {
     };
 }
 
-// Health check hook
-export function useHealthCheck() {
-    const { data, loading, error, execute } = useApi();
-
-    const checkHealth = useCallback(() => {
-        return execute(() => apiService.healthCheck());
-    }, [execute]);
-
-    return { data, loading, error, checkHealth };
-}
-
 // Parking Transaction hooks
 export function useParkingTransactions() {
     const { data, loading, error, execute } = useApi();

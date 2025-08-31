@@ -2,10 +2,13 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
+import { apiService } from "@/services/api";
 
 interface User {
+  id: string;
   username: string;
   role: string;
+  location_id?: string;
 }
 
 interface AuthContextType {
@@ -19,30 +22,44 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
   const pathname = usePathname();
 
-  const isAuthenticated = !!user;
+  // Debug: Log state changes
+  useEffect(() => {
+    console.log('🔍 Auth state changed:', { isAuthenticated, isLoading, user: !!user });
+  }, [isAuthenticated, isLoading, user]);
 
   useEffect(() => {
-    // Check if user is already logged in
-    const checkAuth = () => {
-      const isAuth = localStorage.getItem("isAuthenticated");
-      const userData = localStorage.getItem("user");
-
-      if (isAuth === "true" && userData) {
-        try {
-          const parsedUser = JSON.parse(userData);
-          setUser(parsedUser);
-        } catch (error) {
-          console.error("Error parsing user data:", error);
+    // Check if user is already logged in via API
+    const checkAuth = async () => {
+      try {
+        const response = await fetch('/api/auth/verify');
+        if (response.ok) {
+          const data = await response.json();
+          setUser(data.user);
+          setIsAuthenticated(true); // Add this line!
+          console.log('🔐 Auth check successful, user authenticated');
+        } else {
+          // Clear any stale data
+          localStorage.removeItem("auth-token");
           localStorage.removeItem("isAuthenticated");
           localStorage.removeItem("user");
+          setIsAuthenticated(false);
+          setUser(null);
         }
+      } catch (error) {
+        console.error("Auth check error:", error);
+        // Clear any stale data
+        localStorage.removeItem("auth-token");
+        localStorage.removeItem("isAuthenticated");
+        localStorage.removeItem("user");
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     };
 
     checkAuth();
@@ -63,26 +80,86 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     username: string,
     password: string
   ): Promise<boolean> => {
-    // Dummy authentication - replace with actual API call
-    if (username === "admin" && password === "admin123") {
-      const userData = {
-        username,
-        role: "admin",
-      };
+    try {
+      console.log('🔐 Login attempt for:', username);
+      
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
 
-      localStorage.setItem("isAuthenticated", "true");
-      localStorage.setItem("user", JSON.stringify(userData));
-      setUser(userData);
-      return true;
+      const data = await response.json();
+      console.log('🔐 Login response:', data);
+
+      if (data.success && data.token) {
+        const userData = {
+          id: data.user.id,
+          username: data.user.username,
+          role: data.user.role,
+          location_id: data.user.location_id,
+        };
+
+        console.log('🔐 User data:', userData);
+
+        // Store user data in localStorage (token is in httpOnly cookie)
+        localStorage.setItem("isAuthenticated", "true");
+        localStorage.setItem("user", JSON.stringify(userData));
+        localStorage.setItem("auth-token", data.token); // Store token in localStorage
+        
+        // Update API service token
+        apiService.setToken(data.token);
+        console.log('🔐 Updated API service token');
+        
+        console.log('🔐 Setting user state...');
+        setUser(userData);
+        console.log('🔐 Setting isAuthenticated to true...');
+        setIsAuthenticated(true);
+        
+        console.log('🔐 State after update - user:', userData);
+        console.log('🔐 State after update - isAuthenticated: true');
+        
+        // Force immediate redirect after state update
+        console.log('🔐 Redirecting to dashboard...');
+        setTimeout(() => {
+          if (window.location.pathname === '/login') {
+            console.log('🔐 Force redirect to dashboard');
+            window.location.href = '/';
+          }
+        }, 100);
+        
+        return true;
+      } else {
+        console.error('Login failed:', data.error);
+        return false;
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      return false;
     }
-    return false;
   };
 
-  const logout = () => {
-    localStorage.removeItem("isAuthenticated");
-    localStorage.removeItem("user");
-    setUser(null);
-    router.push("/login");
+  const logout = async () => {
+    try {
+      // Call logout API
+      await fetch('/api/auth/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    } catch (error) {
+      console.error('Logout API error:', error);
+    } finally {
+      // Clear local storage and state
+      localStorage.removeItem("auth-token");
+      localStorage.removeItem("isAuthenticated");
+      localStorage.removeItem("user");
+      setUser(null);
+      router.push("/login");
+    }
   };
 
   return (

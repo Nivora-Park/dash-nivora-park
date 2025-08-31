@@ -10,6 +10,70 @@
     "host": "",
     "basePath": "",
     "paths": {
+        "/api/v1/auth/login": {
+            "post": {
+                "description": "Authenticate user with email and password",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Login",
+                "parameters": [
+                    {
+                        "description": "Login payload",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.LoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/types.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.LoginResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/cms/location": {
             "get": {
                 "description": "Retrieve all location records with optional filtering and pagination",
@@ -22,6 +86,13 @@
                 "summary": "Get all locations",
                 "operationId": "get-locations",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "ID (UUID)",
@@ -254,6 +325,13 @@
                 "operationId": "create-location",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "Location data",
                         "name": "location",
                         "in": "body",
@@ -309,6 +387,13 @@
                 "summary": "Get a location by ID",
                 "operationId": "get-location-by-id",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "ID (UUID)",
@@ -372,6 +457,13 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "ID (UUID)",
                         "name": "id",
                         "in": "path",
@@ -433,6 +525,13 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "ID (UUID)",
                         "name": "id",
                         "in": "path",
@@ -473,6 +572,13 @@
                 "summary": "Get all merchants",
                 "operationId": "get-merchants",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "ID (UUID)",
@@ -699,6 +805,13 @@
                 "operationId": "create-merchant",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "Merchant data",
                         "name": "merchant",
                         "in": "body",
@@ -754,6 +867,13 @@
                 "summary": "Get a merchant by ID",
                 "operationId": "get-merchant-by-id",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "ID (UUID)",
@@ -817,6 +937,13 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "ID (UUID)",
                         "name": "id",
                         "in": "path",
@@ -878,6 +1005,13 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "ID (UUID)",
                         "name": "id",
                         "in": "path",
@@ -918,6 +1052,13 @@
                 "summary": "Get all parking memberships",
                 "operationId": "get-parking-memberships",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "ID (UUID)",
@@ -1144,6 +1285,13 @@
                 "operationId": "create-parking-membership",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "ParkingMembership data",
                         "name": "parkingmembership",
                         "in": "body",
@@ -1199,6 +1347,13 @@
                 "summary": "Get all parking membership products",
                 "operationId": "get-parking-membership-products",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "ID (UUID)",
@@ -1413,6 +1568,13 @@
                 "operationId": "create-parking-membership-product",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "ParkingMembershipProduct data",
                         "name": "parkingmembershipproduct",
                         "in": "body",
@@ -1468,6 +1630,13 @@
                 "summary": "Get a parking membership product by ID",
                 "operationId": "get-parking-membership-product-by-id",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "ID (UUID)",
@@ -1531,6 +1700,13 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "ID (UUID)",
                         "name": "id",
                         "in": "path",
@@ -1592,6 +1768,13 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "ID (UUID)",
                         "name": "id",
                         "in": "path",
@@ -1632,6 +1815,13 @@
                 "summary": "Get all parking membership transactions",
                 "operationId": "get-parking-membership-transactions",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "ID (UUID)",
@@ -1870,6 +2060,13 @@
                 "operationId": "create-parking-membership-transaction",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "ParkingMembershipTransaction data",
                         "name": "parkingmembershiptransaction",
                         "in": "body",
@@ -1925,6 +2122,13 @@
                 "summary": "Get a parking membership transaction by ID",
                 "operationId": "get-parking-membership-transaction-by-id",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "ID (UUID)",
@@ -1988,6 +2192,13 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "ID (UUID)",
                         "name": "id",
                         "in": "path",
@@ -2049,6 +2260,13 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "ID (UUID)",
                         "name": "id",
                         "in": "path",
@@ -2089,6 +2307,13 @@
                 "summary": "Get all parking membership vehicles",
                 "operationId": "get-parking-membership-vehicles",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "ID (UUID)",
@@ -2303,6 +2528,13 @@
                 "operationId": "create-parking-membership-vehicle",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "ParkingMembershipVehicle data",
                         "name": "parkingmembershipvehicle",
                         "in": "body",
@@ -2358,6 +2590,13 @@
                 "summary": "Get a parking membership vehicle by ID",
                 "operationId": "get-parking-membership-vehicle-by-id",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "ID (UUID)",
@@ -2421,6 +2660,13 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "ID (UUID)",
                         "name": "id",
                         "in": "path",
@@ -2482,6 +2728,13 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "ID (UUID)",
                         "name": "id",
                         "in": "path",
@@ -2522,6 +2775,13 @@
                 "summary": "Get a parking membership by ID",
                 "operationId": "get-parking-membership-by-id",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "ID (UUID)",
@@ -2585,6 +2845,13 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "ID (UUID)",
                         "name": "id",
                         "in": "path",
@@ -2646,6 +2913,13 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "ID (UUID)",
                         "name": "id",
                         "in": "path",
@@ -2686,6 +2960,13 @@
                 "summary": "Get all parking payment types",
                 "operationId": "get-parking-payment-types",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "ID (UUID)",
@@ -2876,6 +3157,13 @@
                 "operationId": "create-parking-payment-type",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "ParkingPaymentType data",
                         "name": "parkingpaymenttype",
                         "in": "body",
@@ -2931,6 +3219,13 @@
                 "summary": "Get a parking payment type by ID",
                 "operationId": "get-parking-payment-type-by-id",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "ID (UUID)",
@@ -2994,6 +3289,13 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "ID (UUID)",
                         "name": "id",
                         "in": "path",
@@ -3055,6 +3357,13 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "ID (UUID)",
                         "name": "id",
                         "in": "path",
@@ -3097,14 +3406,33 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "ID (UUID)",
                         "name": "id",
                         "in": "query"
                     },
                     {
                         "type": "string",
+                        "description": "Location ID (UUID)",
+                        "name": "location_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "Description",
                         "name": "description",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Grace period in minutes",
+                        "name": "grace_period",
                         "in": "query"
                     },
                     {
@@ -3123,6 +3451,12 @@
                         "type": "integer",
                         "description": "Daily max cost",
                         "name": "daily_max_cost",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Overnight cost",
+                        "name": "overnight_cost",
                         "in": "query"
                     },
                     {
@@ -3303,6 +3637,13 @@
                 "operationId": "create-parking-rate",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "ParkingRate data",
                         "name": "parkingrate",
                         "in": "body",
@@ -3358,6 +3699,13 @@
                 "summary": "Get a parking rate by ID",
                 "operationId": "get-parking-rate-by-id",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "ID (UUID)",
@@ -3421,6 +3769,13 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "ID (UUID)",
                         "name": "id",
                         "in": "path",
@@ -3482,6 +3837,13 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "ID (UUID)",
                         "name": "id",
                         "in": "path",
@@ -3524,14 +3886,33 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "ID (UUID)",
                         "name": "id",
                         "in": "query"
                     },
                     {
                         "type": "string",
+                        "description": "Location ID (UUID)",
+                        "name": "location_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "Code",
                         "name": "code",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Serial number",
+                        "name": "serial_number",
                         "in": "query"
                     },
                     {
@@ -3556,6 +3937,12 @@
                         "type": "string",
                         "description": "Logo URL",
                         "name": "logo_url",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "IP server",
+                        "name": "ip_server",
                         "in": "query"
                     },
                     {
@@ -3736,6 +4123,13 @@
                 "operationId": "create-parking-terminal",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "ParkingTerminal data",
                         "name": "parkingterminal",
                         "in": "body",
@@ -3791,6 +4185,13 @@
                 "summary": "Get a parking terminal by ID",
                 "operationId": "get-parking-terminal-by-id",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "ID (UUID)",
@@ -3854,6 +4255,13 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "ID (UUID)",
                         "name": "id",
                         "in": "path",
@@ -3915,6 +4323,13 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "ID (UUID)",
                         "name": "id",
                         "in": "path",
@@ -3957,8 +4372,21 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "ID (UUID)",
                         "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Location ID (UUID)",
+                        "name": "location_id",
                         "in": "query"
                     },
                     {
@@ -4157,6 +4585,13 @@
                 "operationId": "create-parking-transaction",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "ParkingTransaction data",
                         "name": "parkingtransaction",
                         "in": "body",
@@ -4214,6 +4649,13 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "ID (UUID)",
                         "name": "id",
                         "in": "query"
@@ -4234,6 +4676,12 @@
                         "type": "string",
                         "description": "Payment Type ID",
                         "name": "payment_type_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Membership ID",
+                        "name": "membership_id",
                         "in": "query"
                     },
                     {
@@ -4462,6 +4910,13 @@
                 "operationId": "create-parking-transaction-payment",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "ParkingTransactionPayment data",
                         "name": "parkingtransactionpayment",
                         "in": "body",
@@ -4517,6 +4972,13 @@
                 "summary": "Get a parking transaction payment by ID",
                 "operationId": "get-parking-transaction-payment-by-id",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "ID (UUID)",
@@ -4580,6 +5042,13 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "ID (UUID)",
                         "name": "id",
                         "in": "path",
@@ -4641,6 +5110,13 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "ID (UUID)",
                         "name": "id",
                         "in": "path",
@@ -4681,6 +5157,13 @@
                 "summary": "Get all parking transaction terminals",
                 "operationId": "get-parking-transaction-terminals",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "ID (UUID)",
@@ -4871,6 +5354,13 @@
                 "operationId": "create-parking-transaction-terminal",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "ParkingTransactionTerminal data",
                         "name": "parkingtransactionterminal",
                         "in": "body",
@@ -4926,6 +5416,13 @@
                 "summary": "Get a parking transaction terminal by ID",
                 "operationId": "get-parking-transaction-terminal-by-id",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "ID (UUID)",
@@ -4989,6 +5486,13 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "ID (UUID)",
                         "name": "id",
                         "in": "path",
@@ -5050,6 +5554,13 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "ID (UUID)",
                         "name": "id",
                         "in": "path",
@@ -5090,6 +5601,13 @@
                 "summary": "Get a parking transaction by ID",
                 "operationId": "get-parking-transaction-by-id",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "ID (UUID)",
@@ -5153,6 +5671,13 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "ID (UUID)",
                         "name": "id",
                         "in": "path",
@@ -5214,6 +5739,13 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "ID (UUID)",
                         "name": "id",
                         "in": "path",
@@ -5256,14 +5788,15 @@
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "ID (UUID)",
-                        "name": "id",
-                        "in": "query"
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     },
                     {
                         "type": "string",
-                        "description": "Location ID (UUID)",
-                        "name": "location_id",
+                        "description": "ID (UUID)",
+                        "name": "id",
                         "in": "query"
                     },
                     {
@@ -5468,6 +6001,13 @@
                 "operationId": "create-parking-vehicle-type",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "ParkingVehicleType data",
                         "name": "parkingvehicletype",
                         "in": "body",
@@ -5523,6 +6063,13 @@
                 "summary": "Get all parking vehicle type terminals",
                 "operationId": "get-parking-vehicle-type-terminals",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "ID (UUID)",
@@ -5701,6 +6248,13 @@
                 "operationId": "create-parking-vehicle-type-terminal",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "ParkingVehicleTypeTerminal data",
                         "name": "parkingvehicletypeterminal",
                         "in": "body",
@@ -5756,6 +6310,13 @@
                 "summary": "Get a parking vehicle type terminal by ID",
                 "operationId": "get-parking-vehicle-type-terminal-by-id",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "ID (UUID)",
@@ -5819,6 +6380,13 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "ID (UUID)",
                         "name": "id",
                         "in": "path",
@@ -5880,6 +6448,13 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "ID (UUID)",
                         "name": "id",
                         "in": "path",
@@ -5920,6 +6495,13 @@
                 "summary": "Get a parking vehicle type by ID",
                 "operationId": "get-parking-vehicle-type-by-id",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "ID (UUID)",
@@ -5983,6 +6565,13 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "ID (UUID)",
                         "name": "id",
                         "in": "path",
@@ -6044,6 +6633,13 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "ID (UUID)",
                         "name": "id",
                         "in": "path",
@@ -6072,18 +6668,25 @@
                 }
             }
         },
-        "/api/v1/desktop/parking-transaction": {
+        "/api/v1/cms/user": {
             "get": {
-                "description": "Retrieve a parking transaction desktop record",
+                "description": "Retrieve all user records with optional filtering and pagination",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "parkingtransactiondesktops"
+                    "users"
                 ],
-                "summary": "Get a parking transaction desktop",
-                "operationId": "get-parking-transaction-desktop",
+                "summary": "Get all users",
+                "operationId": "get-users",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "ID (UUID)",
@@ -6092,27 +6695,140 @@
                     },
                     {
                         "type": "string",
-                        "description": "Terminal ID",
-                        "name": "terminal_id",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Code",
-                        "name": "code",
+                        "description": "Merchant ID (UUID)",
+                        "name": "merchant_id",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "Identifier",
-                        "name": "identifier",
+                        "description": "Location ID (UUID)",
+                        "name": "location_id",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "Vehicle Type ID",
-                        "name": "vehicle_type_id",
+                        "description": "Full Name",
+                        "name": "full_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Email",
+                        "name": "email",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Password Hash",
+                        "name": "password_hash",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Created at date from (YYYY-MM-DD)",
+                        "name": "created_at_from",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Created at date to (YYYY-MM-DD)",
+                        "name": "created_at_to",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Created by",
+                        "name": "created_by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Created remark",
+                        "name": "created_remark",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Updated at date from (YYYY-MM-DD)",
+                        "name": "updated_at_from",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Updated at date to (YYYY-MM-DD)",
+                        "name": "updated_at_to",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Updated by",
+                        "name": "updated_by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Updated remark",
+                        "name": "updated_remark",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Deleted at date from (YYYY-MM-DD)",
+                        "name": "deleted_at_from",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Deleted at date to (YYYY-MM-DD)",
+                        "name": "deleted_at_to",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Deleted by",
+                        "name": "deleted_by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Deleted remark",
+                        "name": "deleted_remark",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Synced at date from (YYYY-MM-DD)",
+                        "name": "synced_at_from",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Synced at date to (YYYY-MM-DD)",
+                        "name": "synced_at_to",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Synced by",
+                        "name": "synced_by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Synced remark",
+                        "name": "synced_remark",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page number for pagination",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page size for pagination",
+                        "name": "page_size",
                         "in": "query"
                     }
                 ],
@@ -6128,7 +6844,129 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/dto.GetParkingTransactionDesktopResponse"
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/models.User"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a new user record",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Create a new user",
+                "operationId": "create-user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "User data",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.User"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/types.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.User"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/cms/user/{id}": {
+            "get": {
+                "description": "Retrieve a user record by its ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get a user by ID",
+                "operationId": "get-user-by-id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "ID (UUID)",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/types.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.User"
                                         }
                                     }
                                 }
@@ -6156,7 +6994,7 @@
                 }
             },
             "put": {
-                "description": "Update an existing parking transaction desktop record",
+                "description": "Update an existing user record by ID",
                 "consumes": [
                     "application/json"
                 ],
@@ -6164,18 +7002,32 @@
                     "application/json"
                 ],
                 "tags": [
-                    "parkingtransactiondesktops"
+                    "users"
                 ],
-                "summary": "Update a parking transaction desktop",
-                "operationId": "update-parking-transaction-desktop",
+                "summary": "Update a user",
+                "operationId": "update-user",
                 "parameters": [
                     {
-                        "description": "Updated parking transaction desktop data",
-                        "name": "parkingtransactiondesktop",
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "ID (UUID)",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Updated user data",
+                        "name": "user",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.UpdateParkingTransactionDesktopRequest"
+                            "$ref": "#/definitions/models.User"
                         }
                     }
                 ],
@@ -6191,7 +7043,387 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/dto.UpdateParkingTransactionDesktopResponse"
+                                            "$ref": "#/definitions/models.User"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete a user record by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Delete a user",
+                "operationId": "delete-user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "ID (UUID)",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/desktop/parking-log": {
+            "post": {
+                "description": "Create a new desktop parking log record",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "desktopparkinglogs"
+                ],
+                "summary": "Create a new desktop parking log",
+                "operationId": "create-desktop-parking-log",
+                "parameters": [
+                    {
+                        "description": "DesktopParkingLog data",
+                        "name": "desktopparkinglog",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.CreateDesktopParkingLogRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/types.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.CreateDesktopParkingLogRequest"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/desktop/parking-terminal": {
+            "get": {
+                "description": "Retrieve a desktop parking terminal record",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "desktopparkingterminals"
+                ],
+                "summary": "Get a desktop parking terminal",
+                "operationId": "get-desktop-parking-terminal",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Terminal ID (UUID)",
+                        "name": "terminal_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Serial Number",
+                        "name": "serial_number",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/types.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.ParkingTerminal"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a new desktop parking terminal record",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "desktopparkingterminals"
+                ],
+                "summary": "Create a new desktop parking terminal",
+                "operationId": "create-desktop-parking-terminal",
+                "parameters": [
+                    {
+                        "description": "ParkingTerminal data",
+                        "name": "parkingterminal",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.ParkingTerminal"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/types.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.ParkingTerminal"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/desktop/parking-transaction": {
+            "get": {
+                "description": "Retrieve a desktop parking transaction record",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "desktopparkingtransactions"
+                ],
+                "summary": "Get a desktop parking transaction",
+                "operationId": "get-desktop-parking-transaction",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID (UUID)",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Terminal ID (UUID)",
+                        "name": "terminal_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Serial Number",
+                        "name": "serial_number",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Vehicle Type ID (UUID)",
+                        "name": "vehicle_type_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Code",
+                        "name": "code",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Plate Number",
+                        "name": "plate_number",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Identifier",
+                        "name": "identifier",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/types.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.GetDesktopParkingTransactionResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/types.Response"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update an existing desktop parking transaction record",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "desktopparkingtransactions"
+                ],
+                "summary": "Update a desktop parking transaction",
+                "operationId": "update-desktop-parking-transaction",
+                "parameters": [
+                    {
+                        "description": "Updated desktop parking transaction data",
+                        "name": "parkingtransactiondesktop",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UpdateDesktopParkingTransactionRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/types.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.UpdateDesktopParkingTransactionResponse"
                                         }
                                     }
                                 }
@@ -6213,7 +7445,7 @@
                 }
             },
             "post": {
-                "description": "Create a new parking transaction desktop record",
+                "description": "Create a new desktop parking transaction record",
                 "consumes": [
                     "application/json"
                 ],
@@ -6221,18 +7453,18 @@
                     "application/json"
                 ],
                 "tags": [
-                    "parkingtransactiondesktops"
+                    "desktopparkingtransactions"
                 ],
-                "summary": "Create a new parking transaction desktop",
-                "operationId": "create-parking-transaction-desktop",
+                "summary": "Create a new desktop parking transaction",
+                "operationId": "create-desktop-parking-transaction",
                 "parameters": [
                     {
-                        "description": "CreateParkingTransactionDesktopRequest data",
-                        "name": "parkingtransactiondesktop",
+                        "description": "CreateDesktopParkingTransactionRequest data",
+                        "name": "desktopparkingtransaction",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.CreateParkingTransactionDesktopRequest"
+                            "$ref": "#/definitions/dto.CreateDesktopParkingTransactionRequest"
                         }
                     }
                 ],
@@ -6248,7 +7480,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/dto.CreateParkingTransactionDesktopResponse"
+                                            "$ref": "#/definitions/dto.CreateDesktopParkingTransactionResponse"
                                         }
                                     }
                                 }
@@ -6272,14 +7504,15 @@
         },
         "/api/v1/file": {
             "get": {
-                "description": "Show list of files from local storage",
+                "description": "Retrieve all file records in local storage. Returns array of filenames.",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "upload"
+                    "files"
                 ],
-                "summary": "List files",
+                "summary": "Get all files",
+                "operationId": "get-files",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -6296,7 +7529,7 @@
                 }
             },
             "post": {
-                "description": "Create a file and save to local storage. Allowed extensions can be set via query param \"allowed_ext\", e.g. \"jpg,png,pdf\"",
+                "description": "Create a file and save to local storage. Allowed extensions can be set via query param \"allowed_ext\", e.g. \"jpg,png,pdf\". Returns uploaded filename and URL.",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -6304,9 +7537,10 @@
                     "application/json"
                 ],
                 "tags": [
-                    "upload"
+                    "files"
                 ],
-                "summary": "Create file",
+                "summary": "Create a new file",
+                "operationId": "create-file",
                 "parameters": [
                     {
                         "type": "file",
@@ -6346,14 +7580,15 @@
         },
         "/api/v1/file/{filename}": {
             "get": {
-                "description": "Show content of uploaded file from local storage",
+                "description": "Show content of file from local storage. Returns raw file data.",
                 "produces": [
                     "text/plain"
                 ],
                 "tags": [
-                    "upload"
+                    "files"
                 ],
-                "summary": "Get file by filename",
+                "summary": "Get a file by filename",
+                "operationId": "get-file-by-filename",
                 "parameters": [
                     {
                         "type": "string",
@@ -6385,11 +7620,15 @@
                 }
             },
             "delete": {
-                "description": "Delete uploaded file from local storage",
-                "tags": [
-                    "upload"
+                "description": "Delete file from local storage by filename",
+                "produces": [
+                    "application/json"
                 ],
-                "summary": "Delete file by filename",
+                "tags": [
+                    "files"
+                ],
+                "summary": "Delete a file",
+                "operationId": "delete-file",
                 "parameters": [
                     {
                         "type": "string",
@@ -6423,38 +7662,83 @@
         }
     },
     "definitions": {
-        "dto.CreateParkingTransactionDesktopRequest": {
+        "dto.CreateDesktopParkingLogRequest": {
             "type": "object",
-            "required": [
-                "terminal_id"
-            ],
             "properties": {
+                "data": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "serial_number": {
+                    "type": "string"
+                },
+                "terminal_id": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.CreateDesktopParkingTransactionRequest": {
+            "type": "object",
+            "properties": {
+                "base_amount": {
+                    "type": "integer"
+                },
+                "change_amount": {
+                    "type": "integer"
+                },
+                "discount_amount": {
+                    "type": "integer"
+                },
                 "identifier": {
                     "type": "string"
                 },
                 "image_url": {
-                    "description": "PaymentTypeID  string `json:\"payment_type_id\"`",
                     "type": "string"
+                },
+                "paid_amount": {
+                    "type": "integer"
+                },
+                "payment_type_id": {
+                    "type": "string"
+                },
+                "penalty_amount": {
+                    "type": "integer"
                 },
                 "plate_number": {
                     "type": "string"
                 },
                 "provider": {
-                    "description": "BaseAmount     int    `json:\"base_amount\"`\nDiscountAmount int    `json:\"discount_amount\"`\nPenaltyAmount  int    `json:\"penalty_amount\"`\nServiceAmount  int    `json:\"service_amount\"`\nTaxAmount      int    `json:\"tax_amount\"`\nTotalAmount    int    `json:\"total_amount\"`\nPaidAmount     int    `json:\"paid_amount\"`\nChangeAmount   int    `json:\"change_amount\"`",
                     "type": "string"
                 },
                 "reference": {
                     "type": "string"
                 },
+                "serial_number": {
+                    "type": "string"
+                },
+                "service_amount": {
+                    "type": "integer"
+                },
+                "tax_amount": {
+                    "type": "integer"
+                },
                 "terminal_id": {
                     "type": "string"
+                },
+                "total_amount": {
+                    "type": "integer"
                 },
                 "vehicle_type_id": {
                     "type": "string"
                 }
             }
         },
-        "dto.CreateParkingTransactionDesktopResponse": {
+        "dto.CreateDesktopParkingTransactionResponse": {
             "type": "object",
             "properties": {
                 "base_amount": {
@@ -6502,6 +7786,9 @@
                 "image_url": {
                     "type": "string"
                 },
+                "membership_id": {
+                    "type": "string"
+                },
                 "paid_amount": {
                     "type": "integer"
                 },
@@ -6518,6 +7805,9 @@
                     "type": "string"
                 },
                 "reference": {
+                    "type": "string"
+                },
+                "serial_number": {
                     "type": "string"
                 },
                 "service_amount": {
@@ -6555,7 +7845,7 @@
                 }
             }
         },
-        "dto.GetParkingTransactionDesktopResponse": {
+        "dto.GetDesktopParkingTransactionResponse": {
             "type": "object",
             "properties": {
                 "base_amount": {
@@ -6603,6 +7893,9 @@
                 "image_url": {
                     "type": "string"
                 },
+                "membership_id": {
+                    "type": "string"
+                },
                 "paid_amount": {
                     "type": "integer"
                 },
@@ -6619,6 +7912,9 @@
                     "type": "string"
                 },
                 "reference": {
+                    "type": "string"
+                },
+                "serial_number": {
                     "type": "string"
                 },
                 "service_amount": {
@@ -6656,11 +7952,42 @@
                 }
             }
         },
-        "dto.UpdateParkingTransactionDesktopRequest": {
+        "dto.LoginRequest": {
             "type": "object",
             "required": [
-                "id",
-                "terminal_id"
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.LoginResponse": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                },
+                "expires_in": {
+                    "type": "integer"
+                },
+                "token_type": {
+                    "type": "string"
+                },
+                "user": {
+                    "$ref": "#/definitions/models.User"
+                }
+            }
+        },
+        "dto.UpdateDesktopParkingTransactionRequest": {
+            "type": "object",
+            "required": [
+                "id"
             ],
             "properties": {
                 "base_amount": {
@@ -6702,6 +8029,9 @@
                 "reference": {
                     "type": "string"
                 },
+                "serial_number": {
+                    "type": "string"
+                },
                 "service_amount": {
                     "type": "integer"
                 },
@@ -6725,7 +8055,7 @@
                 }
             }
         },
-        "dto.UpdateParkingTransactionDesktopResponse": {
+        "dto.UpdateDesktopParkingTransactionResponse": {
             "type": "object",
             "properties": {
                 "base_amount": {
@@ -6773,6 +8103,9 @@
                 "image_url": {
                     "type": "string"
                 },
+                "membership_id": {
+                    "type": "string"
+                },
                 "paid_amount": {
                     "type": "integer"
                 },
@@ -6789,6 +8122,9 @@
                     "type": "string"
                 },
                 "reference": {
+                    "type": "string"
+                },
+                "serial_number": {
                     "type": "string"
                 },
                 "service_amount": {
@@ -6871,32 +8207,11 @@
                 "logo_url": {
                     "type": "string"
                 },
-                "merchant": {
-                    "$ref": "#/definitions/models.Merchant"
-                },
                 "merchant_id": {
                     "type": "string"
                 },
                 "name": {
                     "type": "string"
-                },
-                "parking_membership_products": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.ParkingMembershipProduct"
-                    }
-                },
-                "parking_payment_types": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.ParkingPaymentType"
-                    }
-                },
-                "parking_vehicle_types": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.ParkingVehicleType"
-                    }
                 },
                 "phone": {
                     "type": "string"
@@ -6962,12 +8277,6 @@
                 },
                 "id": {
                     "type": "string"
-                },
-                "locations": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.Location"
-                    }
                 },
                 "logo_url": {
                     "type": "string"
@@ -7043,21 +8352,6 @@
                 "name": {
                     "type": "string"
                 },
-                "parking_membership_product": {
-                    "$ref": "#/definitions/models.ParkingMembershipProduct"
-                },
-                "parking_membership_transactions": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.ParkingMembershipTransaction"
-                    }
-                },
-                "parking_membership_vehicles": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.ParkingMembershipVehicle"
-                    }
-                },
                 "phone": {
                     "type": "string"
                 },
@@ -7123,20 +8417,11 @@
                 "id": {
                     "type": "string"
                 },
-                "location": {
-                    "$ref": "#/definitions/models.Location"
-                },
                 "location_id": {
                     "type": "string"
                 },
                 "name": {
                     "type": "string"
-                },
-                "parking_memberships": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.ParkingMembership"
-                    }
                 },
                 "sticker_price": {
                     "type": "integer"
@@ -7215,9 +8500,6 @@
                 "paid_amount": {
                     "type": "integer"
                 },
-                "parking_membership": {
-                    "$ref": "#/definitions/models.ParkingMembership"
-                },
                 "service_amount": {
                     "type": "integer"
                 },
@@ -7292,12 +8574,6 @@
                 "model": {
                     "type": "string"
                 },
-                "parking_membership": {
-                    "$ref": "#/definitions/models.ParkingMembership"
-                },
-                "parking_vehicle_type": {
-                    "$ref": "#/definitions/models.ParkingVehicleType"
-                },
                 "plate_number": {
                     "type": "string"
                 },
@@ -7357,9 +8633,6 @@
                 "id": {
                     "type": "string"
                 },
-                "location": {
-                    "$ref": "#/definitions/models.Location"
-                },
                 "location_id": {
                     "type": "string"
                 },
@@ -7368,12 +8641,6 @@
                 },
                 "name": {
                     "type": "string"
-                },
-                "parking_transaction_payments": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.ParkingTransactionPayment"
-                    }
                 },
                 "synced_at": {
                     "type": "string"
@@ -7428,17 +8695,20 @@
                 "first_hour_cost": {
                     "type": "integer"
                 },
+                "grace_period": {
+                    "type": "integer"
+                },
                 "id": {
+                    "type": "string"
+                },
+                "location_id": {
                     "type": "string"
                 },
                 "lost_ticket_cost": {
                     "type": "integer"
                 },
-                "parking_vehicle_types": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.ParkingVehicleType"
-                    }
+                "overnight_cost": {
+                    "type": "integer"
                 },
                 "service_cost": {
                     "type": "integer"
@@ -7505,7 +8775,13 @@
                 "ip_printer": {
                     "type": "string"
                 },
+                "ip_server": {
+                    "type": "string"
+                },
                 "ip_terminal": {
+                    "type": "string"
+                },
+                "location_id": {
                     "type": "string"
                 },
                 "logo_url": {
@@ -7514,25 +8790,10 @@
                 "name": {
                     "type": "string"
                 },
-                "parking_transaction_payments": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.ParkingTransactionPayment"
-                    }
-                },
-                "parking_transaction_terminals": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.ParkingTransactionTerminal"
-                    }
-                },
-                "parking_vehicle_type_terminals": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.ParkingVehicleTypeTerminal"
-                    }
-                },
                 "printer_type": {
+                    "type": "string"
+                },
+                "serial_number": {
                     "type": "string"
                 },
                 "synced_at": {
@@ -7600,17 +8861,8 @@
                 "id": {
                     "type": "string"
                 },
-                "parking_transaction_payments": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.ParkingTransactionPayment"
-                    }
-                },
-                "parking_transaction_terminals": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.ParkingTransactionTerminal"
-                    }
+                "location_id": {
+                    "type": "string"
                 },
                 "synced_at": {
                     "type": "string"
@@ -7671,17 +8923,11 @@
                 "identifier": {
                     "type": "string"
                 },
+                "membership_id": {
+                    "type": "string"
+                },
                 "paid_amount": {
                     "type": "integer"
-                },
-                "parking_payment_type": {
-                    "$ref": "#/definitions/models.ParkingPaymentType"
-                },
-                "parking_terminal": {
-                    "$ref": "#/definitions/models.ParkingTerminal"
-                },
-                "parking_transaction": {
-                    "$ref": "#/definitions/models.ParkingTransaction"
                 },
                 "payment_type_id": {
                     "type": "string"
@@ -7757,15 +9003,6 @@
                 "image_url": {
                     "type": "string"
                 },
-                "parking_terminal": {
-                    "$ref": "#/definitions/models.ParkingTerminal"
-                },
-                "parking_transaction": {
-                    "$ref": "#/definitions/models.ParkingTransaction"
-                },
-                "parking_vehicle_type": {
-                    "$ref": "#/definitions/models.ParkingVehicleType"
-                },
                 "plate_number": {
                     "type": "string"
                 },
@@ -7831,38 +9068,11 @@
                 "id": {
                     "type": "string"
                 },
-                "location": {
-                    "$ref": "#/definitions/models.Location"
-                },
-                "location_id": {
-                    "type": "string"
-                },
                 "logo_url": {
                     "type": "string"
                 },
                 "name": {
                     "type": "string"
-                },
-                "parking_membership_vehicles": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.ParkingMembershipVehicle"
-                    }
-                },
-                "parking_rate": {
-                    "$ref": "#/definitions/models.ParkingRate"
-                },
-                "parking_transaction_terminals": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.ParkingTransactionTerminal"
-                    }
-                },
-                "parking_vehicle_type_terminals": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.ParkingVehicleTypeTerminal"
-                    }
                 },
                 "rate_id": {
                     "type": "string"
@@ -7920,12 +9130,6 @@
                 "id": {
                     "type": "string"
                 },
-                "parking_terminal": {
-                    "$ref": "#/definitions/models.ParkingTerminal"
-                },
-                "parking_vehicle_type": {
-                    "$ref": "#/definitions/models.ParkingVehicleType"
-                },
                 "synced_at": {
                     "type": "string"
                 },
@@ -7948,6 +9152,65 @@
                     "type": "string"
                 },
                 "vehicle_type_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.User": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "created_remark": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "type": "string"
+                },
+                "deleted_by": {
+                    "type": "string"
+                },
+                "deleted_remark": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "full_name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "location_id": {
+                    "type": "string"
+                },
+                "merchant_id": {
+                    "type": "string"
+                },
+                "password_hash": {
+                    "type": "string"
+                },
+                "synced_at": {
+                    "type": "string"
+                },
+                "synced_by": {
+                    "type": "string"
+                },
+                "synced_remark": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                },
+                "updated_remark": {
                     "type": "string"
                 }
             }
