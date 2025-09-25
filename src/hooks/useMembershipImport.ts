@@ -33,15 +33,23 @@ export function useMembershipImport() {
             // Use execute from useApi hook to ensure proper token handling
             const response = await execute(() => apiService.importMemberships(data));
 
+            if (!response) {
+                // execute() may return undefined when called on the server or if it returned early
+                throw new Error('No response from import API');
+            }
+
+            const payload = response.data || {};
+
             setImportResult({
-                success: response.success,
-                message: response.message,
-                importedCount: response.importedCount,
-                errorCount: response.errorCount,
-                errors: response.errors,
+                success: (payload as any).success ?? true,
+                message: (payload as any).message ?? response.message,
+                importedCount: (payload as any).importedCount,
+                errorCount: (payload as any).errorCount,
+                errors: (payload as any).errors,
             });
 
-            return response;
+            // Return the payload (not the wrapper) so callers like the modal can inspect errorCount directly
+            return payload;
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Import failed';
             setImportResult({
