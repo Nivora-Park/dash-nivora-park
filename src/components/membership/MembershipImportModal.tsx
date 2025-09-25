@@ -19,7 +19,8 @@ interface MembershipImportData {
 interface MembershipImportModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onImport: (data: MembershipImportData[]) => Promise<void>;
+  // onImport should return the import result so the modal can display import errors
+  onImport: (data: MembershipImportData[]) => Promise<any>;
 }
 
 export function MembershipImportModal({

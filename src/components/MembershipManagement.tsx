@@ -44,9 +44,10 @@ export default function MembershipManagement() {
 
   const handleImport = async (data: any[]) => {
     try {
-      await importMemberships(data);
+      const resp = await importMemberships(data);
       // Refresh data after successful import
       await fetchMemberships();
+      return resp;
     } catch (error) {
       console.error('Import failed:', error);
     }
