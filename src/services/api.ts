@@ -337,6 +337,11 @@ class ApiService {
         return this.post<ApiResponse<any>>('/api/memberships/import', { data });
     }
 
+    // Health check endpoint to validate backend connectivity
+    async healthCheck(): Promise<ApiResponse<any>> {
+        return this.get<ApiResponse<any>>('/health');
+    }
+
     // Parking Membership Vehicles
     async getMembershipVehicles(params?: QueryParams): Promise<ApiResponse<ParkingMembershipVehicle[]>> {
         const queryString = params ? this.buildQueryString(params) : '';
