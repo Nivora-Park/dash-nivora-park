@@ -391,6 +391,52 @@ class ApiService {
         return this.delete<ApiResponse<any>>(`/cms/user/${id}`);
     }
 
+    // File upload helper (multipart/form-data)
+    // This posts to the local app route `/api/file` which proxies the multipart upload
+    // to the backend. We do not set Content-Type so the browser can populate the
+    // multipart boundary correctly.
+    async uploadFile(file: File, allowedExt?: string): Promise<any> {
+        const url = '/api/file';
+
+        // Build FormData
+        const formData = new FormData();
+        formData.append('file', file);
+        if (allowedExt) formData.append('allowed_ext', allowedExt);
+
+        // Get headers but exclude content-type so boundary is set by browser
+        const headersInit = this.getHeaders();
+        const headers: Record<string, string> = {};
+        Object.entries(headersInit).forEach(([k, v]) => {
+            if (k.toLowerCase() === 'content-type') return;
+            if (typeof v === 'string') headers[k] = v;
+        });
+
+        const resp = await fetch(url, {
+            method: 'POST',
+            body: formData,
+            headers,
+        } as RequestInit);
+
+        if (!resp.ok) {
+            const text = await resp.text();
+            // Try JSON parse for nicer message
+            try {
+                const j = JSON.parse(text);
+                throw new Error(j?.message || `Upload failed: ${resp.status}`);
+            } catch {
+                throw new Error(text || `Upload failed: ${resp.status}`);
+            }
+        }
+
+        return resp.json();
+    }
+
+    // Return a same-origin URL that will redirect to the backend file URL.
+    getFileUrl(filename: string) {
+        if (!filename) return '';
+        return `/api/file/${encodeURIComponent(filename)}`;
+    }
+
     // Helper method to build query string
     private buildQueryString(params: QueryParams): string {
         const searchParams = new URLSearchParams();
