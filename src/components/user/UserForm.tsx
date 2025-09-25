@@ -52,7 +52,9 @@ export function UserForm({ user, isEditing = false, onSubmit, onCancel, isLoadin
     status: 'active'
   });
 
-  const [errors, setErrors] = useState<Partial<UserFormData>>({});
+  // Errors map: field name -> error message
+  type UserFormErrors = Partial<Record<keyof UserFormData, string>>;
+  const [errors, setErrors] = useState<UserFormErrors>({});
 
   useEffect(() => {
     if (user) {
@@ -65,7 +67,7 @@ export function UserForm({ user, isEditing = false, onSubmit, onCancel, isLoadin
   }, [user]);
 
   const validateForm = (): boolean => {
-    const newErrors: Partial<UserFormData> = {};
+  const newErrors: UserFormErrors = {};
 
     if (!formData.username.trim()) {
       newErrors.username = 'Username is required';
