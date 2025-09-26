@@ -29,10 +29,10 @@ export function UploadButton({
     setLoading(true);
     setError(null);
     try {
-      const resp = await apiService.uploadFile(file, allowedExt);
+      const resp: any = await apiService.uploadFile(file, allowedExt);
       // Try to infer filename from response.data; backend schema not explicit, so be flexible
       const data: any = resp?.data;
-      let filename = data?.filename || data?.name || data?.file || "";
+      const filename = data?.filename || data?.name || data?.file || "";
       // Always use our same-origin proxy URL for reliability
       const url = apiService.getFileUrl(filename);
       onUploaded({ filename, url, raw: data });

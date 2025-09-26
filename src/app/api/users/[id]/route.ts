@@ -5,7 +5,7 @@ import { mockUsers, findUserById, findUserIndexById, updateUser, removeUser } fr
 // GET /api/users/[id] - Get specific user
 export async function GET(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    context: any
 ) {
     try {
         // Extract user info from headers
@@ -20,7 +20,8 @@ export async function GET(
             );
         }
 
-        const targetUserId = params.id;
+    const params = context?.params ?? {};
+    const targetUserId = params.id;
         const targetUser = findUserById(targetUserId);
 
         if (!targetUser) {
@@ -61,7 +62,7 @@ export async function GET(
 // PUT /api/users/[id] - Update user
 export async function PUT(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    context: any
 ) {
     try {
         // Extract user info from headers
@@ -83,8 +84,9 @@ export async function PUT(
             );
         }
 
-        const targetUserId = params.id;
-        const targetUserIndex = findUserIndexById(targetUserId);
+    const params = context?.params ?? {};
+    const targetUserId = params.id;
+    const targetUserIndex = findUserIndexById(targetUserId);
 
         if (targetUserIndex === -1) {
             return NextResponse.json(
@@ -132,7 +134,7 @@ export async function PUT(
 // DELETE /api/users/[id] - Delete user
 export async function DELETE(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    context: any
 ) {
     try {
         // Extract user info from headers
@@ -154,8 +156,9 @@ export async function DELETE(
             );
         }
 
-        const targetUserId = params.id;
-        const targetUserIndex = findUserIndexById(targetUserId);
+    const params = context?.params ?? {};
+    const targetUserId = params.id;
+    const targetUserIndex = findUserIndexById(targetUserId);
 
         if (targetUserIndex === -1) {
             return NextResponse.json(
@@ -193,7 +196,7 @@ export async function DELETE(
 // PATCH /api/users/[id] - Partial update (for status changes)
 export async function PATCH(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    context: any
 ) {
     try {
         // Extract user info from headers
@@ -215,8 +218,9 @@ export async function PATCH(
             );
         }
 
-        const targetUserId = params.id;
-        const targetUserIndex = findUserIndexById(targetUserId);
+    const params = context?.params ?? {};
+    const targetUserId = params.id;
+    const targetUserIndex = findUserIndexById(targetUserId);
 
         if (targetUserIndex === -1) {
             return NextResponse.json(

@@ -245,7 +245,7 @@ export function useTransactionMonitoring() {
 
   const refreshData = () => {
     let from: Date;
-    let to: Date = endOfToday();
+    const to: Date = endOfToday();
     
     if (timeFilter === "today") {
       from = startOfToday();

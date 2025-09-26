@@ -15,9 +15,9 @@ interface SystemUser {
   username?: string;
   full_name?: string; // Changed from 'name' to 'full_name' to match API
   email?: string;
-  role: "admin" | "operator" | "viewer";
-  status: "active" | "inactive" | "suspended";
-  lastLogin?: string;
+  role?: "admin" | "operator" | "viewer";
+  status?: "active" | "inactive" | "suspended";
+  lastLogin?: string | null;
   permissions?: string[];
   terminal?: string;
   location_id?: string;
