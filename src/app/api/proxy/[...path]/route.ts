@@ -7,7 +7,7 @@ export async function GET(
     try {
         const { path } = await params;
         const pathString = path.join('/');
-        const url = `https://api-nivora.nahsbyte.my.id/api/v1/${pathString}`;
+        const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/${pathString}`;
 
         console.log('🌐 Proxy request to:', url);
 
@@ -65,7 +65,7 @@ export async function POST(
     try {
         const { path } = await params;
         const pathString = path.join('/');
-        const url = `https://api-nivora.nahsbyte.my.id/api/v1/${pathString}`;
+        const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/${pathString}`;
         const body = await request.json();
 
         console.log('🌐 Proxy POST request to:', url);
@@ -123,7 +123,7 @@ export async function PUT(
     try {
         const { path } = await params;
         const pathString = path.join('/');
-        const url = `https://api-nivora.nahsbyte.my.id/api/v1/${pathString}`;
+        const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/${pathString}`;
         const body = await request.json();
 
         console.log('🌐 Proxy PUT request to:', url);
@@ -181,7 +181,7 @@ export async function DELETE(
     try {
         const { path } = await params;
         const pathString = path.join('/');
-        const url = `https://api-nivora.nahsbyte.my.id/api/v1/${pathString}`;
+        const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/${pathString}`;
 
         console.log('🌐 Proxy DELETE request to:', url);
 

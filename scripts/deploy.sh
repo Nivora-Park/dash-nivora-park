@@ -167,7 +167,26 @@ stop_services() {
 cleanup() {
     print_status "Cleaning up..."
     docker-compose down -v
-    docker system prune -f
+
+    # Be careful with docker system prune: it's destructive and can remove images/volumes
+    # Prompt the user for confirmation before running it interactively.
+    # Allow non-interactive mode via AUTO_PRUNE=yes environment variable
+    if [[ "$AUTO_PRUNE" == "yes" ]]; then
+        print_warning "AUTO_PRUNE=yes detected; running docker system prune -f (destructive)..."
+        docker system prune -f
+        print_success "Docker system prune completed"
+    else
+        read -p "Do you want to run 'docker system prune -f'? This will remove unused images, containers, networks, and volumes. (type 'yes' to proceed): " -r
+        echo
+        if [[ $REPLY == "yes" ]]; then
+            print_warning "Running docker system prune -f (destructive)..."
+            docker system prune -f
+            print_success "Docker system prune completed"
+        else
+            print_status "Skipped docker system prune"
+        fi
+    fi
+
     print_success "Cleanup completed"
 }
 

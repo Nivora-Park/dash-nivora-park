@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
         console.log('🔐 Login attempt for:', username);
 
         // Forward login request to backend server
-        const backendResponse = await fetch('https://api-nivora.nahsbyte.my.id/api/v1/auth/login', {
+        const backendResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -2,14 +2,17 @@ module.exports = {
   apps: [
     {
       name: 'dash-nivora-park',
-      script: 'node_modules/next/dist/bin/next',
+      // Use npm start which will call 'next start' in production
+      script: 'npm',
       args: 'start',
       env: {
-        PORT: 3005,
+        PORT: 80,
         NODE_ENV: 'production'
       },
-  pre_start: 'npm run build',
-  post_restart: 'npm run build'
+      // Recommended PM2 options
+      exec_mode: 'fork',
+      instances: 1,
+      watch: false
     }
   ]
 };
