@@ -64,6 +64,8 @@ class ApiService {
         options: RequestInit = {}
     ): Promise<T> {
         const url = `${this.baseUrl}${endpoint}`;
+        const method = options.method || 'GET';
+        const startTime = Date.now();
 
         // Get fresh headers for each request
         const requestHeaders = this.getHeaders();
@@ -76,28 +78,52 @@ class ApiService {
             },
         };
 
-        console.log('🌐 Making request to:', url);
-        console.log('🔐 Request headers:', requestHeaders);
+        // Log API request details
+        console.log(`🚀 [API REQUEST] ${method} ${url}`);
+        console.log(`� [API REQUEST] Headers:`, {
+            ...requestHeaders,
+            'Authorization': requestHeaders['Authorization'] ? '[PRESENT]' : '[MISSING]'
+        });
+
+        if (config.body && typeof config.body === 'string') {
+            try {
+                const bodyData = JSON.parse(config.body);
+                console.log(`📦 [API REQUEST] Body:`, bodyData);
+            } catch {
+                console.log(`📦 [API REQUEST] Body:`, config.body);
+            }
+        }
 
         try {
             const response = await fetch(url, config);
+            const duration = Date.now() - startTime;
+
+            console.log(`✅ [API RESPONSE] ${method} ${url} - Status: ${response.status} (${duration}ms)`);
 
             if (!response.ok) {
+                const errorText = await response.text();
+                console.error(`❌ [API ERROR] ${method} ${url} - Status: ${response.status}, Error: ${errorText}`);
+
                 if (response.status === 401) {
                     // Token expired or invalid, redirect to login
                     if (typeof window !== 'undefined') {
+                        console.warn(`🔐 [API AUTH] Token expired, redirecting to login`);
                         localStorage.removeItem('auth-token');
                         localStorage.removeItem('isAuthenticated');
                         localStorage.removeItem('user');
                         window.location.href = '/login';
                     }
                 }
-                throw new Error(`HTTP error! status: ${response.status}`);
+                throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
             }
 
-            return await response.json();
+            const responseData = await response.json();
+            console.log(`📄 [API RESPONSE] ${method} ${url} - Success (${duration}ms)`, responseData);
+
+            return responseData;
         } catch (error) {
-            console.error('API request failed:', error);
+            const duration = Date.now() - startTime;
+            console.error(`💥 [API ERROR] ${method} ${url} - Failed after ${duration}ms:`, error);
             throw error;
         }
     }

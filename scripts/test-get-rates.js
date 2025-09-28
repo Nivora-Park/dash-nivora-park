@@ -20,7 +20,7 @@ async function testGetRates() {
 
 async function testParkingRates() {
   try {
-    const response = await fetch('http://192.168.8.100:8080/api/v1/cms/parking-rate', {
+    const response = await fetch('http://10.241.197.145:8080/api/v1/cms/parking-rate', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

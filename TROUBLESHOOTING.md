@@ -36,17 +36,17 @@ TypeError: Failed to fetch
 #### 1. Periksa Server API
 ```bash
 # Periksa apakah server berjalan
-curl http://192.168.8.100:8080/health
+curl http://10.241.197.145:8080/health
 
 # Atau buka di browser
-http://192.168.8.100:8080/health
+http://10.241.197.145:8080/health
 ```
 
 #### 2. Periksa Konfigurasi API
 File: `src/config/api.ts`
 ```typescript
 export const API_CONFIG = {
-    BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL || 'http://192.168.8.100:8080',
+    BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL || 'http://10.241.197.145:8080',
     // ...
 };
 ```
@@ -54,8 +54,8 @@ export const API_CONFIG = {
 #### 3. Set Environment Variables
 Buat file `.env.local` di root project:
 ```env
-NEXT_PUBLIC_API_BASE_URL=http://192.168.8.100:8080
-NEXT_PUBLIC_API_SWAGGER_URL=http://192.168.8.100:8080/swagger/index.html#/
+NEXT_PUBLIC_API_BASE_URL=http://10.241.197.145:8080
+NEXT_PUBLIC_API_SWAGGER_URL=http://10.241.197.145:8080/swagger/index.html#/
 ```
 
 #### 4. Restart Development Server
@@ -96,10 +96,10 @@ yarn dev
 ### 3. Test API Endpoints
 ```bash
 # Test health endpoint
-curl -X GET http://192.168.8.100:8080/health
+curl -X GET http://10.241.197.145:8080/health
 
 # Test parking terminals endpoint
-curl -X GET http://192.168.8.100:8080/api/v1/parking-terminal
+curl -X GET http://10.241.197.145:8080/api/v1/parking-terminal
 ```
 
 ### 4. Periksa Network Connectivity

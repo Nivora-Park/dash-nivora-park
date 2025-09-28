@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://192.168.8.100:8080';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://10.241.197.145:8080';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 

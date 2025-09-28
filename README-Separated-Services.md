@@ -140,7 +140,7 @@ docker-compose -f docker-compose.yml down
 - **Features:** Next.js application dengan monitoring
 - **Environment Variables:**
   - `NODE_ENV=production`
-  - `NEXT_PUBLIC_API_URL=http://192.168.8.100:8080`
+  - `NEXT_PUBLIC_API_URL=http://10.241.197.145:8080`
   - `REDIS_URL=redis://nivora-redis:6379`
   - `REDIS_PASSWORD=nivora_redis_password`
 

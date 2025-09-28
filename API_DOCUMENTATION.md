@@ -1,10 +1,10 @@
 # API Documentation
 
 ## Base URL
-http://192.168.8.100:8080
+http://10.241.197.145:8080
 
 ## Swagger Documentation
-http://192.168.8.100:8080/swagger/index.html#/
+http://10.241.197.145:8080/swagger/index.html#/
 
 ## API Version
 ```
