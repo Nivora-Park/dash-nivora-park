@@ -1,10 +1,10 @@
 # API Documentation
 
 ## Base URL
-https://api-nivora.nahsbyte.my.id
+http://192.168.8.100:8080
 
 ## Swagger Documentation
-https://api-nivora.nahsbyte.my.id/swagger/index.html#/
+http://192.168.8.100:8080/swagger/index.html#/
 
 ## API Version
 ```

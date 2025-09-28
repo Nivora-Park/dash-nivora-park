@@ -1,6 +1,6 @@
 export const API_CONFIG = {
-    BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL || 'https://api-nivora.nahsbyte.my.id',
-    SWAGGER_URL: process.env.NEXT_PUBLIC_API_SWAGGER_URL || 'https://api-nivora.nahsbyte.my.id/swagger/index.html#/',
+    BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL || 'http://192.168.8.100:8080',
+    SWAGGER_URL: process.env.NEXT_PUBLIC_API_SWAGGER_URL || 'http://192.168.8.100:8080/swagger/index.html#/',
     API_VERSION: 'v1',
     ENDPOINTS: {
         // Health check

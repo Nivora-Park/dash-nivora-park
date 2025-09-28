@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
         }
 
         // Get available membership products to use valid product ID
-        const productsResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://api-nivora.nahsbyte.my.id'}/api/v1/cms/parking-membership-product`, {
+        const productsResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://192.168.8.100:8080'}/api/v1/cms/parking-membership-product`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
         }
 
         // Get existing memberships to check for duplicates
-        const existingMembershipsResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://api-nivora.nahsbyte.my.id'}/api/v1/cms/parking-membership`, {
+        const existingMembershipsResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://192.168.8.100:8080'}/api/v1/cms/parking-membership`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -133,7 +133,7 @@ export async function POST(request: NextRequest) {
 
         for (let i = 0; i < transformedData.length; i++) {
             try {
-                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://api-nivora.nahsbyte.my.id'}/api/v1/cms/parking-membership`, {
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://192.168.8.100:8080'}/api/v1/cms/parking-membership`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
