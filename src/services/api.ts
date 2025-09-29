@@ -1,4 +1,3 @@
-import { API_CONFIG, API_METHODS, QUERY_PARAMS } from '@/config/api';
 import {
     ApiResponse,
     QueryParams,
@@ -80,9 +79,9 @@ class ApiService {
 
         // Log API request details
         console.log(`🚀 [API REQUEST] ${method} ${url}`);
-        console.log(`� [API REQUEST] Headers:`, {
+        console.log(`📋 [API REQUEST] Headers:`, {
             ...requestHeaders,
-            'Authorization': requestHeaders['Authorization'] ? '[PRESENT]' : '[MISSING]'
+            'Authorization': (requestHeaders as Record<string, string>)['Authorization'] ? '[PRESENT]' : '[MISSING]'
         });
 
         if (config.body && typeof config.body === 'string') {
