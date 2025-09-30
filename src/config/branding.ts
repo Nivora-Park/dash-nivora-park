@@ -37,7 +37,7 @@ export const BRANDING_CONFIG = {
     // Company/App info - MUDAH DIUBAH!
     company: {
         name: 'Aer Parking LCC',           // 👈 GANTI NAMA DISINI
-        tagline: 'Dashboard Monitoring Transaksi', // 👈 GANTI TAGLINE DISINI
+        tagline: 'Dashboard Monitoring Transaksi guys', // 👈 GANTI TAGLINE DISINI
         description: 'Sistem monitoring transaksi parkir yang terintegrasi',
 
         // Contact info
