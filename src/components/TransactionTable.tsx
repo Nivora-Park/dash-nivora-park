@@ -5,6 +5,7 @@ import { Search, Filter, MoreVertical, Car, Bike } from "lucide-react";
 
 export interface MonitoringTableRow {
   id: string;
+  uniqueId: string;
   plateNumber: string;
   vehicleType: "car" | "motorcycle" | string;
   entryTime?: string | null;
@@ -12,7 +13,7 @@ export interface MonitoringTableRow {
   duration?: string | null;
   amount: number;
   paymentMethod: string;
-  status: "completed" | "active" | string;
+  status: "completed" | "pending" | string;
   terminal: string;
 }
 
@@ -41,10 +42,10 @@ export function TransactionTable({ rows }: { rows: MonitoringTableRow[] }) {
             Selesai
           </span>
         );
-      case "active":
+      case "pending":
         return (
           <span className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
-            Aktif
+            Pending
           </span>
         );
       default:
@@ -84,10 +85,10 @@ export function TransactionTable({ rows }: { rows: MonitoringTableRow[] }) {
             onChange={(e) => setStatusFilter(e.target.value)}
             className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-900"
           >
-            <option value="all">Semua Status</option>
-            <option value="completed">Selesai</option>
-            <option value="active">Aktif</option>
-          </select>
+          <option value="all">Semua Status</option>
+          <option value="completed">Selesai</option>
+          <option value="pending">Pending</option>
+        </select>
         </div>
         <button className="flex items-center space-x-2 px-4 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg">
           <Filter className="w-4 h-4" />

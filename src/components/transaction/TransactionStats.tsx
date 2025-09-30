@@ -6,6 +6,7 @@ interface TransactionStatsProps {
   totalRevenue: number;
   activeVehicles: number;
   avgDurationMinutes: number;
+  loading?: boolean;
 }
 
 export function TransactionStats({
@@ -13,6 +14,7 @@ export function TransactionStats({
   totalRevenue,
   activeVehicles,
   avgDurationMinutes,
+  loading = false,
 }: TransactionStatsProps) {
   const stats = [
     {
@@ -57,14 +59,24 @@ export function TransactionStats({
                 <p className="text-sm font-medium text-gray-600 ">
                   {stat.title}
                 </p>
-                <p className="text-2xl font-bold text-gray-900 mt-1">
-                  {stat.value}
-                </p>
+                {loading ? (
+                  <div className="mt-1">
+                    <div className="animate-pulse bg-gray-200 h-8 w-20 rounded"></div>
+                  </div>
+                ) : (
+                  <p className="text-2xl font-bold text-gray-900 mt-1">
+                    {stat.value}
+                  </p>
+                )}
               </div>
               <div
                 className={`w-12 h-12 ${stat.color} rounded-lg flex items-center justify-center`}
               >
-                <Icon className="w-6 h-6 text-white" />
+                {loading ? (
+                  <div className="animate-pulse bg-white bg-opacity-30 w-6 h-6 rounded"></div>
+                ) : (
+                  <Icon className="w-6 h-6 text-white" />
+                )}
               </div>
             </div>
           </div>

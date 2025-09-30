@@ -12,12 +12,17 @@ import { TransactionTable } from "./TransactionTable";
 export function TransactionMonitoring() {
   const {
     timeFilter,
+    dateRange,
     stats,
     chartData,
     tableRows,
     terminalsMaster,
     payments,
+    terminalEntryCounts,
+    terminalExitCounts,
+    loading,
     updateTimeFilter,
+    updateDateRange,
     refreshData,
     exportData,
   } = useTransactionMonitoring();
@@ -32,6 +37,9 @@ export function TransactionMonitoring() {
       <TransactionMonitoringFilters
         timeFilter={timeFilter}
         onTimeFilterChange={updateTimeFilter}
+        startDate={dateRange.startDate}
+        endDate={dateRange.endDate}
+        onDateRangeChange={updateDateRange}
       />
 
       {/* Stats Cards */}
@@ -40,6 +48,7 @@ export function TransactionMonitoring() {
         totalRevenue={stats.totalRevenue}
         activeVehicles={stats.activeVehicles}
         avgDurationMinutes={stats.avgDurationMinutes}
+        loading={loading}
       />
 
       {/* Charts Section */}
@@ -54,7 +63,14 @@ export function TransactionMonitoring() {
               <span>Filter</span>
             </button>
           </div>
-          <TransactionChart data={chartData} />
+          {loading ? (
+            <div className="p-6 text-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+              <p className="mt-2 text-gray-600">Loading data...</p>
+            </div>
+          ) : (
+            <TransactionChart data={chartData} />
+          )}
         </div>
 
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -67,27 +83,36 @@ export function TransactionMonitoring() {
               <span className="text-sm text-gray-600">Online</span>
             </div>
           </div>
-          <div className="space-y-3">
-            {terminalsMaster.slice(0, 4).map((terminal, index) => (
-              <div
-                key={terminal.id ?? index}
-                className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
-              >
-                <div className="flex items-center space-x-3">
-                  <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                  <span className="font-medium text-gray-900">
-                    {terminal.name}
-                  </span>
-                </div>
-                <div className="text-sm text-gray-600">
-                  {payments
-                    .filter((p) => p.terminal_id === terminal.id)
-                    .length.toLocaleString("id-ID")}{" "}
-                  transaksi
-                </div>
-              </div>
-            ))}
-          </div>
+          {loading ? (
+            <div className="p-6 text-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+              <p className="mt-2 text-gray-600">Loading data...</p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {terminalsMaster.slice(0, 4).map((terminal, index) => {
+                const entryCount = terminalEntryCounts.get(terminal.id) || 0;
+                const exitCount = terminalExitCounts.get(terminal.id) || 0;
+                return (
+                  <div
+                    key={terminal.id ?? index}
+                    className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                  >
+                    <div className="flex items-center space-x-3">
+                      <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                      <span className="font-medium text-gray-900">
+                        {terminal.name}
+                      </span>
+                    </div>
+                    <div className="text-sm text-gray-600 space-x-2">
+                      <span>Entry: {entryCount.toLocaleString("id-ID")}</span>
+                      <span>Exit: {exitCount.toLocaleString("id-ID")}</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
 
@@ -104,7 +129,14 @@ export function TransactionMonitoring() {
             </button>
           </div>
         </div>
-        <TransactionTable rows={tableRows} />
+        {loading ? (
+          <div className="p-6 text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+            <p className="mt-2 text-gray-600">Loading data...</p>
+          </div>
+        ) : (
+          <TransactionTable rows={tableRows} />
+        )}
       </div>
     </div>
   );
