@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useMemo } from "react";
+
+import { useState, useMemo, useEffect } from "react";
 import { Search, Filter, MoreVertical, Car, Bike, ChevronLeft, ChevronRight } from "lucide-react";
 
 export interface MonitoringTableRow {
@@ -19,24 +20,43 @@ export interface MonitoringTableRow {
 
 export function TransactionTable({ rows }: { rows: MonitoringTableRow[] }) {
   const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10;
 
+  // Debounce search input to improve performance
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 300); // 300ms debounce delay
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchTerm]);
+
   const filteredTransactions = useMemo(() => {
     return rows.filter((transaction) => {
+      const search = debouncedSearchTerm.toLowerCase();
       const matchesSearch =
-        transaction.plateNumber
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase()) ||
-        transaction.id.toLowerCase().includes(searchTerm.toLowerCase());
+        transaction.plateNumber.toLowerCase().includes(search) ||
+        transaction.id.toLowerCase().includes(search) ||
+        transaction.uniqueId.toLowerCase().includes(search) ||
+        transaction.terminal.toLowerCase().includes(search) ||
+        transaction.paymentMethod.toLowerCase().includes(search) ||
+        transaction.status.toLowerCase().includes(search) ||
+        transaction.vehicleType.toLowerCase().includes(search) ||
+        transaction.amount.toString().includes(search) ||
+        (transaction.entryTime || "").toLowerCase().includes(search) ||
+        (transaction.exitTime || "").toLowerCase().includes(search);
       const matchesStatus =
         statusFilter === "all" || transaction.status === statusFilter;
       return matchesSearch && matchesStatus;
     });
-  }, [rows, searchTerm, statusFilter]);
+  }, [rows, debouncedSearchTerm, statusFilter]);
 
   // Calculate total pages
   const totalPages = Math.ceil(filteredTransactions.length / pageSize);
@@ -100,7 +120,7 @@ export function TransactionTable({ rows }: { rows: MonitoringTableRow[] }) {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
             <input
               type="text"
-              placeholder="Cari plat nomor atau ID transaksi..."
+              placeholder="Cari ID transaksi, terminal, pembayaran, status..."
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value);
