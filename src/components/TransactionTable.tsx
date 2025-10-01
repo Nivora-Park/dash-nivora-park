@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Search, Filter, MoreVertical, Car, Bike } from "lucide-react";
+import { Search, Filter, MoreVertical, Car, Bike, ChevronLeft, ChevronRight } from "lucide-react";
 
 export interface MonitoringTableRow {
   id: string;
@@ -21,6 +21,10 @@ export function TransactionTable({ rows }: { rows: MonitoringTableRow[] }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10;
+
   const filteredTransactions = useMemo(() => {
     return rows.filter((transaction) => {
       const matchesSearch =
@@ -33,6 +37,15 @@ export function TransactionTable({ rows }: { rows: MonitoringTableRow[] }) {
       return matchesSearch && matchesStatus;
     });
   }, [rows, searchTerm, statusFilter]);
+
+  // Calculate total pages
+  const totalPages = Math.ceil(filteredTransactions.length / pageSize);
+
+  // Get current page data slice
+  const currentPageData = useMemo(() => {
+    const startIndex = (currentPage - 1) * pageSize;
+    return filteredTransactions.slice(startIndex, startIndex + pageSize);
+  }, [filteredTransactions, currentPage]);
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -65,6 +78,19 @@ export function TransactionTable({ rows }: { rows: MonitoringTableRow[] }) {
     );
   };
 
+  // Pagination handlers
+  const goToPreviousPage = () => {
+    setCurrentPage((page) => Math.max(page - 1, 1));
+  };
+
+  const goToNextPage = () => {
+    setCurrentPage((page) => Math.min(page + 1, totalPages));
+  };
+
+  const goToPage = (page: number) => {
+    setCurrentPage(() => Math.min(Math.max(page, 1), totalPages));
+  };
+
   return (
     <div className="p-6">
       {/* Filters */}
@@ -76,19 +102,25 @@ export function TransactionTable({ rows }: { rows: MonitoringTableRow[] }) {
               type="text"
               placeholder="Cari plat nomor atau ID transaksi..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1); // Reset page on search change
+              }}
               className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-80 bg-white text-gray-900"
             />
           </div>
           <select
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
+            onChange={(e) => {
+              setStatusFilter(e.target.value);
+              setCurrentPage(1); // Reset page on filter change
+            }}
             className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-900"
           >
-          <option value="all">Semua Status</option>
-          <option value="completed">Selesai</option>
-          <option value="pending">Pending</option>
-        </select>
+            <option value="all">Semua Status</option>
+            <option value="completed">Selesai</option>
+            <option value="pending">Pending</option>
+          </select>
         </div>
         <button className="flex items-center space-x-2 px-4 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg">
           <Filter className="w-4 h-4" />
@@ -132,7 +164,7 @@ export function TransactionTable({ rows }: { rows: MonitoringTableRow[] }) {
             </tr>
           </thead>
           <tbody>
-            {filteredTransactions.map((transaction) => (
+            {currentPageData.map((transaction) => (
               <tr
                 key={transaction.id}
                 className="border-b border-gray-100 hover:bg-gray-50 transition-colors duration-300"
@@ -191,17 +223,33 @@ export function TransactionTable({ rows }: { rows: MonitoringTableRow[] }) {
       {/* Pagination */}
       <div className="flex items-center justify-between mt-6">
         <div className="text-sm text-gray-600 ">
-          Menampilkan {filteredTransactions.length} dari {rows.length} transaksi
+          Menampilkan {currentPageData.length} dari {filteredTransactions.length} transaksi
         </div>
         <div className="flex items-center space-x-2">
-          <button className="px-3 py-1 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-300">
-            Sebelumnya
+          <button
+            onClick={goToPreviousPage}
+            disabled={currentPage === 1}
+            className={`px-3 py-1 text-sm rounded transition-colors duration-300 ${
+              currentPage === 1
+                ? "text-gray-400 cursor-not-allowed"
+                : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+            }`}
+          >
+            <ChevronLeft className="inline w-4 h-4" /> Sebelumnya
           </button>
           <span className="px-3 py-1 text-sm font-medium text-gray-900 bg-blue-100 rounded">
-            1
+            {currentPage}
           </span>
-          <button className="px-3 py-1 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors duration-300">
-            Selanjutnya
+          <button
+            onClick={goToNextPage}
+            disabled={currentPage === totalPages}
+            className={`px-3 py-1 text-sm rounded transition-colors duration-300 ${
+              currentPage === totalPages
+                ? "text-gray-400 cursor-not-allowed"
+                : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+            }`}
+          >
+            Selanjutnya <ChevronRight className="inline w-4 h-4" />
           </button>
         </div>
       </div>

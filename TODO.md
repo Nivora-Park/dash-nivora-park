@@ -1,17 +1,20 @@
-# Date Filter Implementation for Transaction Monitoring
+# TODO: Implementasi Pagination di Transaction Monitoring
 
-## Overview
-Add date-based filtering capability to the "Lihat Semua" (View All) function in the "Transaksi Terbaru" (Latest Transactions) section of the transaction monitoring page.
+## Tugas Utama
+- Implementasikan pagination di frontend untuk TransactionTable agar menampilkan maksimal 10 transaksi per halaman.
 
-## Tasks
-- [x] Update `useTransactionMonitoring` hook to support date range state and filtering
-- [x] Create date range input components in `TransactionMonitoringFilters`
-- [x] Modify data fetching logic to use date range when specified
-- [x] Update `TransactionMonitoring` component to integrate date filters
-- [ ] Test the date filtering functionality
+## Langkah-langkah Implementasi
+- [x] Tambahkan state pagination (currentPage, pageSize=10) di TransactionTable.tsx
+- [x] Hitung totalPages berdasarkan filteredTransactions.length / pageSize
+- [x] Slice filteredTransactions untuk menampilkan hanya data halaman saat ini
+- [x] Update tabel untuk menampilkan data yang dipaginasi
+- [x] Buat tombol pagination (Previous, Next, nomor halaman) menjadi fungsional
+- [x] Update teks "Menampilkan X dari Y transaksi" untuk mencerminkan halaman saat ini
 
-## Implementation Details
-1. Add `dateRange` state to the hook with start and end dates
-2. Add date picker inputs to the filter UI
-3. Update `refreshData` function to use date range parameters
-4. Ensure backward compatibility with existing time period fi
+## Testing
+- [ ] Verifikasi pagination bekerja: klik Previous/Next, pindah halaman
+- [ ] Pastikan performa baik dengan data banyak (tidak loading ulang)
+- [ ] Cek filter masih bekerja dengan pagination
+
+## File yang Terpengaruh
+- src/components/TransactionTable.tsx
