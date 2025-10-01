@@ -105,8 +105,8 @@ export function TransactionMonitoring() {
                       </span>
                     </div>
                     <div className="text-sm text-gray-600 space-x-2">
-                      <span>Entry: {entryCount.toLocaleString("id-ID")}</span>
-                      <span>Exit: {exitCount.toLocaleString("id-ID")}</span>
+                      {entryCount > 0 && <span>{entryCount.toLocaleString("id-ID")}</span>}
+                      <span>{exitCount.toLocaleString("id-ID")}</span>
                     </div>
                   </div>
                 );
