@@ -471,6 +471,10 @@ export function useTransactionMonitoring() {
       "Terminal": row.terminal,
     }));
 
+    // Calculate totals
+    const totalVehicles = tableRows.length;
+    const totalRevenue = tableRows.reduce((sum, row) => sum + row.amount, 0);
+
     const startDate = dateRange.startDate || formatDate(startOfToday());
     const endDate = dateRange.endDate || formatDate(endOfToday());
     const filename = `transaction-monitoring-${startDate}-to-${endDate}`;
@@ -481,15 +485,15 @@ export function useTransactionMonitoring() {
 
       // Set column widths
       const colWidths = [
-        { wch: 15 }, // ID Transaksi
-        { wch: 15 }, // Jenis Kendaraan
-        { wch: 20 }, // Waktu Masuk
-        { wch: 20 }, // Waktu Keluar
-        { wch: 10 }, // Durasi
-        { wch: 12 }, // Jumlah
-        { wch: 18 }, // Metode Pembayaran
-        { wch: 10 }, // Status
-        { wch: 15 }, // Terminal
+        { wch: 20 }, // ID Transaksi (wider for total label)
+        { wch: 20 }, // Jenis Kendaraan (wider for total label)
+        { wch: 10 }, // Waktu Masuk (spacer)
+        { wch: 10 }, // Waktu Keluar (spacer)
+        { wch: 10 }, // Durasi (spacer)
+        { wch: 10 }, // Jumlah (spacer)
+        { wch: 10 }, // Metode Pembayaran (spacer)
+        { wch: 25 }, // Status (wider for total revenue)
+        { wch: 25 }, // Terminal (wider for total revenue)
       ];
       ws['!cols'] = colWidths;
 
@@ -527,6 +531,61 @@ export function useTransactionMonitoring() {
           };
         }
       }
+
+      // Add totals row
+      const totalsRowIndex = headerRange.e.r + 1;
+
+      // Add a new row for totals with empty cells
+      for (let c = headerRange.s.c; c <= headerRange.e.c; c++) {
+        const cellAddress = XLSX.utils.encode_cell({ r: totalsRowIndex, c });
+        ws[cellAddress] = { t: 's', v: '' };
+      }
+
+      const totalVehiclesCell = XLSX.utils.encode_cell({ r: totalsRowIndex, c: 0 });
+      const totalRevenueCell = XLSX.utils.encode_cell({ r: totalsRowIndex, c: 7 });
+
+      // Set total vehicles label and value spanning first two columns
+      ws[totalVehiclesCell] = { t: 's', v: `TOTAL KENDARAAN: ${totalVehicles}` };
+      if (!ws['!merges']) ws['!merges'] = [];
+      ws['!merges'].push({
+        s: { r: totalsRowIndex, c: 0 },
+        e: { r: totalsRowIndex, c: 1 }
+      });
+
+      // Merge columns 2 to 6 as spacer
+      ws['!merges'].push({
+        s: { r: totalsRowIndex, c: 2 },
+        e: { r: totalsRowIndex, c: 6 }
+      });
+
+      // Set total revenue label and value spanning last two columns
+      ws[totalRevenueCell] = { t: 's', v: `TOTAL PENDAPATAN: Rp ${totalRevenue.toLocaleString("id-ID")}` };
+      ws['!merges'].push({
+        s: { r: totalsRowIndex, c: 7 },
+        e: { r: totalsRowIndex, c: 8 }
+      });
+
+      // Style all cells in totals row
+      for (let c = headerRange.s.c; c <= headerRange.e.c; c++) {
+        const cellAddress = XLSX.utils.encode_cell({ r: totalsRowIndex, c });
+        if (!ws[cellAddress]) continue;
+        ws[cellAddress].s = {
+          font: { bold: true, color: { rgb: "000000" } },
+          alignment: { horizontal: "center", vertical: "center" },
+          border: {
+            top: { style: "thin", color: { rgb: "000000" } },
+            bottom: { style: "thin", color: { rgb: "000000" } },
+            left: { style: "thin", color: { rgb: "000000" } },
+            right: { style: "thin", color: { rgb: "000000" } },
+          },
+          fill: { fgColor: { rgb: "FFF2CC" } }, // Light yellow background for totals
+        };
+      }
+
+      // Update worksheet range to include totals row
+      const range = XLSX.utils.decode_range(ws['!ref'] || "");
+      range.e.r = totalsRowIndex;
+      ws['!ref'] = XLSX.utils.encode_range(range);
 
       XLSX.utils.book_append_sheet(wb, ws, "Transactions");
       XLSX.writeFile(wb, `${filename}.xlsx`);
@@ -629,6 +688,39 @@ export function useTransactionMonitoring() {
         });
         y += rowHeight;
       });
+
+      // Add totals row below table
+      if (y + rowHeight * 2 < pageHeight - margin) {
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(10);
+        doc.setFillColor(255, 255, 0); // Yellow background
+        doc.setTextColor(0, 0, 0);
+
+        // Calculate widths based on colWidths array
+        const colWidths = [40, 30, 35, 35, 15, 20, 30, 15, 20];
+        const totalTableWidth = colWidths.reduce((a, b) => a + b, 0);
+        const rightBoxWidth = 100; // wider width for total revenue box
+        const leftBoxWidth = totalTableWidth - rightBoxWidth;
+
+        // Draw left box for total vehicles with fill only
+        doc.setFillColor(255, 255, 0); // Yellow fill
+        doc.rect(margin, y, leftBoxWidth, rowHeight, "F"); // Fill only
+        // Draw border separately
+        doc.setDrawColor(0, 0, 0);
+        doc.rect(margin, y, leftBoxWidth, rowHeight, "S"); // Stroke only
+        doc.setTextColor(0, 0, 0);
+        doc.text(`TOTAL KENDARAAN: ${totalVehicles}`, margin + 5, y + rowHeight / 2 + 3, { align: "left" });
+
+        // Draw right box for total revenue with fill only
+        doc.setFillColor(255, 255, 0); // Yellow fill
+        doc.rect(margin + leftBoxWidth, y, rightBoxWidth, rowHeight, "F"); // Fill only
+        // Draw border separately
+        doc.setDrawColor(0, 0, 0);
+        doc.rect(margin + leftBoxWidth, y, rightBoxWidth, rowHeight, "S"); // Stroke only
+
+        doc.setTextColor(0, 0, 0);
+        doc.text(`TOTAL PENDAPATAN: Rp ${totalRevenue.toLocaleString("id-ID")}`, margin + leftBoxWidth + 5, y + rowHeight / 2 + 3, { align: "left" });
+      }
 
       doc.save(`${filename}.pdf`);
     }
