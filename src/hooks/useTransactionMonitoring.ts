@@ -1,4 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
+import * as XLSX from "xlsx";
+import jsPDF from "jspdf";
+import { BRANDING_CONFIG } from "@/config/branding";
 import {
   useParkingTransactionPayments,
   useParkingTransactionTerminals,
@@ -73,10 +76,11 @@ export function useTransactionMonitoring() {
   const [dateRange, setDateRange] = useState<{
     startDate: string | null;
     endDate: string | null;
-  }>( {
+  }>({
     startDate: formatDate(startOfToday()),
     endDate: formatDate(endOfToday()),
   });
+  const [exportFormat, setExportFormat] = useState<"excel" | "pdf">("excel");
 
   // API hooks
   const { data: paymentsData, loading: paymentsLoading, getTransactionPayments } = useParkingTransactionPayments();
@@ -455,8 +459,179 @@ export function useTransactionMonitoring() {
   };
 
   const exportData = () => {
-    // TODO: Implement export functionality
-    console.log("Export data");
+    const data = tableRows.map(row => ({
+      "ID Transaksi": row.id,
+      "Jenis Kendaraan": row.vehicleType,
+      "Waktu Masuk": row.entryTime || "-",
+      "Waktu Keluar": row.exitTime || "-",
+      "Durasi": row.duration || "-",
+      "Jumlah": row.amount,
+      "Metode Pembayaran": row.paymentMethod,
+      "Status": row.status,
+      "Terminal": row.terminal,
+    }));
+
+    const startDate = dateRange.startDate || formatDate(startOfToday());
+    const endDate = dateRange.endDate || formatDate(endOfToday());
+    const filename = `transaction-monitoring-${startDate}-to-${endDate}`;
+
+    if (exportFormat === "excel") {
+      const ws = XLSX.utils.json_to_sheet(data);
+      const wb = XLSX.utils.book_new();
+
+      // Set column widths
+      const colWidths = [
+        { wch: 15 }, // ID Transaksi
+        { wch: 15 }, // Jenis Kendaraan
+        { wch: 20 }, // Waktu Masuk
+        { wch: 20 }, // Waktu Keluar
+        { wch: 10 }, // Durasi
+        { wch: 12 }, // Jumlah
+        { wch: 18 }, // Metode Pembayaran
+        { wch: 10 }, // Status
+        { wch: 15 }, // Terminal
+      ];
+      ws['!cols'] = colWidths;
+
+      // Add header styling
+      const headerRange = XLSX.utils.decode_range(ws['!ref'] || "");
+      for (let C = headerRange.s.c; C <= headerRange.e.c; ++C) {
+        const cellAddress = XLSX.utils.encode_cell({ r: 0, c: C });
+        if (!ws[cellAddress]) continue;
+        ws[cellAddress].s = {
+          fill: { fgColor: { rgb: "D9E1F2" } },
+          font: { bold: true },
+          alignment: { horizontal: "center", vertical: "center" },
+          border: {
+            top: { style: "thin", color: { rgb: "000000" } },
+            bottom: { style: "thin", color: { rgb: "000000" } },
+            left: { style: "thin", color: { rgb: "000000" } },
+            right: { style: "thin", color: { rgb: "000000" } },
+          },
+        };
+      }
+
+      // Add border and alignment to data cells
+      for (let R = 1; R <= headerRange.e.r; ++R) {
+        for (let C = headerRange.s.c; C <= headerRange.e.c; ++C) {
+          const cellAddress = XLSX.utils.encode_cell({ r: R, c: C });
+          if (!ws[cellAddress]) continue;
+          ws[cellAddress].s = {
+            alignment: { horizontal: "center", vertical: "center" },
+            border: {
+              top: { style: "thin", color: { rgb: "000000" } },
+              bottom: { style: "thin", color: { rgb: "000000" } },
+              left: { style: "thin", color: { rgb: "000000" } },
+              right: { style: "thin", color: { rgb: "000000" } },
+            },
+          };
+        }
+      }
+
+      XLSX.utils.book_append_sheet(wb, ws, "Transactions");
+      XLSX.writeFile(wb, `${filename}.xlsx`);
+    } else if (exportFormat === "pdf") {
+      const doc = new jsPDF('l', 'mm', 'a4'); // Landscape orientation for better table fit
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      const margin = 10;
+      const tableWidth = pageWidth - (margin * 2);
+
+      // Title
+      doc.setFontSize(16);
+      doc.text("Transaction Monitoring Report", pageWidth / 2, margin + 10, { align: "center" });
+
+      // Date range
+      doc.setFontSize(12);
+      doc.text(`Date Range: ${startDate} to ${endDate}`, pageWidth / 2, margin + 20, { align: "center" });
+
+      // Table setup
+      let y = margin + 30;
+      const headers = Object.keys(data[0] || {});
+      const colWidths = [40, 30, 35, 35, 15, 20, 30, 15, 20]; // Increased widths for first two columns
+      const rowHeight = 14;
+
+      // Header row with background color
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "bold");
+      let x = margin;
+      const headerFillColor = BRANDING_CONFIG.theme.primary;
+      const headerTextColor = "#FFFFFF";
+      // Convert hex to RGB for jsPDF setFillColor
+      const hexToRgb = (hex: string) => {
+        const bigint = parseInt(hex.replace("#", ""), 16);
+        const r = (bigint >> 16) & 255;
+        const g = (bigint >> 8) & 255;
+        const b = bigint & 255;
+        return [r, g, b];
+      };
+      const [r, g, b] = hexToRgb(headerFillColor);
+      doc.setFillColor(r, g, b);
+      headers.forEach((header, i) => {
+        const width = colWidths[i] || 20;
+        if (i === 0) {
+          // First header cell with primary color background and white text
+          doc.setFillColor(r, g, b);
+          doc.rect(x, y, width, rowHeight, "F");
+          doc.setTextColor(headerTextColor);
+        } else {
+          // Other header cells with light background and black text
+          doc.setFillColor(217, 225, 242);
+          doc.rect(x, y, width, rowHeight, "F");
+          doc.setTextColor(0, 0, 0);
+        }
+        doc.text(header, x + width / 2, y + rowHeight / 2, { align: "center" });
+        x += width;
+      });
+      y += rowHeight;
+
+      // Data rows with borders and centered text
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(8);
+      data.forEach((row, rowIndex) => {
+        if (y + rowHeight > pageHeight - margin) {
+          doc.addPage();
+          y = margin;
+
+          // Redraw header on new page
+          doc.setFont("helvetica", "bold");
+          doc.setFontSize(10);
+          x = margin;
+          doc.setFillColor(r, g, b);
+          headers.forEach((header, i) => {
+            const width = colWidths[i] || 20;
+            if (i === 0) {
+              doc.setFillColor(r, g, b);
+              doc.rect(x, y, width, rowHeight, "F");
+              doc.setTextColor(headerTextColor);
+            } else {
+              doc.setFillColor(217, 225, 242);
+              doc.rect(x, y, width, rowHeight, "F");
+              doc.setTextColor(0, 0, 0);
+            }
+            doc.text(header, x + width / 2, y + rowHeight / 2, { align: "center" });
+            x += width;
+          });
+          y += rowHeight;
+          doc.setFont("helvetica", "normal");
+          doc.setFontSize(8);
+        }
+
+        x = margin;
+        headers.forEach((header, i) => {
+          const width = colWidths[i] || 20;
+          let value = String(row[header as keyof typeof row] || "");
+          value = value.replace(/\n/g, " ").trim();
+          const lines = doc.splitTextToSize(value, width - 6);
+          doc.rect(x, y, width, rowHeight);
+          doc.text(lines, x + width / 2, y + rowHeight / 2, { align: "center" });
+          x += width;
+        });
+        y += rowHeight;
+      });
+
+      doc.save(`${filename}.pdf`);
+    }
   };
 
   // Load data when filter changes
@@ -469,6 +644,7 @@ export function useTransactionMonitoring() {
     // State
     timeFilter,
     dateRange,
+    exportFormat,
 
     // Data
     stats,
@@ -489,5 +665,6 @@ export function useTransactionMonitoring() {
     updateDateRange,
     refreshData,
     exportData,
+    setExportFormat,
   };
 }

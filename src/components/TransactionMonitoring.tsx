@@ -13,6 +13,7 @@ export function TransactionMonitoring() {
   const {
     timeFilter,
     dateRange,
+    exportFormat,
     stats,
     chartData,
     tableRows,
@@ -25,6 +26,7 @@ export function TransactionMonitoring() {
     updateDateRange,
     refreshData,
     exportData,
+    setExportFormat,
   } = useTransactionMonitoring();
 
   return (
@@ -32,6 +34,8 @@ export function TransactionMonitoring() {
       <TransactionMonitoringHeader
         onRefresh={refreshData}
         onExport={exportData}
+        exportFormat={exportFormat}
+        onExportFormatChange={setExportFormat}
       />
 
       <TransactionMonitoringFilters
