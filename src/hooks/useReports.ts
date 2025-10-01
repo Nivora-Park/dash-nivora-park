@@ -15,10 +15,11 @@ function formatYYYYMM(date: Date): string {
 export function useReports() {
   const [dateRange, setDateRange] = useState<'week' | 'month' | 'quarter' | 'year'>('month');
   const [reportType, setReportType] = useState<'revenue' | 'vehicles' | 'performance'>('revenue');
+  const [loading, setLoading] = useState(true);
 
   // API hooks
-  const { data: paymentsData, getTransactionPayments } = useParkingTransactionPayments();
-  const { data: vehicleTypesData, getVehicleTypes } = useParkingVehicleTypes();
+  const { data: paymentsData, loading: paymentsLoading, getTransactionPayments } = useParkingTransactionPayments();
+  const { data: vehicleTypesData, loading: vehicleTypesLoading, getVehicleTypes } = useParkingVehicleTypes();
 
   // Processed data
   const payments: ParkingTransactionPayment[] = useMemo(() => 
@@ -30,6 +31,11 @@ export function useReports() {
     Array.isArray(vehicleTypesData) ? vehicleTypesData : [],
     [vehicleTypesData]
   );
+
+  // Update loading state based on API loading flags
+  useEffect(() => {
+    setLoading(paymentsLoading || vehicleTypesLoading);
+  }, [paymentsLoading, vehicleTypesLoading]);
 
   // Statistics
   const stats = useMemo(() => {
@@ -75,8 +81,8 @@ export function useReports() {
     const vehicleCounts = new Map<string, number>();
     for (const p of payments) {
       // Use 'vehicle_type_id' from ParkingTransactionPayment
-            const key = (p as any).vehicle_type ?? 'unknown';
-            vehicleCounts.set(key, (vehicleCounts.get(key) || 0) + 1);
+      const key = (p as any).vehicle_type ?? 'unknown';
+      vehicleCounts.set(key, (vehicleCounts.get(key) || 0) + 1);
     }
 
     const vehicleTypeData = Array.from(vehicleCounts.entries()).map(([vehicleTypeId, value]) => {
@@ -149,6 +155,7 @@ export function useReports() {
     // State
     dateRange,
     reportType,
+    loading,
     
     // Data
     stats,

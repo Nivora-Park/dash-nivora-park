@@ -6,6 +6,7 @@ interface ReportsStatsProps {
   totalTransactions: number;
   averageRevenue: number;
   growth: number;
+  loading?: boolean;
 }
 
 export function ReportsStats({
@@ -13,7 +14,24 @@ export function ReportsStats({
   totalTransactions,
   averageRevenue,
   growth,
+  loading = false,
 }: ReportsStatsProps) {
+  if (loading) {
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        {[...Array(4)].map((_, i) => (
+          <div
+            key={i}
+            className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 animate-pulse"
+          >
+            <div className="h-6 bg-gray-300 rounded w-3/4 mb-4"></div>
+            <div className="h-10 bg-gray-300 rounded w-1/2"></div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">

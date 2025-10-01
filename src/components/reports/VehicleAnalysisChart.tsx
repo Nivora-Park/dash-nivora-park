@@ -15,9 +15,23 @@ interface VehicleAnalysisChartProps {
     revenue: number;
     transactions: number;
   }>;
+  loading?: boolean;
 }
 
-export function VehicleAnalysisChart({ data }: VehicleAnalysisChartProps) {
+export function VehicleAnalysisChart({ data, loading = false }: VehicleAnalysisChartProps) {
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <div>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            Ringkasan Kendaraan per Bulan
+          </h3>
+          <div className="h-64 bg-gray-300 rounded animate-pulse"></div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <div>

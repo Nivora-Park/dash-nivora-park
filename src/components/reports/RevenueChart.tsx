@@ -15,9 +15,21 @@ interface RevenueChartProps {
     revenue: number;
     transactions: number;
   }>;
+  loading?: boolean;
 }
 
-export function RevenueChart({ data }: RevenueChartProps) {
+export function RevenueChart({ data, loading = false }: RevenueChartProps) {
+  if (loading) {
+    return (
+      <div>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+          Tren Pendapatan Bulanan
+        </h3>
+        <div className="h-64 bg-gray-300 rounded animate-pulse"></div>
+      </div>
+    );
+  }
+
   return (
     <div>
       <h3 className="text-lg font-semibold text-gray-900 mb-4">

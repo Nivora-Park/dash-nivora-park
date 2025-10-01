@@ -11,9 +11,10 @@ interface PerformanceMetric {
 
 interface PerformanceMetricsProps {
   metrics?: PerformanceMetric[];
+  loading?: boolean;
 }
 
-export function PerformanceMetrics({ metrics }: PerformanceMetricsProps) {
+export function PerformanceMetrics({ metrics, loading = false }: PerformanceMetricsProps) {
   const defaultMetrics: PerformanceMetric[] = [
     {
       title: "Uptime Sistem",
@@ -39,6 +40,21 @@ export function PerformanceMetrics({ metrics }: PerformanceMetricsProps) {
   ];
 
   const displayMetrics = metrics || defaultMetrics;
+
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {[...Array(3)].map((_, i) => (
+            <div
+              key={i}
+              className="bg-gray-50 rounded-lg p-4 animate-pulse h-24"
+            ></div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">

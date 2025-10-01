@@ -13,9 +13,21 @@ interface VehicleTypeChartProps {
     value: number;
     color: string;
   }>;
+  loading?: boolean;
 }
 
-export function VehicleTypeChart({ data }: VehicleTypeChartProps) {
+export function VehicleTypeChart({ data, loading = false }: VehicleTypeChartProps) {
+  if (loading) {
+    return (
+      <div>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+          Distribusi Jenis Kendaraan
+        </h3>
+        <div className="h-64 bg-gray-300 rounded animate-pulse"></div>
+      </div>
+    );
+  }
+
   return (
     <div>
       <h3 className="text-lg font-semibold text-gray-900 mb-4">

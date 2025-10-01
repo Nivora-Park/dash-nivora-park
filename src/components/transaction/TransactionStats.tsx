@@ -1,5 +1,5 @@
 import React from "react";
-import { TrendingUp, DollarSign, Car, Clock } from "lucide-react";
+import { TrendingUp, Car, Clock } from "lucide-react";
 
 interface TransactionStatsProps {
   totalTransactions: number;
@@ -26,7 +26,7 @@ export function TransactionStats({
     {
       title: "Pendapatan",
       value: `Rp ${totalRevenue.toLocaleString("id-ID")}`,
-      icon: DollarSign,
+      icon: null, // No icon, will render custom Rp text
       color: "bg-blue-500",
     },
     {
@@ -74,8 +74,10 @@ export function TransactionStats({
               >
                 {loading ? (
                   <div className="animate-pulse bg-white bg-opacity-30 w-6 h-6 rounded"></div>
-                ) : (
+                ) : Icon ? (
                   <Icon className="w-6 h-6 text-white" />
+                ) : (
+                  <span className="text-white font-bold text-lg">Rp</span>
                 )}
               </div>
             </div>
